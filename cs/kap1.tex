@@ -1,0 +1,645 @@
+\chapter{Úvod k rozhodovacím stromom}
+V tejto kapitole zadefinujeme základné pojmy a koncepty, ktoré budú obsiahnuté v ďalších častiach tejto práce. V nadchádzajúcich podsekciách vysvetlíme postupne všetky dôležité pojmy. V oddieli \ref{kap1:2.1:Data} pomenovanom Dáta zadefinujemem čo sú to dáta, zavedieme pojem atribút a  vysvetlíme základné pojmy, s ktorými budeme pracovať. Dobývanie znalostí, ktoré predstavuje oddiel \ref{kap1:2.2:DataMining}, popíše tento obor so zaradením rozhodovacích stromov v ňom. V oddieli \ref{kap1:2.3:DT} zavedieme základný model rozhodovacích stromov, pre ktorý bude nutné uviesť pár pojmov z teórie grafov. Oddiel \ref{kap1:2.4:DTTypes} zoznamuje s rôznymi typmi rozhodovacích stromov. V oddieli \ref{kap1:2.5:DTTechniques} zhrnieme techniky nazývané indukčné algoritmy na tvorbu stromov.
+Nakoniec v oddieli \ref{kap1:2.6:DTUsage} ukážeme využitie rozhodovacích stromov pri predikcii dát.
+
+\section{Dáta}\label{kap1:2.1:Data}
+V oddieli popíšeme čo sú to dáta. Dozvieme sa tie najzákladnejšie pojmy s ktorými sa stretneme pri práci s nimi. Informácie sme čerpali z voľne dostupnej knihy  \cite{kap1-DataMiningAndAnalysis} a online zdrojov \cite{wiki-Data,online-Data}.
+
+V prvej časti \ref{kap1:2.1:2.1.1:DataRepresentation} popíšeme, čo sú to dáta a ako ich môžme reprezentovať. Popíšeme základné pojmy, ako je atribút a príznakový vektor. V časti \ref{kap1:2.1:2.1.2:DataAttributes} rozdelíme atribúty na dva druhy - kategoriálne a numerické. Aj napriek jednoduchosti týchto pojmov je ich nutné zaviesť, pretože ich budeme využívať v neskorších kapitolách.
+
+\subsection{Dáta a ich reprezentácia}\label{kap1:2.1:2.1.1:DataRepresentation}
+Dáta sú množiny hodnôt, ktoré predstavujú kusy informácií.
+Môžu byť zozbierané, odmerané, analyzované a následne vizualizované.
+Zozberané dáta môžme nájsť v relačných, tabuľkových databázach. Tento typ dát nazývame štrukturované. V skutočnosti sa však vo väčšine prípadov stretávame presne s ich opakom, a to s neštrukturovanými dátami.
+Podľa \cite{kap1-DataMiningAndAnalysis} si dáta možme predstaviť ako maticu $n \times d$, kde $n$ predstavuje počet riadkov a $d$ počet stĺpcov tejto matice. Riadky sú v tomto prípade popisujú objekty a stĺpce sú tvorené hodnotami danej vlastnosti. Matica je daná takto
+
+\begin{center}
+Data = 
+$\begin{array}{c | c c c c}
+& X_{1} & X_{2} & \ldots & X_{d} \\ \hline
+\mathbf{x}_{1} & x_{11} & x_{12} & \ldots & x_{1d} \\
+\mathbf{x}_{2} & x_{21} & x_{22} & \ldots & x_{2d} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\mathbf{x}_{n} & x_{n1} & x_{n2} & \ldots & x_{nd} \\
+\end{array}$
+\end{center}
+
+$x_{i}$ predstavuje $i$-tý riadok, ktorý obsahuje $d$ hodnôt.
+Jeden riadok matice taktiež nazývame príznakový vektor, entita, objekt, transakcia alebo inštancia.
+\begin{center}
+$\mathbf{x}_{i} = (x_{i1},x_{i2},\ldots,x_{id})$
+\end{center}
+
+$X_{j}$ predstavuje $j$-tý stĺpec, ktorý obsahuje $n$ hodnôt.
+Na druhú stranu, stĺpec matice označujeme aj ako príznak, vlastnosť, atribút.
+\begin{center}
+$X_{j} = (x_{1j},x_{2j},\ldots,x_{nj})$
+\end{center}
+
+Pri metódach učenia s učiteľom uvažujeme ešte jeden stĺpec. Jeho hodnoty odpovedajú klasifikácii alebo regresii jednotlivých inštancií. Tieto hodnoty sú z domény množiny označovanej $C$. Kvôli konzistencii budeme tento posledný stĺpec ďalej nazývať ako výstupný atribút.
+\begin{align}
+C &= (c_{1},c_{2},\ldots,c_{m}) \nonumber
+\end{align}
+
+Premennú \textit{n} nazývame veľkosť dát a premennú \textit{d} zase dimenzionalita alebo rozmer dát.
+
+Ako sme už spomínali, štrukturované dáta sú tie, ktoré máme uchované v riadkovo-stĺpcových databázach a teda ich ľahko prevedieme do maticového zápisu. Pre komplexnejšie dátové množiny (neštrukturované), ktoré sa vyskytujú napr. v bioinformatike (DNA, proteínové sekvencie,...), je buď nutné použiť iný zápis alebo využiť techniku extrakcie príznakov. Medzi ďaľšie neštrukturované dáta zaraďujeme obrázky, text, audio ale aj video nahrávky.
+
+\subsection{Atribúty}\label{kap1:2.1:2.1.2:DataAttributes}
+Doména atribútu je množina hodnôt, ktoré môže atribút nadobudnúť. Atribúty môžme rozdeliť na 2 typy podľa ich domény:
+\begin{itemize}
+\item \textbf{Kategoriálne} -- doména týchto atribútov sa skladá z konečnej množiny symbolov. Takýmto atribútom môže byť napríklad pohlavie (muž, žena), rodinný stav (slobodný, ženatý), ale aj komplikovanejšie ako je študijný program (informatika, fyzika, matematika, ...). Tieto atribúty je možné rozdeliť ešte do dvoch skupín:
+\begin{itemize}
+\item \textbf{Nominálne}, keď hodnoty v doméne nie sú usporiadané. Zmysluplné je iba porovnanie na zhodu. Príkladom môže byť pohlavie.
+\item \textbf{Usporiadané}, keď sa hodnoty v doméne dajú porovnávať. Takéto hodnoty môžeme porovnávať nie len na zhodu, ale aj porovnávať (hodnota je väčšia, menšia). Ako príklad môžeme uviesť vzdelanie (základné, stredné, vysokoškolské).
+\end{itemize}
+\item \textbf{Numerické} sú také, ktorých doména je založená na celých alebo reálnych číslach. Jedným z takýchto atribútov môže byť príjem, zostatok na účte, \ldots. 
+\end{itemize}
+
+\section{Dobývanie znalostí}\label{kap1:2.2:DataMining}
+V tomto oddieli zhrnieme vedomosti z dobývania znalostí, ktorého základ je dôležitý pri zaradení rozhodovacích stromov do správneho oboru.
+Znalosti sme čerpali z kníh, ktoré sú vhodné ako úvod do tohoto oboru \cite{kap1-DataMiningAndAnalysis,kap1-DataMiningForMasses,kap1-DataMiningForTrees,kap1-StatisticLearn}. Pomimo týchto kníh sú informácie získané aj z ďaľších zdrojov ako je Wikipédia \cite{wiki-DataMining} ale aj menej známa HTML stránka od Dr. Saed Sayada \cite{online-DataMining}, ktorá stojí za povšimnutie. Všetky materiály sú voľne dostupné online.
+ 
+V časti \ref{kap1:2.2:2.2.1:KDD} popíšeme proces dobývania znalostí z databází, anglicky knowledge discovery in databases (KDD). Hlavné informácie o samotnom dobývaní znalostí zhrnieme v časti \ref{kap1:2.2:2.2.2:DataMineProcess}. Tu ho rozdelíme do štyroch vrstiev. Každú vrstvu vysvetlíme a pri tom do tejto schémy zaradíme rozhodovacie stromy. V časti \ref{kap1:2.2:2.2.3:Taxonomy} predstavíme taxonómiu metód s nadväznosťou na zavedený 4-vrstvový model. Ďalší oddiel \ref{kap1:2.2:2.2.4:Supervised} vysvetlí, čo sú to metódy učenia s učiteľom, rozlíšime jeho dve obmeny a spomenieme tu aj učenie bez učiteľa.
+Nakoniec v oddieli \ref{kap1:2.2:2.2.5:Tools} zhrnieme a uvedieme pár základných nástrojov, ktoré môžeme použiť pri práci v oboru dobývania znalostí. 
+
+\subsection{Dobývanie znalostí z databází}\label{kap1:2.2:2.2.1:KDD}
+Tiež známe pod skratkou KDD je komplikovaný proces pozostávajúci z viacerých fáz, ktorý ma za úlohu identifikovať nové, využiteľné vzory v dátach. KDD zahŕňa aj samotné dobývanie znalostí, ktoré je pravdepodobne jeho najvýznamnejšou súčasťou. Kvôli prominentnému postaveniu dobývania znalostí v rámci KDD, ich mnoho odborníkov stotožňuje.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap1/DM-KDD.pdf}}}
+\caption{Štrukturovaný KDD proces (prekreslené a preložené z \cite{kap1-DataMiningForTrees}).}\label{fig:dataMineKDD}
+\end{figure}
+
+Jednou z úloh v minulosti bolo formalizovať a štandardizovať prístup k dobývaniu znalostí. Na obrázku \ref{fig:dataMineKDD} sú jednotlivé časti sedem-stupňového modelu. Toto rozdelenie ale nie je pevné. Mnoho iných prác a spoločností navrhlo svoje obmeny. Veľké korporácie ako Daimler-Benz, poskytovateľ poistenia OHRA, vývojári softwaru a hardwaru NCR Corp. sa v roku 1999 spojili a vytvorili svoj vlastný model. Týmto vznikol známy CRISP-DM, ktorého štruktúru je možné vidieť na obrázku~\ref{fig:dataMineCRISP} \cite{kap1-DataMiningForMasses}. Ďalším známym modelom je model 5A alebo SEMMA.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap1/DM-CRISP.pdf}}}
+\caption{CRISP-DM model (prekreslené a preložené z \cite{kap1-DataMiningForMasses})}\label{fig:dataMineCRISP}
+\end{figure}
+
+\subsection{Popis dobývania znalostí}\label{kap1:2.2:2.2.2:DataMineProcess}
+Dobývanie znalostí je technika z KDD, ktorá je priamo zodpovedná za vytváranie poznatkov o existujúcich dátach, tak isto ako za predikciu určitých vlastnosti dát. Je to obor, ktorý kombinuje viaceré poznatky zo štatistiky, umelej inteligencie, strojového učenia a čiastočnej znalostí databázových strojov (obrázok \ref{fig:dataMineComb}).
+
+% IMAGE 1
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=225pt]{../img/kap1/DM-comb.pdf}}}
+\caption{Dobývanie znalostí ako kombinácia rôznych oborov (prekreslené a preložené z \cite{online-DataMining})}\label{fig:dataMineComb}
+\end{figure}
+
+Celý proces dobývania znalostí je možné popísať v štyroch vrstvách. Tento model je možné vidieť na obrázku \ref{fig:layerModel}. Každá z nižších vrstiev je dôležitá pre vrstvu vyššie.
+
+% IMAGE 2
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap1/DM-layer.pdf}}}
+\caption{Proces dobývania znalostí v 4 vrstvách (prekreslené a preložené z \cite[s. 26]{kap1-DataMiningForTrees})}\label{fig:layerModel}
+\end{figure}
+
+Prvá vrstva sa zaoberá už konečnou, výstupnou aplikáciou, pri tvorbe ktorej sme využili všetky predchádzajúce vrstvy. Tieto majú široký záber využitia v podnikateľských sférach. Medzi najvyužívanejšie patrí ohodnocovanie zákazníkov podľa ich príjmu, tak ako aj detekcia fraudov\footnote{podvod alebo nepoctivý trik, ktorým je poškodený zainteresovaný uživateľ}. Na vytvorenie aplikácie použijeme jednu alebo viacero techník, ktoré na našom obrázku predstavujú druhú vrstvu. Táto vrstva sa zaoberá úlohami strojového učenia ako je regresia, zhlukovanie a mnoho iných. Tieto úlohy využívajú rôzne, už konkrétne modely (tretia vrstva), kde patria už spomínané rozhodovacie stromy, neurónové siete, kohonenove mapy, \ldots. Posledná vrstva sa zaoberá tvorbou týchto modelov, v ktorej sa nachádzajú aj indukčné algoritmy tvorby rozhodovacích stromov.
+
+
+\subsection{Taxonómia metód}\label{kap1:2.2:2.2.3:Taxonomy}
+Z predchádzajúceho oddielu vieme, že časti dobývania znalostí sú umiestnené v nejakých vrstvách. V tomto oddieli nás budú zaujímať hlavne vzťahy v rámci druhej a tretej vrstvy. Vertikálne rozlíšenie je uvedené v predchádzajúcom oddieli. Na zistenie nejakých ďalších vzťahov je nutné zaradiť metódy do širších jednotiek ako na obrázku \ref{fig:dataMineParad}. Jeden taký pohľad na rozdelenie metód môžeme nájsť aj v \cite{online-DataMining}. V tomto druhom prípade je taxonómia v konečnom dôsledku funkcionálne rovnaká (niektoré názvy sú iné), ale líšia sa štruktúrou. 
+
+V úlohách je v prvom rade nutné rozlišovať medzi dvoma typmi dobývacích techník, verifikačné a objaviteľské. Každý z nich má svoju metodológiu. Verifikačný sa zaoberá testovaním hypotéz, analýzou rozptylu a ďalšími praktikami. Objaviteľské zase automaticky hľadajú nové pravidlá a vzory.
+
+Verifikačné metódy spoliehajú na určitú predom známu hypotézu, ktorá býva vyhodnotená expertom. Tento prístup nie je až tak spojený s dobývaním znalostí, ako to je pri objaviteľských metódach. Najvýznamnejším dôvodom je ten, že techniky dobývania znalostí by mali vyberať hypotézu z množiny vhodných hypotéz (identifikácia modelu), než aby sa spoliehali na nejakú dopredu známu (odhadnutie modelu).
+
+Medzi takéto objaviteľské techniky patria ako predikčné, tak aj popisné metódy (zhlukovanie, vizualizácia). Popisnými sa hlavne snažíme pochopiť ako a prečo sú dáta umiestnené tak, ako sú nám prezentované. Predikčné zase dokážu predpovedať hodnoty jednotlivých atribútov daného objektu. Indukčné algoritmy sú typickou technikou, ktoré sa používajú pri vytváraní týchto modelov.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap1/DM-paradigm.pdf}}}
+\caption{Taxonómia modelov, prekreslené a preložené z \cite{kap1-DataMiningForTrees})}\label{fig:dataMineParad}
+\end{figure}
+
+\subsection{Učenie s učiteľom a bez učiteľa}\label{kap1:2.2:2.2.4:Supervised}
+Učenie s učiteľom je oblasťou dobývacích techník, ktoré na vytvorenie modelu potrebuje trénovaciu množinu. Z taxonómie zavedenej v predchádzajúcom oddieli sem patria predikčné metódy. Pri tomto type sa teda snažíme nájsť vzťahy v trénovacích dátach medzi vstupnými atribútmi (nazývanými aj nezávislé premenné) a výstupným, klasifikačným atribútom (tiež nazývaný závislá premenná). Nájdený vzťah v dátach je reprezentovaný určitou štruktúrou a je to v konečnom dôsledku náš model. Takýto model je vytváraný už nejakou konkrétnou metódou. Medzi najzákladnejšie patria rozhodovacie stromy, neurónové siete, SVM, \ldots. Poskytnutím nových inštancií môžeme model využiť na klasifikáciu výstupného atribútu z tých vstupných.
+Využitie je veľmi bohaté v rôznych sférach (financie, obchod, služby, \ldots). 
+
+Hlavným cieľom učenia je zlepšenie modelu na nejakej úlohe pomocou predom daných dát. K tomuto cieľu je nutné poznať tri jeho komponenty:
+\begin{itemize}
+\item Úloha $U$, ktorú chceme učením vylepšiť
+\item Dáta $D$, ktoré použijeme pri učení
+\item Meradlo výkonu $M$, ktoré je použité pri meraní miery zlepšenia.
+\end{itemize} 
+Pre lepšie pochopenie môžeme použiť známy problém identifikácie emailov do spamu\footnote{Spamová správa - nevyžiadaná správa, ktorú užívateľovi prišla do emailovej schránky.}. Pre túto vyzerajú komponenty takto:
+\begin{itemize}
+\item Úlohou $U$ je identifikovať nevyžiadané emaily.
+\item Dáta $D$ sú v tomto prípade množiny emailov, v ktorých sa nachádzajú správne aj nesprávne emaily.
+\item Meradlom výkonu $M$ je percento nevyžiadaných emailov, ktoré boli klasifikované správne a percento správnych emailov, ktoré boli klasifikované nesprávne.
+\end{itemize} 
+
+Trénovacie dáta sú v tomto prípade v trochu odlišnejšom dátovom zápise, ako sme definovali v časti \ref{kap1:2.1:Data}. Nová matica by vyzerala ako $TrainData = (Data | Y)$, kde znak $|$ znamená pripojenie stĺpca $Y$ za maticu $Data$. Iným zápisom môže byť aj $TrainData = \{(\mathbf{x}_{k},y_{k})\}_{k=1}^{n}$, kde $y_{k}$ je hodnota klasifikácie/regresie pre vektor $\mathbf{x}_{k}$. Hodnota $y_{k}$ je z domény množiny $C$ 
+
+Pri modeloch učenia s učiteľom je nutné rozlišovať medzi dvoma základnými typmi podľa typu výstupného atribútu:
+\begin{itemize}
+\item \textbf{Klasifikačné} mapujú vstupný vektor na dopredu známe triedy. Príkladom môže byť predikovanie rizika rakoviny (žiadne, nízke, vysoké) pacienta podľa jeho lekárskej anamnézy.
+\item \textbf{Regresné} mapujú vstupný vektor na reálne čísla. Takýto model dokáže napríklad určiť výšku pôžičky, ktorú môže banka poskytnúť z informácii o žiadateľovi.
+\end{itemize} 
+
+Učenie bez učiteľa je presným opakom od učenia s učiteľom. Tento typ vytvára model bez trénovacej množiny. Podľa taxonómie sem môžme zase zaradiť popisné metódy (nie vizualizáciu) z objaviteľských techník. 
+
+\subsection{Nástroje pre DM}\label{kap1:2.2:2.2.5:Tools}
+Existuje veľké množstvo nástrojov, ktoré boli vytvorené aby zvládali úlohy z dobývania znalostí. Medzi nimi existuje plno profesionálnych nástrojov určených priamo pre takéto úlohy (Weka, RapidMiner). Iné druhy sú vo forme knižníc do stávajúcich jazykov (Python, Matlab, ...). Stavané sú tak, aby dokázali využiť techniky umelej inteligencie, strojového učenia, štatistiky a iné. Veľa z nich je ale platených, niektoré zase komplikované na inštaláciu, konfiguráciu alebo použitie. Pre učenie, ľahšiu využiteľnosť a hlavne pre účel našej práce sú preto nevhodné. 
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kap1/DM-Weka.png}}}
+\caption{Náhľad na užívateľské prostredie nástroja Weka}\label{fig:dataMineWeka}
+\end{figure}
+
+Najvhodnejšími kandidátmi sú:
+\begin{itemize}
+\item \textbf{RapidMiner} je napísaný v jazyku Java a poskytuje pokročilé analytické techniky pomocou framework-u založeného na šablónach. Výhodou tohto nástroja je aj to, že používateľ nie je nútený vytvárať žiaden kód. Ponú\-kaný je skorej ako služba, než kus lokálneho softwaru. Popri riešení úloh dobývania znalostí dokáže aj predspracovanie, vizualizáciu dát, štatistické modelovanie a vyhodnocovanie. RapidMiner je jedným z najpoužívanejších a najlepších nástrojov na úlohy z dobývania znalostí. Sila nástroja narastá vďaka využiteľnosti schém, modelov a algoritmov z Weky a R-skriptov. Distribuovaný je pod AGPL licenciou a je voľne stiahnuteľný zo stránky SourceForge.
+\item \textbf{Weka} je kolekciou algoritmov pre strojové učenie a dobývanie znalostí. Algoritmy môžu byť volané priamo z užívateľského prostredia programu (obrázok \ref{fig:dataMineWeka}) alebo z vlastne vytvorenej aplikácie bežiacej pod Java prostredím. Obsahuje nástroje na predspracovanie, klasifikáciu, regresiu, asociačné pravidlá a vizualizáciu. Taktiež je použiteľná na vytváranie vlastných schém (prebrané z \cite{online-DataMiningWeka}). Aplikáciu si je možné stiahnuť zadarmo z hlavnej stránky pod GNU General Public licenciou. Tento typ licencie je jedna z najdôležitejších výhod Weky oproti RapidMiner-u. Vďaka nej je možná ľubovoľná úprava nástroja podľa našich požiadavkov, tak ako aj pridanie úplne nových algoritmov.
+\end{itemize}
+
+Ďalší kandidáti nie sú samostatnými aplikáciami, ale moduly pre dobývanie znalostí do nejakého dynamického jazyka. Tieto možnosti môžeme považovať za pokročilejšie, keďže na ich využitie je nutné spísať vlastný kód vo forme skriptov.
+\begin{itemize}
+\item \textbf{Matlab} je jazyk vysokej úrovne a interaktívne prostredie používané širokou skupinou vedcov a technikov \cite{online-DataMiningMatlab}. Príjemné prostredie tohoto jazyka a možnosť interaktívneho ladenia svojich programov zjednodušuje prácu. Rozširujúce moduly nazývané toolboxy\footnote{panel nástrojov, pomenovanie modulov do Matlab-u}, majú široké spektrum zamerania. Medzi najvýznamnejšie moduly na tvorbu modelov a dátovú analýzu pat\-ria štatistický modul (Statistics and Machine Learning Toolbox), modul pre neu\-rónové siete (Neural Network Toolbox) a mnoho ďalších. Tieto moduly sa dajú často ovládať z takzvaných pomocných nástrojov\footnote{pomocný nástroj/wizard je skupina po sebe nasledujúcich obrazoviek, ktoré prevedú užívateľa celým procesom tvorby požadovaného programu, bez ďalšej znalosti vnútornej funkcionality}.
+Nevýhodou tohoto prístupu je buď nutnosť vlastniť Matlab, ktorý je spoplatnený, alebo mať alternatívny Octave, ktorým zase strácame príjemné užívateľské prostredie s ďalšími výhodami modulov, ako sú spomenuté pomocné nástroje.
+\item \textbf{Python} je vysoko úrovňový dynamický jazyk podobne ako to je u Matlab-u \cite{wiki-Python}. Je to obľúbeným jazykom vedcov a jeho hlavnou filozofiou je zaručiť čitateľnosť kódu. Python podporuje mnoho programátorských paradigmát (objektovo orientovaný, imperatívny, funkcionálny, ...). Taktiež k nemu existuje mnoho knižníc na zjednodušenie práce v širokej škále oborov. Najoblúbenejší nástroj pre štatistické a strojové učenie je obsiahnutý v balíčku scikit-learn \cite{kap1-Scikit}. Tento balík v sebe viaže efektívne a jednoduché nástroje pre dátovú analýzu aj dobývanie znalostí. Stavia na obľúbených knižniciach NumPy, SciPy a matplotlib. Jazyk Python je k tomu voľne dostupný a scikit-learn je so svojou BSD licenciou skvelým kandidátom aj pre obchodné účely. 
+\end{itemize}
+
+
+\section{Základné pojmy rozhodovacích stromov}\label{kap1:2.3:DT}
+V tomto oddieli vysvetlíme základné pojmy, ktoré sa používajú v spojitosti s rozhodovacími stromami. Najprv zadefinujeme čo je strom a čo znamenajú jednotlivé jeho časti v rozhodovacom strome. Informácií o tejto metóde existuje veľa, no základné pojmy sme hlavne čerpali z kníh \cite{kap1-DataMiningForTrees,kap1-DecisionTree} a \cite[s. 481-498]{kap1-DataMiningAndAnalysis}. Ďalšími použitými zdrojmi bola Wikipédia \cite{wiki-DecisionTree} a scikit-learn stránka \cite{online-DecisionTreeScikit}, na ktorej sa nachádzajú zaujímavé príklady.
+
+V časti \ref{kap1:2.3:2.3.1} popíšeme čo je strom. Rozhodovacie stromy potom na základe grafovej štruktúry stromu zavedieme v časti \ref{kap1:2.3:2.3.2}.
+
+\subsection{Strom}\label{kap1:2.3:2.3.1}
+Na bližšie zadefinovanie rozhodovacieho stromu je potrebný aspoň minimálny základ z teórie grafov. Základné pojmy sme čerpali z knihy \cite{kap1-KapitolyDiskretka}.
+\begin{def-sk}[Graf]\label{kap1:2.3:2.3.1:graf}
+Graf je usporiadaná dvojica (V,E), kde V je nejaká neprázdna množina a E je množina dvojbodových podmnožín množiny V. Prvky množiny V sa nazývajú vrcholy grafu G a prvky množiny E sú hrany grafu G.
+\end{def-sk}
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kap1/DT-graphs.pdf}}} 
+\caption{Príklady neorientovaných grafov. Čierne body predstavujú vrcholy a čiary medzi vrcholmi reprezentujú hrany z $E$.}\label{fig:decisionTreeGraphs}
+\end{figure}
+
+\begin{def-sk}[Orientovaný graf]\label{kap1:2.3:2.3.1:orient-graf}
+Orientovaný graf G je dvojica (V,E), kde V je nejaká neprázdna množina a E je podmnožina kartézskeho súčinu $V \times V$. Prvky množiny V sa nazývajú vrcholy grafu G a prvky množiny E nazývame orientované hrany. Orientovaná hrana má tvar (x,y). Hovoríme, že orientovaná hrana vychádza z x a končí v y.
+\end{def-sk}
+
+Príklady obyčajných(neorientovaných) a orientovaných grafov je možné vidieť na obrázkoch \ref{fig:decisionTreeGraphs} a \ref{fig:decisionTreeOrientGraphs}.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kap1/DT-orientgraphs.pdf}}}
+\caption{Príklady orientovaných grafov. Čierne body predstavujú vrcholy a čiary medzi vrcholmi reprezentujú orientované hrany z $E$. Šípka určuje orientáciu hrany.}\label{fig:decisionTreeOrientGraphs}
+\end{figure}
+
+\begin{def-sk}[Symetrizácia]\label{kap1:2.3:2.3.1:symetrizacia}
+Každému orientovanému grafu $G = (V,E)$ môžeme priradiť neorientovaný graf $sym(G) = (V,E')$, kde $E' = \{\{x,y\}; (x,y) \in E$ alebo $(y,x) \in E\}$. Graf $sym(G)$ nazývame symetrizáciou grafu G.
+\end{def-sk}
+
+\begin{def-sk}[Súvislosť]\label{kap1:2.3:2.3.1:suvislost}
+Hovoríme, že graf G je súvislý, keď pre každé dva jeho vrcholy x a y v ňom existuje cesta z x do y. Orientovaný graf je súvislý, keď je súvislá jeho symetrizácia (takáto súvislosť sa nazýva slabá).
+\end{def-sk}
+
+Pre orientované hrany existuje ešte druhý typ súvislosti a to silná. Avšak táto súvislosť je pre naše účely a hlavne definíciu rozhodovacích stromov nepodstatná.
+
+\begin{def-sk}[Kružnica]\label{kap1:2.3:2.3.1:kruznica}
+Graf $C_{n}$, kde n > 3, nazývame kružnicou, keď $ V = \{1,2,...,n\}$ a $E = \{\{i,i+1\};i=1,...,n-1\} \cup \{\{1,n\}\}$.
+\end{def-sk}
+
+Na obrázku \ref{fig:decisionTreeCycles} sú príklady štyroch druhov kružníc (tých najmenších).
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kap1/DT-cycles.pdf}}}
+\caption{Pár príkladov kružníc. Čierne body predstavujú vrcholy a čiary medzi vrcholmi reprezentujú hrany z $E$.}\label{fig:decisionTreeCycles}
+\end{figure}
+
+\begin{def-sk}[Strom]\label{kap1:2.3:2.3.1:strom}
+Strom je súvislý graf neobsahujúci kružnicu. Orientovaný strom je súvislý orientovaný graf, ktorý po symetrizácii neobsahuje žiadnu kružnicu.
+\end{def-sk}
+
+Podrobnejší výklad o stromoch môže čitateľ nájsť v knihe \cite{kap1-KapitolyDiskretka}. 
+
+\begin{def-sk}[Zakorenený strom]\label{kap1:2.3:2.3.1:korenovystrom}
+Zakorenený strom je orientovaným stromom, v ktorom je jeden význačný vrchol nazývaný koreň stromu. Hrany takéhoto stromu sú jednoznačne orientované a vedú smerom od koreňa. Pre zakorenený strom ďalej definujeme tieto pojmy:
+\begin{itemize}
+\item \textbf{potomok} vrcholu $V$ je každý vrchol, do ktorého je vedená orientovaná hrana z vrcholu $V$,
+\item \textbf{list} je vrchol, ktorý nemá ďalšieho potomka.
+\end{itemize} 
+\end{def-sk}
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=200pt]{../img/kap1/DT-parentchild.pdf}}}
+\caption{Popis jednotlivých druhov vrcholov vzhľadom k danému vrcholu (červený). Modrá -- nasledovníci, žltá -- predchodcovia, zelená -- potomkovia, fialová -- rodič)}\label{fig:decisionTreeParentChild}
+\end{figure}
+
+\begin{def-sk}[Vzťahy v strome]\label{kap1:2.3:2.3.1:naslednik}
+Nech $G = (V,E)$ je zakorenený strom (obrázok \ref{fig:decisionTreeParentChild}) a $k$ je koreň stromu, potom uvažujme:
+\begin{itemize}
+\item \textbf{predchodca} vrcholu $v$ je každý vrchol na orientovanej ceste z koreňa $k$ do vrcholu $v$,
+\item \textbf{nasledovník} vrcholu $v$ je každý vrchol, kde jedným z predchodcov tohoto vrcholu je vrchol $v$,
+\item \textbf{rodič} vrcholu $v$ je vrchol, z ktorého vedie orientovaná hrana do vrcholu $v$. Inak aj bezprostredný predchodca vrcholu $v$,
+\item \textbf{potomok} vrcholu $v$ je vrchol, do ktorého vedie orientovaná hrana z vrcholu $v$. Inak aj bezprostredný nasledovník vrcholu $v$.
+\end{itemize} 
+\end{def-sk}
+
+\subsection{Rozhodovací strom}\label{kap1:2.3:2.3.2}
+Rozhodovací strom je prediktívny model, ktorý môžeme použiť pri riešení klasifikačných, ale aj regresných úloh. Z časti \ref{kap1:2.2:2.2.4:Supervised} vieme, že táto technika patrí pod metódy učenia s učiteľom. Z tejto časti taktiež vieme, že trénovacie dáta majú mierne pozmenený zápis od toho zadefinovaného v oddieli \ref{kap1:2.1:2.1.1:DataRepresentation}.
+
+\begin{def-sk}[Trénovacie dáta]\label{kap1:2.3:2.3.2:traindata}
+Trénovacie dáta sú n prvkovou množinou dvojíc $D = \{(\mathbf{x}_{k},y_{k})\}_{k=1}^{n}$, kde $\mathbf{x}_{k}$ je $d$-rozmerný príznakový vektor $d \geq 1$ a $y_{k}$ je jeho klasifikácia/regresia vybraná z množiny $C$. Pre klasifikáciu je doménou $C$ konečná množina symbolov, $C = \{c_{1},c_{2},\ldots,c_{m}\}$. Pri regresii je doména $C$ nejaká nekonečná množina, ako napríklad interval reálnych čísel $\mathbb{R}$, podmnožina celých čísel, $\ldots$.
+\end{def-sk}
+
+\begin{def-sk}[Podmnožina dát podľa hodnoty atribútu]\label{kap1:2.3:2.3.2:subsetValueData}
+Nech $D = \{(\mathbf{x}_{i},y_{i})\}_{i=1}^{n}$ sú trénovacie dáta. Ďalej nech $D_{X_{i} = t}$ je podmnožina $D$ taká, že obsahuje práve všetky dvojice $(\mathbf{x},y) \in D$, pre ktoré platí $\mathbf{x} = (x_{1}, \ldots, x_{d})$ a $x_{i} = t$. Podobne $D_{c_{i}}$ je podmnožina dátovej množiny $D$ skladajúca sa z dvojíc $(\mathbf{x},y) \in D$, pre ktoré platí $y = c_{i}$.
+\end{def-sk}
+
+Na obrázku \ref{fig:decisionPlaneDataa} sú zobrazené štyri množiny dát, ktoré dokopy tvoria celú množinu $D$ ($=D_{1} \cup D_{2} \cup D_{3} \cup D_{4}$). Farby jednotlivých útvarov určuje ich klasifikáciu.
+ 
+\begin{figure}[h]
+\centering
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{../img/kap1/DT-planedata.pdf}
+\caption{}\label{fig:decisionPlaneDataa}
+\end{subfigure}
+\qquad
+\begin{subfigure}[b]{0.45\textwidth}
+\includegraphics[width=\textwidth]{../img/kap1/DT-planedatasep.pdf}
+\caption{}\label{fig:decisionPlaneDatab}
+\end{subfigure}
+\caption{Umiestnenie dátových množín $D = D_{1} \cup D_{2} \cup D_{3} \cup D_{4}$ v rovine. Farby určujú klasifikáciu/regresiu pre množinu. V prípade b) sú vyznačené aj deliace nadroviny.}\label{fig:decisionPlaneData}
+\end{figure}
+
+\begin{def-sk}[Zobrazenie na atribúty]\label{kap1:2.3:2.3.2:mapovanievrcholov}
+Nech P je príznakový vektor v daných dátach, $G = (V,E)$ je zakorenený strom a L je množina všetkých listov tohoto stromu. Potom zobrazením $\alpha:(V \setminus L) \times P \rightarrow V$ priraďujeme nelistovému vrcholu $u \in V \setminus L$ a špecifickému príznakovému vektoru $P$ vrchol $v \in V$ (listový alebo nelistový), taký že $(u,v)$ je orientovaná hrana z $E$.
+\end{def-sk}
+
+\begin{def-sk}[Zobrazenie na výstupný atribút]\label{kap1:2.3:2.3.2:mapovanielistov}
+Nech C je výstupný atribút a dom(C) jeho obor hodnôt v daných dátach, $G$ je koreňový strom a L je množina všetkých listov tohoto stromu. Potom zobrazenie $\beta:L \rightarrow dom(C)$ priraďuje každému listu triedu alebo reálnu hodnotu.
+\end{def-sk}
+
+\begin{def-sk}[Rozhodovací strom]\label{kap1:2.3:2.3.2:DT}
+Majme zakorenený strom $G = (V,E)$ a zobrazenia $\alpha$ a $\beta$, ako sú uvedené v Definíciach \ref{kap1:2.3:2.3.2:mapovanielistov} a \ref{kap1:2.3:2.3.2:mapovanievrcholov}. Rozhodovací strom pre trénovacie dáta $D$ definujeme ako trojicu $(G,\alpha,\beta)$.
+\end{def-sk}
+
+Pri takejto definícii klasifikácia/regresia funguje nasledovne. Daný príznakový vektor je testovaný na nelistovom vrchole pomocou funkcie $\alpha$, ktorou získame ďalší vrchol na otestovanie. Tento proces začína v koreni stromu a pokračuje až dokým nedostaneme nejaký listový vrchol. V tomto vrchole, za použitia funkcie $\beta$ dostávame požadovanú klasifikáciu/regresiu.
+Testovanie väčšinou prebieha porovnávaním určitého atribútu alebo skupiny atribútov vektora s nejakou hodnotou.
+
+\begin{def-sk}[Deliaca nadrovina]\label{kap1:2.3:2.3.2:axisHyperplanes}
+Deliacu nadrovinu $h$, určenú vektorom $\mathbf{w}$ a číslom $b$ definujeme ako množinu všetkých bodov $\mathbf{x}$, pre ktoré platí $h:\mathbf{w^{T}x} + b = 0$, kde $\mathbf{w^{T}}$ nazývame normálny váhový vektor vzhľadom k nadrovine a $b$ je vzdialenosť od počiatku súradnicovej sústavy.
+\end{def-sk}
+
+V modeli rozhodovacích stromov sú uvažované oddeľujúce nadroviny, ktoré sú rovnobežné s jednou z hlavných osí. Z Definície \ref{kap1:2.3:2.3.2:axisHyperplanes} teda vyplýva, že váhový vektor $\mathbf{w}$ takejto nadroviny musí byť taktiež rovnobežný s niektorou z hlavných osí. K tomu je tento vektor obmedzený iba na jeden z množiny $\{\mathbf{e}_1,\mathbf{e}_2,\ldots,\mathbf{e}_d\}$, kde každý vektor $\mathbf{e}_i \in \mathbb{R}^{d}$ a obsahuje, okrem jedničky na $i$-tom mieste, samé nuly. Potom pre každý bod $\mathbf{x} = \{x_{1},x_{2},\ldots,x_{d}\}$ nadroviny $h$ platí:
+\begin{align}
+h:\mathbf{e}_i\mathbf{x} + b &= 0 \nonumber\\
+h:x_{i} + b &= 0 \label{kap1:2.3:2.3.2:eq1}
+\end{align}
+
+\begin{def-sk}[Deliaci bod]\label{kap1:2.3:2.3.2:splitPoints}
+Deliaci bod zodpovedajúci rozhodnutiu a definovaný nadrovinou rozdeľuje dátový priestor $\mathcal{R}$ na dva podpriestory $\mathcal{R}_{p}$ a $\mathcal{R}_{n}$. 
+\end{def-sk}
+
+\begin{remark-sk}\label{kap1:2.3:2.3.2:remarkSplitPoints}
+Takže všetky body $\mathbf{x}$, pre ktoré platí $h(\mathbf{x}) < 0$, sú na jednej strane nadroviny, pričom $h(\mathbf{x}) > 0$ implikuje opačnú stranu. V prípade $h(\mathbf{x}) < 0$ podľa (\ref{kap1:2.3:2.3.2:eq1}) platí, že $x_{i} + b < 0$ a teda $x_{i} < -b$, pričom $x_{i}$ nadobúda nejakú hodnotu z domény atribútu $X_{i}$. Deliaci bod v rozhodovacom strome je preto potom uvádzaný vo formáte $X_{i} < v$, kde $v = -b$.
+\end{remark-sk}
+
+Rozhodovacie stromy teda obsahujú vrcholy, ktoré reprezentujú rozhodnutia zodpovedajúce deliacim bodom asociovanými s deliacimi nadrovinami.
+
+\begin{def-sk}[Binárny rozhodovací strom]\label{kap1:2.3:2.3.2:binarnyDT}
+Binárny rozhodovací strom je rozhodovací strom, pre ktorý platí, že počet potomkov každého vrcholu tohoto stromu je rovný 2 alebo 0 (len v prípade listov).
+\end{def-sk}
+
+Na obrázku \ref{fig:decisionPlaneDatab} sú nakreslené 4 množiny bodov zo štyroch tried spolu s deliacimi nadrovinami. Rozhodovací strom, v konečnom dôsledku, svojou vnútornou stavbou pokladá tieto deliace čiary.
+
+\section{Typy rozhodovacích stromov}\label{kap1:2.4:DTTypes}
+Z časti taxonómia metód \ref{kap1:2.2:2.2.3:Taxonomy} vieme, že rozhodovací strom je predikčný model.
+Uvádzali sme, že predikčné modely sú dvoch typov, klasifikačné a regresné. Delenie rozhodovacích stromov bude v tomto ohľadu také isté. Informácie použité v tejto časti sme čerpali už zo spomínaných kníh \cite{kap1-DataMiningForTrees,kap1-DataMiningForMasses}, článku \cite{kap1-DecisionTreesTypes} a online zdroju \cite{online-DecisionTreeTypes}.
+
+Čo je to klasifikačný strom spolu s jeho dôležitými vlastnosťami zhrnieme v časti \ref{kap1:2.4:2.4.1:DTClassification}. Poznatky o regresných stromoch budú uvedené v časti \ref{kap1:2.4:2.4.1:DTRegression}. V obidvoch častiach vypíšeme prevod rozhodovacieho stromu na súbor jednoduchých pravidiel pre ľahšiu predikciu.
+\subsection{Klasifikačný strom}\label{kap1:2.4:2.4.1:DTClassification}
+Rozhodovací strom, ako už vieme z predchádzajúcej kapitoly je hierarchická štruktúra, ktorý pomocou rozhodnutí dovedie zadaný vektor k určitej výstupnej hodnote. V obore dobývania znalostí je rozhodovací strom prediktívny model, ktorý môže reprezentovať ako klasifikačný, tak aj regresný model. Keď je strom použitý na klasifikačné úlohy, tak ho nazývame klasifikačný.
+
+Klasifikačný strom používame vtedy, keď chceme klasifikovať objekt do triedy vybranej z konečnej, predom definovanej množiny tried podľa jeho príznakov. Klasifikačné stromy sú použiteľné najmä ako objaviteľská technika. Široko sú využívané v oblasti financií (pre ich zrozumiteľnosť), medicíny, vo vedeckých okruhoch, ale aj priemyselných procesoch. Aj napriek svojim výhodám nenahradzujú iné tradičné techniky predikcie ako sú Bayesovské alebo Neurónové siete. Pri klasifikačných stromoch si je taktiež nutné uvedomiť, že atribúty vo vrcholoch môžu byť ako numerické, tak aj kategorické.
+
+Na Obrázku \ref{fig:TypesClassify} je nakreslený typický klasifikačný strom. Tento príklad vznikol priamym prepisom obrázku \ref{fig:decisionPlaneDatab} spolu s uvedenými deliacimi nadrovinami. Uvažujme, že každej definovanej množine $D_{1},\ldots,D_{4}$ z \ref{fig:decisionPlaneDatab} priradíme triedu $c_{1},\ldots,c_{4}$. Podľa pozorovania \ref{kap1:2.3:2.3.2:remarkSplitPoints} z predchádzajúcej časti je vidieť, že testy atribútov vo vnútorných uzloch stromu zodpovedajú deliacim bodom a konečné klasifikácie jednotlivým dátovým množinám na tomto obrázku. Vstupnú inštanciu, ktorú chceme klasifikovať označme $I$. Pravidlá tohoto klasifikačného stromu vyzerajú takto:
+\begin{align}
+Y(I) < 3.5 \wedge X(I) < 3.5 &\Rightarrow c_{2} \nonumber \\
+Y(I) < 3.5 \wedge X(I) \geq 3.5 &\Rightarrow c_{3} \nonumber \\
+Y(I) \geq 3.5 \wedge X(I) > 2 &\Rightarrow c_{4} \nonumber \\
+Y(I) \geq 3.5 \wedge X(I) \leq 2 &\Rightarrow c_{1} \nonumber
+\end{align}
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap1/DT-binary.pdf}}}
+\caption{Príklad klasifikačného stromu (binárneho), ktorý popisuje deliace nadroviny z obrázku \ref{fig:decisionPlaneDatab}}\label{fig:TypesClassify}
+\end{figure}
+Na tvorbu klasifikačných stromov sa využíva mnoho rôznych techník. 
+Prvý publikovaný algoritmus sa nazýva THeta Automatic Interaction Detection (THAID). Neskôr vznikli vylepšené techniky ako Iterative Dichotomiser 3 (ID3), C4.5 (zlepšený ID3), CHi-squared Automatic Interaction Detection (CHAID) a Classification And Regression Tree (CART), ktorý sa dá použiť pri tvorbe klasifikačných aj regresných stromov. Každý z nich používa iný typ hľadania deliacich bodov. Medzi ďalšie, menej známe techniky môžeme uviesť CRUISE, GUIDE, QUEST, o ktorých si je možné prečítať v článkoch \cite{kap1-DecisionTreesUnused1,kap1-DecisionTreesUnused2,kap1-DecisionTreesUnused3}.
+Konkrétnejšie budú niektoré z nich popísané v oddieli \ref{kap1:2.5:DTTechniques}. 
+
+\subsection{Regresný strom}\label{kap1:2.4:2.4.1:DTRegression}
+Regresný strom je variantou rozhodovacieho stromu navrhnutý na aproximáciu reálnych funkcií namiesto toho, aby bol použitý na klasifikáciu. Strom je veľmi podobný tomu klasifikačnému. Jediným rozdielom je výstupný atribút, ktorého doména je v tomto prípade nekonečná množina ($\mathbb{R},\mathbb{N},\ldots$).
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap1/DT-regression.pdf}}}
+\caption{Príklad regresneho stromu (binárneho), ktorý predikuje požičky pre žiadateľov}\label{fig:TypesRegression}
+\end{figure}
+
+Tento druh stromov teda používame vtedy, keď chceme predikovať vlastnosť objektu, ktorá je z nekonečnej množiny. Využitie je úplne rovnaké, ako pri klasifikačných stromoch. Regresné stromy majú ale bohatšie spôsoby pri predikcii. Týka sa to hlavne ďalšieho využitia iných druhov modelov v koncových listoch. Takto vytvorené stromy bývajú ale o niečo náročnejšie na konštrukciu kvôli ich komplikovanejšej štruktúre. Vďaka zložitejšej štruktúre stromy dávajú pri regresii zvyčajne lepšie výsledky než iné jednoduchšie metódy.
+
+Na obrázku \ref{fig:TypesRegression} si je možné všimnúť typický regresný strom. V tomto prípade predikuje výšku priradenej pôžičky žiadateľom podľa ich veku a sociálneho zaradenia (príklad nevychádza z reálnych údajov). Označme žiadateľa/entitu o pôžičku ako $E$. Jednotlivé pravidlá pre tento strom by vyzerali takto:
+\begin{align}
+vek(E) < 25 \wedge soc.zar(E) = \check{s}tudent &\Rightarrow schv\acute{a}len\acute{a}\  po\check{z}i\check{c}ka = 30000 \nonumber \\
+vek(E) < 25 \wedge soc.zar(E) \neq \check{s}tudent &\Rightarrow schv\acute{a}len\acute{a}\  po\check{z}i\check{c}ka = 15000 \nonumber \\
+vek(E) \geq 25 \wedge soc.zar(E) = zamestnan\acute{y} &\Rightarrow schv\acute{a}len\acute{a}\  po\check{z}i\check{c}ka = 60000 \nonumber \\
+vek(E) \geq 25 \wedge soc.zar(E) = nezamestnan\acute{y} &\Rightarrow schv\acute{a}len\acute{a}\ po\check{z}i\check{c}ka = 5000 \nonumber 
+\end{align}
+Regresné stromy sa konštruujú rôznymi technikami. Historicky prvým algoritmom na konštrukciu regresných stromov bol algoritmus Automatic Interaction Detection (AID), ktorý sa objavil pár rokov pred THAID. Ďalším, veľmi obľúbeným algoritmom je už spomínaný CART, ktorý dokáže vytvoriť popri regresných stromov aj tie klasifikačné. Spomedzi menej známych techník uvádzame M5' a GUIDE.
+
+\section{Techniky tvorby stromov}\label{kap1:2.5:DTTechniques}
+Cieľom tejto časti je predviesť najznámejšie techniky tvorby stromov (regresných aj klasifikačných). Tieto techniky spadajú pod oblasť učenia s učiteľom, ktorá bola bližšie popísaná v oddieli \ref{kap1:2.2:2.2.4:Supervised}. Jedná sa o algoritmy, ktoré vytvárajú strom z trénovacej množiny postupne od koreňa. Dáta sú v algoritme rozdelené podľa deliaceho kritéria na podmnožiny. Ďalej pokračujeme rekurzívnym volaním toho istého algoritmu na každú z týchto podmnožín. V obore dobývania znalostí sa celý tento proces nazýva indukcia rozhodovacích stromov zhora nadol, anglicky top down induction of decision trees (TDIDT). Indukčné algoritmy sú príkladom hladných techník. V praxi sú jedným z najpoužívanejších stratégii pri trénovaní rozhodovacích stromov. V tejto časti sme čerpali z kníh \cite{kap1-DataMiningForTrees,kap1-DataMiningAndAnalysis} pričom na rozšírenie ďalších poznatkov sme použili online zdroje \cite{online-SplitCriterias,online-SplitCriteriasMatter,online-DTLectures}.
+
+Najskôr v časti \ref{kap1:2.5:2.5.1:SplitCriterias} zadefinujeme, čo sú to kritéria delenia a vypíšeme tie najznámejšie z nich. V časti \ref{kap1:2.5:2.5.2:Generic} ukážeme generický algoritmus na indukciu stromov. V ďalších častiach rozoberieme tri najznámejšie indukčné algoritmy na tvorbu stromov. Konkrétne v časti \ref{kap1:2.5:2.5.3:ID3} ukážeme algoritmus ID3. Následne v časti \ref{kap1:2.5:2.5.4:C4.5} predstavíme vylepšený algoritmus C4.5. Pre regresné typy stromov predvedieme v časti \ref{kap1:2.5:2.5.5:CART} obľúbený algoritmus CART.
+\subsection{Kritéria delenia}\label{kap1:2.5:2.5.1:SplitCriterias}
+Kritéria delenia sú funkcie, ktoré sú použité pri konštrukcii stromov. Tieto kritéria majú za úlohu zvoliť vhodný atribút do vnútorného vrcholu stromu.
+V rozhodovacích stromoch majú tieto vnútorné vrcholy väčšinou jediný atribút, na ktorom porovnávame jednotlivé inštancie z dát. Kritéria, ktoré vytvárajú takýto typ atribútov nazývame jednorozmerné.
+
+Jednorozmerné kritéria môžu byť ďalej charakterizované podľa
+\begin{itemize}
+\item pôvodu (teória informácii, závislosť, vzdialenosť),
+\item štruktúry, kam patria binárne kritéria, kritéria založené na miere neusporiadanosti (impurity-based) a ich normalizované verzie.
+\end{itemize}
+
+Viac príkladov kritérií, doplnené informácie o spomínaných kritériách a podrobnejšie vysvetlenie deliacich kritérií je možné vyhľadať v knihách \cite{kap1-DataMiningForTrees,kap1-StatisticLearn}. 
+\subsubsection{Neusporiadanosť}\label{kap1:2.5:2.5.1:Impurity}
+Na bližšie zadefinovanie kritérií založených na neusporiadanosti potrebujeme vedieť pár pojmov z teórie informácii.  
+\begin{def-sk}[Miera neusporiadanosti]\label{kap1:2.5:2.5.1:ImpurityFunction}
+Nech $k \in \mathbb{N}$. Miera/funkcia neusporiadanosti $\gamma: [0,1]^{k}  \rightarrow \mathbb{R}$ je funkcia definovaná pre $n$-tice $P = (p_{1},\ldots,p_{k})$, pre ktoré platí
+\begin{itemize}
+\item $\sum_{i=1}^{k}p_{i} = 1, p_{i} \geq 0$,
+\item $\gamma(P) \geq 0$,
+\item $\gamma(P)$ dosahuje minimum v bodoch, pre ktoré platí $\exists i, p_{i} = 1$,
+\item $\gamma(P)$ dosahuje maxima v bode $(1/k,\ldots,1/k)$,
+\item $\gamma(P)$ je symetrická vzhľadom k hodnotám $p_{1},\ldots,p_{k}$,
+\item $\gamma(P)$ je všade diferencovateľná.
+\end{itemize}
+\end{def-sk}
+
+\begin{def-sk}[Neusporiadanosť množiny]\label{kap1:2.5:2.5.1:ImpuritySet}
+Nech $D$ je dátová množina a $C = (c_{1},\ldots,c_{k})$ je množina klasifikačných tried. Ďalej nech $\mathbf{x}$ je príznakový vektor z $D$, $y$ jeho klasifikácia a $\gamma: [0,1]^{k}  \rightarrow \mathbb{R}$ je funkcia neusporiadanosti. Potom neusporiadanosť dátovej množiny $D$, označovaná $\gamma(D)$, je definovaná ako
+\begin{equation}
+\gamma(D) = \gamma
+	\left(
+	\dfrac
+		{\lvert D_{c_{1}}\lvert}
+		{\lvert D \lvert},		
+	\ldots,
+	\dfrac
+		{\lvert D_{c_{k}}\lvert}
+		{\lvert D \lvert}				
+	\right).
+\end{equation}
+\end{def-sk}
+
+\begin{def-sk}[Zníženie neusporiadanosti množiny]
+Nech $D_{1}, \ldots, D_{n}$ sú podmnožiny dátovej množiny $D$, ktoré vznikli rozdelením roviny. Potom výsledné zníženie neusporiadanosti označené ako $\Delta\gamma(D) = \gamma(D) - \sum_{i=1}^{s}\dfrac{\lvert D_{i} \lvert}{\lvert D \lvert} \gamma(D_{i})$.
+\end{def-sk}
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap1/DT-splitcrit.pdf}}}
+\caption{Príklad, ako môžu kritéria delenia rozdeliť dátovú množinu so štyrmi triedami. Farby určujú pomery dát s danou triedou. Obrázok a) oproti b) je vhodnejší, pretože minimalizuje neusporiadanosť v listových vrcholoch týchto stromov.}\label{fig:SplitCriterias}
+\end{figure}
+
+Pri indukcii rozhodovacích stromov zvyčajne využívame nejakú hladnú stratégiu, ktorá sa snaží čo najviac znížiť neusporiadanosť celého rozhodovacieho stromu. Na obrázku \ref{fig:SplitCriterias} môžeme vidieť rozdelenie stromu v jednom z jeho vrcholov. V tomto obrázku preferujeme prípad a), pretože minimalizuje neusporiadanosť podmnožín $D$ v listových vrcholoch.
+\subsubsection{Informačný zisk}\label{kap1:2.5:2.5.1:InfoGain} 
+Informačný zisk je jedno z kritérií delenia založené na neusporiadanosti. Definícia kritéria vychádza z predchádzajúcej časti \ref{kap1:2.5:2.5.1:Impurity}, kde za funkciu neusporiadanosti $\gamma$ je dosadená entropia (z teórie informácii). Vzorec kritéria potom vyzerá ($D_{X_{i}}$ je v Definícii \ref{kap1:2.3:2.3.2:subsetValueData})
+\begin{align}
+Info\_zisk(& X_{i},D) = \nonumber \\
+& Entropia(C,D) -
+\sum_{t \in dom(X_{i})}^{}
+\dfrac{\lvert D_{X_{i} = t}\lvert}{\lvert D \lvert} 
+Entropia(C,D_{X_{i} = t}). \label{kap1:2.5:2.5.1:InfoGainDef} 
+\end{align}
+kde
+\begin{equation}
+Entropia(C,D) = \sum_{c_{i} \in C}^{} \left( -
+\dfrac{\lvert D_{c_{i}}\lvert}{\lvert D \lvert} \log
+\dfrac{\lvert D_{c_{i}}\lvert}{\lvert D \lvert}\right). 
+\end{equation}
+
+Informačný zisk blízko súvisí s metódou maximálnej vierohodnosti. Táto metóda je populárnou hlavne v oblasti štatistiky pri odhadovaní parametrov nejakého štatistického modelu. Odhad je prevádzaný pri aplikovaní na dátovú množinu a na daný štatistický model.
+
+Ďalšie informácie o entropii si je možné nájsť v knihách spomenutých v týchto častiach. Pre naše potreby nám stačí použiť wikipédiu \cite{wiki-Entropy}.
+\subsubsection{Gini Index}\label{kap1:2.5:2.5.1:GiniIndex}
+Gini index je ďalšie z kritérii založené na neusporiadanosti. Používa sa ako miera diverzifikácie hodnôt vo výstupnom atribúte. Tak ako aj ostatné miery neusporiadanosti nadobúda hodnoty od 0 po 1, kde 0 znamená dokonalú rovnosť tried výstupu a 1 úplnú nerovnosť. Kritérium potom vyzerá
+\begin{align}
+Gini\_zisk(X_{i},D) = Gini(C,D) -
+\sum_{t \in dom(X_{i})}^{}
+\dfrac{\lvert D_{X_{i} = t}\lvert}{\lvert D \lvert} 
+Gini(C,D_{X_{i} = t}). \label{kap1:2.5:2.5.1:GiniIndexDef}
+\end{align}
+kde
+\begin{equation}
+Gini(C,D) = 1 - \sum_{c_{i} \in C}^{} 
+\left(
+\dfrac{\lvert D_{c{i}}\lvert}{\lvert D \lvert} 
+\right) ^ 2. 
+\end{equation}
+Taktiež je možné nahliadnuť, že pre binárny prípad (počet tried je rovný dvom) je výpočet kritéria jednoduchší.
+\begin{equation}
+Gini(C,D) = 2p_{c_{1}}p_{c_{2}}, 
+\end{equation}
+
+kde $p_{c_{i}}$ je relatívny počet inštancií, ktorých výstupný atribút má hodnotu $c_{i}$.
+
+\subsubsection{Koeficient zisku}\label{kap1:2.5:2.5.1:GainRatio} 
+Koeficient zisku je ďalším známym kritériom, ktoré pre svoj výpočet využíva informačný zisk. Patrí medzi normalizované kritéria neusporiadanosti. Definované je ako
+\begin{align}
+Koef\_zisku(X_{i},D) =
+\dfrac{Info\_zisk(X_{i},D)}{Entropia(X_{i},D)} \label{kap1:2.5:2.5.1:GainRatioDef} 
+\end{align}
+
+Z definície je vidieť, že kritérium nie je definované, keď je entropia rovná nule. Taktiež je kritérium náchylné k atribútom, pre ktoré je entropia veľmi malá. V minulosti bolo ukázané, že toto kritérium dokázalo prekonať normálny informačný zisk v presnosti aj v zložitosti.
+
+\subsubsection{Twoing kritérium}\label{kap1:2.5:2.5.1:Twoing} 
+Menej medzi známe kritéria patrí Twoing kritérium \cite[s.88]{kap1-DataMiningForTrees}. Je to binárne kritérium (rozdeľuje dátovú množinu $D$ na dve podmnožiny). Zavedené bolo hlavne kvôli Gini indexu a jeho problému s príliš veľkou doménou výstupného atribútu. Kritérium je definované 
+\begin{align}
+Twoing(X_{i},& dom_{1}(X_{i}),dom_{2}(X_{i}),D) = \nonumber \\
+& 0.25 
+\dfrac{\lvert D_{X_{i} = t \in dom_{1}(X_{i})}\lvert}{\lvert D\lvert}
+\dfrac{\lvert D_{X_{i} = t \in dom_{2}(X_{i})}\lvert}{\lvert D\lvert} \nonumber \\
+& \left(
+\sum_{c_{i} \in C}^{}
+\left| 
+\dfrac{
+\lvert D_{X_{i} = t \in dom_{1}(X_{i})} \cap D_{c_{i}}\lvert }{\lvert D_{X_{i} = t \in dom_{1}(X_{i})}\lvert} -
+\dfrac{
+\lvert D_{X_{i} = t \in dom_{2}(X_{i})} \cap D_{c_{i}}\lvert }{\lvert D_{X_{i} = t \in dom_{2}(X_{i})}\lvert}
+\right|
+\right)^2 \label{kap1:2.5:2.5.1:TwoingDef} 
+\end{align}
+
+Keď je výstupný atribút binárny, tak Gini Index a Twoing kritérium sú totožné. Toto kritérium v nebinárnom prípade preferuje atribúty s podobným rozdelením dátovej množiny. Algoritmus CART používa toto deliace kritérium pri indukcii stromov.
+
+\subsection{Generický indukčný algoritmus}\label{kap1:2.5:2.5.2:Generic}
+Indukčné algoritmy majú za úlohu vytvoriť rozhodovací strom z predom danej trénovacej množiny. Hlavnou úlohou pri tvorbe je minimalizovať generalizačnú chybu. Nie vždy sa jedná len o minimalizovanie. Algoritmus sa môže snažiť o vytvorenie stromu s čo najnižšou výškou alebo tiež s obmedzeným počtom vrcholov.
+
+Tvorba optimálneho rozhodovacieho stromu je ťažkou úlohou. Viac o tom v knihe \cite[s.51]{kap1-DataMiningForTrees}. Indukčné algoritmy sú dvoch typov. Tie, ktoré vytvárajú stromy zhora nadol a zdola nahor. Medzi algoritmy typu zhora nadol patria ID3, C4.5, CART a mnoho ďalších. Tvorba stromu je pri niektorých algoritmoch (C4.5 a CART) spojená spolu aj s jeho orezaním. Kostra takejto tvorby stromu je popísaná v Algoritme  \ref{fig:genericAlgoritm}.
+
+\begin{algorithm} 
+\floatname{algorithm}{Algoritmus}
+\caption{Generický algoritmus na tvorbu stromov, z ktorého vychádzajú známe algoritmy ID3,C4.5,$\ldots$}\label{fig:genericAlgoritm}
+$D$ - Trénovacia množina \\
+$X$ - Množina atribútov \\
+$Y$ - Výstupný atribút \\
+$Del\_Krit$ - Kritérium pre delenie \\
+$Stop\_Krit$ - Kritérium na zastavenie tvorby stromu \\
+$T$ - Vytvorený strom 
+\begin{algorithmic}
+\Function{IndukciaStromu}{$D$,$X$,$Y$,$Del\_Krit$, $Stop\_Krit$}
+\State $\var{T} \gets $ Strom s jedným vrcholom (koreň)
+\If {$Stop\_Krit(D)$}:	  
+\State $\var{T} \gets $ list s najčastejšou hodnotou atribútu $Y$ v $D$.
+\Else
+\State $\var{A} \gets min_{X_{i}}Del\_Krit(X_{i},D)$
+\State $attr(\var{T}) \gets A$
+\EndIf
+\ForAll{$\var{v_{i}} \in A$}:
+\State $PodStrom_{i}(T) \gets $ \textsc{IndukciaStromu}($D_{X_{i} = v_{i}}$,$X$,$Y$,$\_$,$\_$) 
+\State $Hrana_{i}(T) \gets v_{i}$  
+\EndFor \\
+\Return{\textsc{OrezanieStromu}($D$,$T$,$Y$)}
+\EndFunction
+\\
+\Function{OrezanieStromu}{$D$,$T$,$Y$}
+\Repeat 
+\State $t \gets$ vrchol stromu T, ktorý po orezaní maximalizuje predom zvolené vyhodnocovacie kritérium  
+\If{$t \neq \emptyset$}:
+\State $T \gets$ orezanie($T$,$t$)
+\EndIf
+\Until{$t = \emptyset$} \\
+\Return{$T$}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+%\begin{figure}[h]
+%\lstset{inputencoding=utf8,extendedchars=true,basicstyle=\ttfamily\small,literate={á}{{\'a}}1 {é}{{\'e}}1 {ž}{{\v{z}}}1 {ň}{{\v{n}}}1 {š}{{\v{s}}}1 {č}{{\v{c}}}1 {ď}{{\v{d}}}1 {í}{{\'i}}1 {ý}{{\'y}}1 {ú}{{\'u}}1}
+%\begin{lstlisting}[mathescape]
+%IndukciaStromu($D$,$A$,$y$,$DeliaceKrit\acute{e}rium$,$Krit\acute{e}riumZastavenia$)
+%$D$ - Trénovacia množina
+%$A$ - Vstupné príznaky
+%$y$ - Výstupný atribút
+%$DeliaceKrit\acute{e}rium$ - Kritérium pre delenie
+%$Krit\acute{e}riumZastavenia$ - Kritérium na zastavenie tvorby stromu
+%
+%Vytvor strom $T$ s jedným vrcholom (koreň)
+%IF Krit\acute{e}riumZastavenia(D) THEN
+%	Sprav z $T$ list s najčastejšou
+%	hodnotou atribútu $y$ v $D$.
+%ELSE
+%	Vyber atribút $a \in A$ s najlepšou
+%	hodnotou $DeliaceKrit\acute{e}rium(a,D)$.
+%	Aktuálnemu vrcholu priraď atribút $a$.
+%	FOR $v_{i} \in A$:
+%		Nastav $PodStrom_{i}$ = IndukciaStromu($D_{v_{i}}$,$A$,$y$,_,_).
+%		Spoj vrchol $t_{T}$ a $PodStrom_{i}$ s hranou označenou
+%		$v_{i}$.
+%	END FOR
+%END IF
+%RETURN OrezanieStromu(D,T,y).
+%\end{lstlisting}
+%\caption{Generický algoritmus z ktorého vychádzajú známe algoritmy ID3,C4.5,$\ldots$. Prevzaté a prepísané z \cite[s.52]{kap1-DataMiningForTrees}}\label{fig:genericAlgoritm}
+%\end{figure}
+
+Existujú rôzne kritéria zastavenia, ktoré prerušia vytváranie stromu. Tými najznámejšími sú
+
+\begin{itemize}
+\item Všetky inštancie v trénovacej množine majú jednotný výstupný atribút $y$.
+\item Strom dosiahol maximálnu výšku.
+\item Hodnota najlepšieho deliaceho kritéria je menšia než určitý prah.
+\item Počet inštancií v danom uzle je menší než dopredu zadaná konštanta.
+\end{itemize}
+
+\subsection{ID3}\label{kap1:2.5:2.5.3:ID3}
+ID3 algoritmus je najznámejší a najjednoduchší z indukčných algoritmov. Deliacim kritériom je Informačný zisk (\ref{kap1:2.5:2.5.1:InfoGainDef}). Kritériom zastavenia je nulový informačný zisk alebo dosiahnutie homogénnosti výstupného atribútu. Algoritmus nevyužíva žiadne techniky orezávania, nedokáže riešiť problémy s chýbajúcimi hodnotami v atribútoch a nevie pracovať s numerickými atribútmi.
+
+Najväčšou výhodou ID3 je jeho jednoduchosť. Zvyčajne je kvôli tomu využívaný pre vzdelávacie účely. 
+
+Nevýhody tohoto algoritmu presahujú spomenuté výhody. Stromy vytvorené týmto algoritmom sa nachádzajú v nejakom lokálnom optime (hladný algoritmus).
+Vytvorené stromy bývajú väčšinou malé, ale keď algoritmus vytvorí väčší strom tak dochádza veľmi často k preučeniu. Preto pri tomto druhu algoritmu sú preferovanejšie menšie stromy. Algoritmus nepodporuje numerické hodnoty a pre prácu s nimi je nutné predspracovať dáta do nejakých diskrétnych skupín (hodnoty menšie ako $x$ budú v skupine $a$, ostatné v skupine $b$).
+\subsection{C4.5}\label{kap1:2.5:2.5.4:C4.5}
+C4.5 je vylepšením algoritmu ID3. Obidva majú rovnakého autora. Algoritmus používa koeficient zisku (\ref{kap1:2.5:2.5.1:GainRatioDef}) za deliace kritérium. Vytváranie stromu končí, keď počet inštancií pri delení je menej ako určitý threshold. Zároveň využíva techniky orezávania a dokáže pracovať aj s numerickými atribútmi. C4.5 vie popri tomu  pracovať aj s chýbajúcimi hodnotami atribútov.
+
+Indukcia pomocou C4.5 poskytuje oproti ID3 veľa zlepšení. Pri orezávaní odstraňuje vetvy, ktoré neprispievajú k presnosti a nahradzuje ich listami. Inštanciám môžu chýbať niektoré hodnoty atribútov. Numerické atribúty sú riešené rozdelením domény daného atribútu na dve podmnožiny podľa deliaceho bodu. Tento deliaci bod je zvolený tak, aby maximalizoval koeficient zisku.
+
+Jedným z ďalších vylepšení C4.5 je ešte o niečo novší, komerčný algoritmus C5.0. Popri výhodám z C4.5 obsahuje ešte ďalšie zlepšenia, ako je rýchlosť výpočtu a zlepšenie práce s pamäťou. Ďalším zlepšením je vstavané využitie techniky boosting, ktorá dokáže zvýšiť prediktívne schopnosti modelu.
+
+Implementovanú verziu algoritmu C4.5, nazývanú J48 môžeme nájsť už v spomínanom nástroji Weka.
+
+\subsection{CART}\label{kap1:2.5:2.5.5:CART}
+CART je hladový algoritmus, ktorý slúži na tvorbu klasifikačných aj regresných stromov. Autorom algoritmu je Breiman. Vytvorený strom je v tomto prípade vždy binárny (každý vnútorný vrchol ma dvoch potomkov). Algoritmus využíva Twoing kritérium (\ref{kap1:2.5:2.5.1:TwoingDef}) ako deliace kritérium. CART používa na orezávanie stromu metriku, ktorá berie do úvahy počet listov spolu s chybovosťou modelu (\cite{wiki-costcompprune}, \cite[s.382]{kap1-DecisionTree}).
+
+Dôležitou vlastnosťou algoritmu je vytváranie regresných stromov. Vytvorené stromy obsahujú v listoch reálne hodnoty. V tomto prípade sú deliace body vyberané tak, aby minimalizovali hodnotu získanú metódou najmenších štvorcov. V listových vrcholoch je hodnota rovná váženému priemeru dát v tomto vrchole.
+
+\section{Využitie rozhodovacích stromov pri predikcii}\label{kap1:2.6:DTUsage}
+V tomto oddieli zhrnieme výhody a nevýhody rozhodovacích stromov, ktoré priamo ovplyvňujú využiteľnosť tohoto modelu v praxi. Zároveň predstavíme projekty, ktoré prakticky využívajú techniku rozhodovacích stromov. Knihy s informáciami, ktoré boli použité v tejto časti sú \cite{kap1-DataMiningAndAnalysis,kap1-DataMiningForTrees}. Informácie s praktickým použitím rozhodovacích stromov sme čerpali zo stránok príslušných projektov \cite{online-astronomy} a \cite{online-psychoterapy}.
+
+V časti \ref{kap1:2.6:2.6.1:AdvAndDis} popíšeme výhody a nevýhody rozhodovacích stromov, ktoré priamo ovplyvňujú využitie v praxi. V ďalších častiach predstavíme dva projekty, ktoré využívajú rozhodovacie stromy pri predikcii. Filtrovanie šumu v obrázkoch získaných z Hubblovho vesmírneho ďalekohľadu bude popísané v časti \ref{kap1:2.6:2.6.2:Hubble}. Využitie rozhodovacích stromov pre klinickú prax predvedieme v poslednej časti \ref{kap1:2.6:2.6.3:Clinical}.
+
+\subsection{Výhody a nevýhody stromov}\label{kap1:2.6:2.6.1:AdvAndDis}
+V predchádzajúcich oddieloch sme spomínali rôzne výhody a nevýhody rozhodovacích stromov. Po zhrnutí môžeme medzi výhody zaraďovať:
+\begin{itemize}
+\item Rozhodovacie stromy majú jednoduchú reprezentáciu, z ktorej je vidieť chovanie stromu. Pri malom počte listov je reprezentácia ľahko spracovateľná aj neprofesionálnym užívateľom.
+\item Model je dostatočne bohatý nato, aby existoval prevod s ľubovoľným iným diskrétnym klasifikátorom.
+\item Cesty od koreňa k listom predstavujú jednotlivé pravidla. Existuje teda jednoduchý prevod medzi stromom a vytvorenými pravidlami.
+\item Model rozhodovacích stromov je zaraďovaný medzi neparametrické techniky a teda neuvažuje žiadne predpoklady o štruktúre klasifikátora či rozdelení dát.
+\item Rozhodovacie stromy dokážu pracovať s dátami, ktoré obsahujú chyby alebo ktorým chýbajú hodnoty niektorých atribútov.
+\item Rozhodovacie stromy vedia pracovať s kategoriálnymi atribútmi, tak ako aj s numerickými.
+\end{itemize}
+
+K nevýhodám rozhodovacích stromov patrí:
+\begin{itemize}
+\item Hladové techniky tvorby stromov môžu uviaznuť v lokálnom optime. Stromy sú taktiež náchylné na preučenie.
+\item Tvorba stromu hladovými technikami sa môže zamerať na nerelevantné atribúty a šum v dátach.
+\item Krátkozrakosť algoritmu, kde delenia v jednotlivých vrcholoch pracujú iba s priamymi potomkami vrcholu.
+\item Väčšina algoritmov požaduje, aby bol výstupný atribút kategoriálny (C4.5, ID3, \ldots).
+\item Riešenie problémov chýbajúcich hodnôt atribútov. 
+\item Problém fragmentácie pri rozdeľovaní dát vo vrcholoch. Pri rovnomernom rozdelení dát vo vrcholoch, na ceste z koreňa do listu, môžeme otestovať iba $\log n$ atribútov. Veľký problém pri existencii väčšieho počtu významných atribútov.
+\end{itemize}
+
+\subsection{Filtrovanie šumu z Hubblovho ďalekohľadu}\label{kap1:2.6:2.6.2:Hubble}
+Projekt si dal za úlohu popísať nové metódy a poskytnúť nové nástroje na analýzu rozsiahlych, komplexných a mnoho atribútových dátových množín pre výskumnú komunitu astrofyziky. Článok popisuje spoločné úsilie výskumníkov z umelej inteligencie a astrofyziky pri vytváraní a používaní rôznych techník, ktoré riešia signifikantné problémy v astronómii. Konkrétne sa v práci snažia čo najlepšie využiť mnoho rôznorodých techník zo strojového učenia na identifikovanie a klasifikovanie objektov z astronomických obrázkov. Tieto poznatky sa následne snažia aplikovať pri identifikovaní šumu v obrázkoch získaných z Hubblovho vesmírneho ďalekohľadu (HVD). Šum, na ktorý sa zamerali bolo kozmické žiarenie, ktoré je veľmi častým úkazom pri týchto fotkách.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap1/DT-hubble.pdf}}}
+\caption{Získaný model klasifikujúci vstupný vektor s 20 príznakmi (Čísla v elipsách znamenajú delenia vo vrcholoch. Percentá pod vrcholmi predstavujú relatívny počet hviezd ku kozmickému žiareniu). Obrázok modelu je prebraný a prepísaný z \cite[str. 284]{online-astronomy}}\label{fig:HubbleTree}
+\end{figure}
+
+Vytvorenie dát predchádzalo veľa práce a to hlavne získavaním obrázkov z ďalekohľadu. Následne bolo nutné obrázky kalibrovať. Prvý, experimentálny prístup rozdelil obrázky na skupiny veľkosti $3 \times 3$ pixele. Skupiny boli vycentrované na hviezdu, aby obsahovali čo najviac informácii o nej. Hodnoty v skupine boli intenzity svetla. Týmto prístupom previedli hviezdy a kozmické žiarenie do deväť rozmerného priestoru. Každá inštancia pre klasifikovanie teda obsahovala deväť príznakov. Druhý prístup je nadstavbou toho prvého a využíva pojmy ako odchýlka a difrakcia, ktoré popisujú rozdelenie intenzity svetla (tzv. funkcie šírenia z bodu FSB) pre objekty ako napr. hviezdy. Pre hviezdy a kozmické žiarenie by sa takto získané FSB malo rozlišovať v niektorých parametroch. Počet príznakov pri tomto prístupe je rovný 20. Príznaky použité pri klasifikácií boli intenzity pixelov skupín veľkosti $3 \times 3$ spolu s parametrami FSB a s ďalšími vedomosťami (rozdiely medzi hviezdami a kozmickým žiarením).
+Pri riešení využili ich vlastný model rozhodovacích stromov nazývaný OC1. Tento ich model spočíva v tom, že uvažuje aj také rozdeľovacie nadroviny, ktoré nie sú rovnobežné s hlavnými osami. Viac o algoritme je priamo v článku \cite[str. 281]{online-astronomy}.
+
+Modely, vytvorené metódou OC1 dosahujú presnosť až 95\%. Experimenty, nachádzajúce sa v článku uvádzajú, že zlepšením metód na eliminovanie šumu môže ďalej vylepšiť presnosť vytvorených klasifikátorov. Príklad takto vytvoreného stromu je na obrázku \ref{fig:HubbleTree}
+
+\subsection{Rozhodovacie stromy pre klinickú prax}\label{kap1:2.6:2.6.3:Clinical}
+Tento projekt sa snaží preklenúť priepasť medzi vedou a praktickým využitím v oblasti duševnej zdravotnej starostlivosti a priviesť novú metódu, ktorú bude možné využiť v klinickej praxi.  Existencia dokonalého štatistického modelu, ktorý by dokonale predikoval výsledok liečby, je ale nepravdepodobná. V tomto projekte sa ale snažia čo najlepšie identifikovať a popísať možný neúspech liečby a ako takému neúspechu predchádzať pomocou správnych rozhodnutí pri prebiehajúcej liečbe. Projekt odkazuje na existujúce štúdiá, ktoré síce vykazujú priemerné výsledky, no neposkytujú dostatočné predikčné schopnosti pre rozhodovanie v praxi.
+
+Dáta, na účely vytvorenia modelu, boli získané z iného projektu (Project TR-EAT), ktorý skúmal vzťahy medzi dĺžkou/intenzitou liečby poruchy prijímania potravy a výsledkom liečby. Z dát bola vybratá vzorka ľudí diagnostikovaná bulímiou nervosa ($n$ = 630). Pri výbere dát boli zaujímavé hlavne údaje o prijatí, liečebná stratégia a odpoveď na liečbu. Na túto vzorku bol použitý algoritmus CART. Vytvorený model má podľa projektu potenciál, pretože popisuje riziko neúspechu podľa dostupných liečebných možností. Model je podľa projektu zároveň citlivý na unikátne vlastnosti pacienta a výsledok liečby tohoto pacienta.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap1/DT-clinical.pdf}}}
+\caption{Získaný model klasifikujúci výsledok liečby (Čísla v elipsách predstavujú veľkosti skupín získané po delení. Percentá pod vrcholmi predstavujú relatívny počet ľudí s lepším verzus horším výsledkom. SCLGSI = Symptom Checklist-90-R Global Severity Index). Obrázok modelu je prebraný a prepísaný z \cite[s. 454]{online-psychoterapy}}\label{fig:ClinicalTree}
+\end{figure}
+
+Model získaný algoritmom CART, ktorý bol ešte zredukovaný, je optimálnym kompromisom medzi zložitosťou a prediktívnymi schopnosťami modelu. Strom obsahoval desať listových vrcholov a jeho chybovosť bola 18\%. Zo 448 pacientov, ktorým bol predpovedaný zlý výsledok malo 86\% skutočne zlý výsledok. Zo 182 pacientov s predikovaným dobrým výsledkom malo 74\% dobrý výsledok.
+
+Výsledný strom tohoto projektu, vytvorený metódou CART, je na obrázku \ref{fig:ClinicalTree}.

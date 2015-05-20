@@ -1,0 +1,91 @@
+% This file was created with JabRef 2.10.
+% Encoding: UTF8
+
+
+@Online{online-Data,
+  Title                    = {What is data},
+  Author                   = {Vangie Beal},
+  Url                      = {http://www.webopedia.com/TERM/D/data.html},
+  Year                     = {2014}
+}
+
+@Online{online-DataMiningWeka,
+  Title                    = {Weka 3: Data Mining Software in Java},
+  Author                   = {Eibe Frank and Mark Hall and Peter Reutemann and Len Trigg},
+  Url                      = {http://www.cs.waikato.ac.nz/ml/weka/},
+  Year                     = {2015}
+}
+
+@Online{online-DataMiningTools,
+  Title                    = {Six of the Best Open Source Data Mining Tools},
+  Author                   = {CHANDAN GOOPTA},
+  Url                      = {http://thenewstack.io/six-of-the-best-open-source-data-mining-tools/},
+  Year                     = {2014}
+}
+
+@Online{online-psychoterapy,
+  Title                    = {A Classification Tree Model for
+Decision-Making in Clinical Practice: An Application Based on the Data of the German Multicenter Study on Eating Disorders, Project TR-EAT},
+  Author                   = {Wolfgang Hannöver and Matthias Richard and Nathan B. Hansen and Zoran Martinovich and Hans Kordy},
+  Editor                   = {Society for Psychotherapy Research},
+  Url                      = {http://www.tandfonline.com/doi/pdf/10.1080/713664470},
+  Year                     = {2002}
+}
+
+@Www{online-SplitCriteriasMatter,
+  Title                    = {Do Splitting Rules Really Matter},
+  Author                   = {SalfordSystems},
+  Url                      = {https://www.salford-systems.com/resources/whitepapers/114-do-splitting-rules-really-matter},
+  Year                     = {2015}
+}
+
+@Article{online-astronomy,
+  Title                    = {Decision trees for automated identification of cosmic-ray hits in Hubble Space Telescope images},
+  Author                   = {Steven SALZBERG and Rupali CHANDAR and Holland FORD and Sreerama MURTHY and Rick WHITE},
+  Journaltitle             = {Astronomical Society of the Pacific},
+  Year                     = {2015},
+  ISSN                     = {0004-6280},
+  Pages                    = {279--288},
+  Url                      = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.55.4543},
+  Volume                   = {107}
+}
+
+@Online{online-DataMining,
+  Title                    = {Data Mining},
+  Author                   = {Dr. Saed Sayad},
+  Url                      = {http://www.saedsayad.com/},
+  Year                     = {2015}
+}
+
+@Online{online-DecisionTreeTypes,
+  Title                    = {Introductory Overview of Decision Trees},
+  Author                   = {StatSoft},
+  Url                      = {http://www.statsoft.com/Textbook/Classification-and-Regression-Trees},
+  Year                     = {2015}
+}
+
+@Online{online-DTLectures,
+  Title                    = {Decision Trees - prednášky},
+  Author                   = {Dr. Benno Stein},
+  Url                      = {http://www.uni-weimar.de/medien/webis/teaching/lecturenotes/machine-learning/unit-en-decision-trees-impurity.pdf},
+  Year                     = {2015}
+}
+
+@Online{online-DataMiningMatlab,
+  Title                    = {About Matlab},
+  Url                      = {http://www.mathworks.com/products/matlab/},
+  Year                     = {2015}
+}
+
+@Online{online-DecisionTreeScikit,
+  Title                    = {Decision Trees in Scikit},
+  Url                      = {http://scikit-learn.org/stable/modules/tree.html},
+  Year                     = {2015}
+}
+
+@Www{online-SplitCriterias,
+  Title                    = {SAS The power to know},
+  Url                      = {http://support.sas.com/documentation/cdl/en/stathpug/66410/HTML/default/viewer.htm#stathpug_hpsplit_details10.htm},
+  Year                     = {2015}
+}
+

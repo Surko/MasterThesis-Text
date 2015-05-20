@@ -1,0 +1,98 @@
+% This file was created with JabRef 2.10.
+% Encoding: UTF8
+
+
+@Book{kap1-DecisionTree,
+  Title                    = {Data mining Concepts and Techniques},
+  Author                   = {Jiawei Han and Micheline Kamber and Jian Pei},
+  Year                     = {2012},
+  Edition                  = {3rd},
+  ISBN                     = {978-0-12-381479-1},
+  Url                      = {http://web.engr.illinois.edu/~hanj/bk3/bk3_slidesindex.htm}
+}
+
+@Book{kap1-StatisticLearn,
+  Title                    = {The Elements of Statistical Learning - Data Mining, Inference, and Prediction},
+  Author                   = {Trevor Hastie and Robert Tibshirani and Jerome Friedman},
+  Year                     = {2009},
+  Edition                  = {2nd},
+  ISBN                     = {978-0-387-84858-7}
+}
+
+@Article{kap1-DecisionTreesUnused1,
+  Title                    = {Classification trees with unbiased multiway splits},
+  Author                   = {Hyunjoong Kim and Wei-Yin Loh},
+  Journaltitle             = {Journal of the American Statistical Association},
+  Year                     = {2001},
+  Pages                    = {589-604},
+  Volume                   = {96}
+}
+
+@Article{kap1-DecisionTreesTypes,
+  Title                    = {Classification and regression trees},
+  Author                   = {Wei-Yin Loh},
+  Journaltitle             = {Wiley Interdisciplinary Reviews: Data Mining and Knowledge Discovery},
+  Year                     = {2011},
+  Pages                    = {14-23},
+  Url                      = {http://www.stat.wisc.edu/~loh/guide.html},
+  Volume                   = {1}
+}
+
+@Article{kap1-DecisionTreesUnused3,
+  Title                    = {Improving the precision of classificationation trees},
+  Author                   = {Wei-Yin Loh},
+  Journaltitle             = {The Annals of  Applied Statistics},
+  Year                     = {2009},
+  Pages                    = {1710-1737}
+}
+
+@Article{kap1-DecisionTreesUnused2,
+  Title                    = {Split selection methods for classification trees},
+  Author                   = {Wei-Yin Loh and Yu-Shan Shih},
+  Journaltitle             = {Statistica Sinica},
+  Year                     = {1997},
+  Pages                    = {815-840},
+  Volume                   = {7}
+}
+
+@Book{kap1-KapitolyDiskretka,
+  Title                    = {Kapitoly z diskrétní matematiky},
+  Author                   = {Jiří Matoušek and Jaroslav Nešetřil and Jiří Sgall},
+  Year                     = {2002},
+  ISBN                     = {80-246-0084-6}
+}
+
+@Book{kap1-DataMiningForMasses,
+  Title                    = {Data Mining for the Masses},
+  Author                   = {Matthew North},
+  Year                     = {2014},
+  ISBN                     = {0-615-68437-8},
+  Publisher                = {Cambridge University Press}
+}
+
+@Article{kap1-Scikit,
+  Title                    = {Scikit-learn: Machine Learning in {P}ython},
+  Author                   = {F Pedregosa and G Varoquaux and A Gramfort and V. Michel and Thirion B. and Grisel O. and Blondel M. and Prettenhofer P. and Weiss R. and Dubourg V. and Vanderplas J. and Passos A. and},
+  Journaltitle             = {Journal of Machine Learning Research},
+  Year                     = {2011},
+  Pages                    = {2825--2830},
+  Volume                   = {12}
+}
+
+@Book{kap1-DataMiningForTrees,
+  Title                    = {Data Mining with decision trees - Theory and application},
+  Author                   = {Lior Rokach and Oded Maimon},
+  Year                     = {2015},
+  Edition                  = {2nd},
+  ISBN                     = {978-9814590082},
+  Publisher                = {World Scientifc Publishing Co}
+}
+
+@Book{kap1-DataMiningAndAnalysis,
+  Title                    = {Data Mining and Analysis: Fundamental Concepts and Algorithms},
+  Author                   = {Mohammed J. Zaki and Wagner Jr. Meira},
+  Year                     = {2014},
+  ISBN                     = {0-521-76633-8},
+  Publisher                = {Cambridge University Press}
+}
+

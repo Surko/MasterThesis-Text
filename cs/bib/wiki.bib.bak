@@ -1,0 +1,46 @@
+% This file was created with JabRef 2.10.
+% Encoding: UTF8
+
+
+@Online{wiki-Data,
+  Title                    = {All About Data},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Data},
+  Year                     = {2015}
+}
+
+@Online{wiki-DataMining,
+  Title                    = {Data Mining},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Data_mining},
+  Year                     = {2015}
+}
+
+@Online{wiki-DecisionTree,
+  Title                    = {Decision tree},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Decision_tree_learning},
+  Year                     = {2015}
+}
+
+@Online{wiki-Entropy,
+  Title                    = {Entropy},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Entropy_(information_theory)},
+  Year                     = {2015}
+}
+
+@Online{wiki-Python,
+  Title                    = {About Python},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Python_%28programming_language%29},
+  Year                     = {2015}
+}
+
+@Online{wiki-costcompprune,
+  Url                      = {http://en.wikipedia.org/wiki/Pruning_%28decision_trees%29#Cost_complexity_pruning},
+
+  Owner                    = {kirrie},
+  Timestamp                = {2015.05.14}
+}
+
