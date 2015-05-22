@@ -408,7 +408,7 @@ Nech $D$ je dátová množina a $C = (c_{1},\ldots,c_{k})$ je množina klasifika
 \end{def-sk}
 
 \begin{def-sk}[Zníženie neusporiadanosti množiny]
-Nech $D_{1}, \ldots, D_{n}$ sú podmnožiny dátovej množiny $D$, ktoré vznikli rozdelením roviny. Potom výsledné zníženie neusporiadanosti označené ako $\Delta\gamma(D) = \gamma(D) - \sum_{i=1}^{s}\dfrac{\lvert D_{i} \lvert}{\lvert D \lvert} \gamma(D_{i})$.
+Nech $X_{i}$ je daný atribút a $D_{1}, \ldots, D_{n}$ sú podmnožiny dátovej množiny $D$, ktoré vznikli rozdelením roviny podľa atribútu $X_{i}$. Potom výsledné zníženie neusporiadanosti označené ako $\Delta\gamma(X_{i},D) = \gamma(D) - \sum_{i=1}^{s}\dfrac{\lvert D_{i} \lvert}{\lvert D \lvert} \gamma(D_{i})$.
 \end{def-sk}
 
 \begin{figure}[h]
@@ -419,7 +419,7 @@ Nech $D_{1}, \ldots, D_{n}$ sú podmnožiny dátovej množiny $D$, ktoré vznikl
 
 Pri indukcii rozhodovacích stromov zvyčajne využívame nejakú hladnú stratégiu, ktorá sa snaží čo najviac znížiť neusporiadanosť celého rozhodovacieho stromu. Na obrázku \ref{fig:SplitCriterias} môžeme vidieť rozdelenie stromu v jednom z jeho vrcholov. V tomto obrázku preferujeme prípad a), pretože minimalizuje neusporiadanosť podmnožín $D$ v listových vrcholoch.
 \subsubsection{Informačný zisk}\label{kap1:2.5:2.5.1:InfoGain} 
-Informačný zisk je jedno z kritérií delenia založené na neusporiadanosti. Definícia kritéria vychádza z predchádzajúcej časti \ref{kap1:2.5:2.5.1:Impurity}, kde za funkciu neusporiadanosti $\gamma$ je dosadená entropia (z teórie informácii). Vzorec kritéria potom vyzerá ($D_{X_{i}}$ je v Definícii \ref{kap1:2.3:2.3.2:subsetValueData})
+Informačný zisk je jedno z kritérií delenia založené na neusporiadanosti. Definícia kritéria vychádza z predchádzajúcej časti \ref{kap1:2.5:2.5.1:Impurity}, kde za funkciu neusporiadanosti $\gamma$ je dosadená entropia (z teórie informácii). Vzorec kritéria je potom definovaný ako ($D_{X_{i}}$ je v Definícii \ref{kap1:2.3:2.3.2:subsetValueData})
 \begin{align}
 Info\_zisk(& X_{i},D) = \nonumber \\
 & Entropia(C,D) -
@@ -438,7 +438,7 @@ Informačný zisk blízko súvisí s metódou maximálnej vierohodnosti. Táto m
 
 Ďalšie informácie o entropii si je možné nájsť v knihách spomenutých v týchto častiach. Pre naše potreby nám stačí použiť wikipédiu \cite{wiki-Entropy}.
 \subsubsection{Gini Index}\label{kap1:2.5:2.5.1:GiniIndex}
-Gini index je ďalšie z kritérii založené na neusporiadanosti. Používa sa ako miera diverzifikácie hodnôt vo výstupnom atribúte. Tak ako aj ostatné miery neusporiadanosti nadobúda hodnoty od 0 po 1, kde 0 znamená dokonalú rovnosť tried výstupu a 1 úplnú nerovnosť. Kritérium potom vyzerá
+Gini index je ďalšie z kritérii založené na neusporiadanosti. Používa sa ako miera diverzifikácie hodnôt vo výstupnom atribúte. Tak ako aj ostatné miery neusporiadanosti nadobúda hodnoty od 0 po 1, kde 0 znamená dokonalú rovnosť tried výstupu a 1 úplnú nerovnosť. Kritérium využívajúce Gini index ako funkciu neusporiadanosti $\gamma$ potom definujeme ako
 \begin{align}
 Gini\_zisk(X_{i},D) = Gini(C,D) -
 \sum_{t \in dom(X_{i})}^{}
@@ -469,7 +469,7 @@ Koef\_zisku(X_{i},D) =
 Z definície je vidieť, že kritérium nie je definované, keď je entropia rovná nule. Taktiež je kritérium náchylné k atribútom, pre ktoré je entropia veľmi malá. V minulosti bolo ukázané, že toto kritérium dokázalo prekonať normálny informačný zisk v presnosti aj v zložitosti.
 
 \subsubsection{Twoing kritérium}\label{kap1:2.5:2.5.1:Twoing} 
-Menej medzi známe kritéria patrí Twoing kritérium \cite[s.88]{kap1-DataMiningForTrees}. Je to binárne kritérium (rozdeľuje dátovú množinu $D$ na dve podmnožiny). Zavedené bolo hlavne kvôli Gini indexu a jeho problému s príliš veľkou doménou výstupného atribútu. Kritérium je definované 
+Menej medzi známe kritéria patrí Twoing kritérium \cite[s.88]{kap1-DataMiningForTrees}. Je to binárne kritérium, ktoré je ako zbytok binárnych kritérii založené na rozdelení domény nejakého atribútu na dve podmnožiny. Zavedené bolo hlavne kvôli Gini indexu a jeho problému s príliš veľkou doménou výstupného atribútu. Kritérium je definované 
 \begin{align}
 Twoing(X_{i},& dom_{1}(X_{i}),dom_{2}(X_{i}),D) = \nonumber \\
 & 0.25 
@@ -486,12 +486,12 @@ Twoing(X_{i},& dom_{1}(X_{i}),dom_{2}(X_{i}),D) = \nonumber \\
 \right)^2 \label{kap1:2.5:2.5.1:TwoingDef} 
 \end{align}
 
-Keď je výstupný atribút binárny, tak Gini Index a Twoing kritérium sú totožné. Toto kritérium v nebinárnom prípade preferuje atribúty s podobným rozdelením dátovej množiny. Algoritmus CART používa toto deliace kritérium pri indukcii stromov.
+$dom_{1}(X_{i})$ a $dom_{2}(X_{i})$ sú podmnožiny domény atribútu $X_{i}$. Keď je výstupný atribút binárny, tak Gini Index a Twoing kritérium sú totožné. Toto kritérium v nebinárnom prípade preferuje atribúty s podobným rozdelením dátovej množiny. Algoritmus CART používa toto deliace kritérium pri indukcii stromov.
 
 \subsection{Generický indukčný algoritmus}\label{kap1:2.5:2.5.2:Generic}
-Indukčné algoritmy majú za úlohu vytvoriť rozhodovací strom z predom danej trénovacej množiny. Hlavnou úlohou pri tvorbe je minimalizovať generalizačnú chybu. Nie vždy sa jedná len o minimalizovanie. Algoritmus sa môže snažiť o vytvorenie stromu s čo najnižšou výškou alebo tiež s obmedzeným počtom vrcholov.
+Indukčné algoritmy majú za úlohu vytvoriť rozhodovací strom z predom danej trénovacej množiny $D$. Hlavnou úlohou pri tvorbe je minimalizovať generalizačnú chybu. Nie vždy sa jedná len o minimalizovanie. Algoritmus sa môže snažiť o vytvorenie stromu s čo najnižšou výškou alebo tiež s obmedzeným počtom vrcholov.
 
-Tvorba optimálneho rozhodovacieho stromu je ťažkou úlohou. Viac o tom v knihe \cite[s.51]{kap1-DataMiningForTrees}. Indukčné algoritmy sú dvoch typov. Tie, ktoré vytvárajú stromy zhora nadol a zdola nahor. Medzi algoritmy typu zhora nadol patria ID3, C4.5, CART a mnoho ďalších. Tvorba stromu je pri niektorých algoritmoch (C4.5 a CART) spojená spolu aj s jeho orezaním. Kostra takejto tvorby stromu je popísaná v Algoritme  \ref{fig:genericAlgoritm}.
+Tvorba optimálneho rozhodovacieho stromu je ťažkou úlohou. Viac o tom v knihe \cite[s.51]{kap1-DataMiningForTrees}. Indukčné algoritmy sú dvoch typov. Tie, ktoré vytvárajú stromy zhora nadol a zdola nahor. Medzi algoritmy typu zhora nadol patria ID3, C4.5, CART a mnoho ďalších. Tvorba stromu je pri niektorých algoritmoch (C4.5 a CART) spojená spolu aj s jeho orezaním. Väčšinou na začiatku existuje jeden vrchol stromu (koreň), ktorému odpovedá celá trénovacia množina $D$. Následníci tohoto koreňa ďalej zodpovedajú podmnožinám trénovacej množiny. Týmto postupom stále delíme trénovaciu množinu, a tým vytvárame nové vrcholy stromu. Delenie prebieha až dokým nie je pravdivé niektoré zo stanovených kritérií zastavenia. Kostra takejto tvorby stromu je popísaná v Algoritme  \ref{fig:genericAlgoritm}.
 
 \begin{algorithm} 
 \floatname{algorithm}{Algoritmus}
@@ -636,7 +636,7 @@ Dáta, na účely vytvorenia modelu, boli získané z iného projektu (Project T
 
 \begin{figure}[h]
 \centering
-\centerline{\mbox{\includegraphics[width=400pt]{../img/kap1/DT-clinical.pdf}}}
+\centerline{\mbox{\includegraphics[width=385pt]{../img/kap1/DT-clinical.pdf}}}
 \caption{Získaný model klasifikujúci výsledok liečby (Čísla v elipsách predstavujú veľkosti skupín získané po delení. Percentá pod vrcholmi predstavujú relatívny počet ľudí s lepším verzus horším výsledkom. SCLGSI = Symptom Checklist-90-R Global Severity Index). Obrázok modelu je prebraný a prepísaný z \cite[s. 454]{online-psychoterapy}}\label{fig:ClinicalTree}
 \end{figure}
 
