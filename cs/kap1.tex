@@ -497,12 +497,40 @@ kde $dom_{1}(X_{i})$ a $dom_{2}(X_{i})$ sú podmnožiny domény atribútu $X_{i}
 \section{Vyhodnotenie kvality stromov}\label{kap1:2.6:DTEvaluation}
 Pri vytváraní modelov metódami strojového učenia, ako aj pri tvorbe stromov je dôležité vyhodnotiť kvalitu vytvoreného modelu. Z predchádzajúcich oddielov vieme, že pri tvorbe stromu používame trénovaciu množinu. Vytvorený strom následne slúži na klasifikovanie novej inštancie. Takto vytvorený strom je možné ohodnotiť podľa určitých kritérií.
 
-Najrozumnejšie kritérium je presnosť modelu, no existuje mnoho ďalších. Ďalšími kritériami vyhodnotenia môže byť zložitosť stromu (výška, počet vrcholov stromu, a pod.) ale aj výpočetná zložitosť pri tvorbe, úprave stromu či klasifikovaní nových inštancií. Existujú aj také kritéria, ktoré sa zaoberajú robustnosťou\footnote{Schopnosť modelu správne predikovať inštancie, ktoré obsahujú šum alebo ktorým chýbajú niektoré atribúty.} a stabilitou\footnote{} stromov.
+Najrozumnejšie kritérium je presnosť modelu, no existuje mnoho ďalších. Ďalšími kritériami vyhodnotenia môže byť zložitosť stromu (výška, počet vrcholov stromu, a pod.) ale aj výpočtová zložitosť pri tvorbe, úprave stromu či klasifikovaní nových inštancií. Existujú aj také kritéria, ktoré sa zaoberajú robustnosťou\footnote{Schopnosť modelu správne predikovať inštancie, ktoré obsahujú šum alebo ktorým chýbajú niektoré atribúty.} a stabilitou\footnote{Schopnosť modelu vytvárať podobné/rovnaké stromy pri pozmenení niektorých dát z trénovacej množiny} stromov.
 
-Informácie o rôznych kritériach sú v knihách \cite[s. 364]{kap1-DecisionTree} a \cite[s. 31]{kap1-DataMiningForMasses}
+Informácie o rôznych kritériách na vyhodnotenie stromov sú v knihách \cite[s. 364]{kap1-DecisionTree} a \cite[s. 31]{kap1-DataMiningForMasses}. Jednoduché vysvetlenie generalizačnej chyby existuje na Wikipedii \cite{wiki-GeneralizationError}.
+
+Najprv v časti \ref{kap1:2.6:2.6.1:Generalize} zadefinujeme generalizačnú chybu a ukážeme ako súvisí táto chyba s presnosťou modelu. Následne v časti \ref{kap1:2.6:2.6.2:Alternatives} predstavíme niektoré alternatívne metriky pre zhodnotenie kvality stromov.
 
 \subsection{Generalizačná chyba}\label{kap1:2.6:2.6.1:Generalize}
+Pred zadefinovaním generalizačnej chyby najprv zavedieme pojmy trénovacia chyba a testovacia chyba.
+Trénovacia chyba $err$ modelu $M$ nad trénovaciou množinou $D$ je definovaná ako:
+\begin{equation}
+err = \dfrac{1}{\lvert D \lvert}\sum_{(x,y) \in D} L(y, M(x)),
+\end{equation}
+Testovacia chyba $Err$ modelu $M$ nad testovaciou množinou $T$ je definovaná ako:
+\begin{equation}
+Err = \dfrac{1}{\lvert T \lvert}\sum_{(x,y) \in T} L(y, M(x)),
+\end{equation}
+V oboch prípadoch je $M(x)$ klasifikácia inštancie $x$ pomocou modelu $M$. V prípade kategoriálneho výstupného atribútu môže byť $L(y,\tilde{y})$ 0-1 stratová funkcia
+\begin{equation}
+L(y,\tilde{y}) = I(y \ne \tilde{y}).
+\end{equation}
+V prípade spojitého výstupného atribútu môžu byť stratové funkcie definované takto:
+\begin{align}
+L(y,\tilde{y}) &= (y - \tilde{y})^2, \nonumber \\
+L(y,\tilde{y}) &= \lvert y - \tilde{y} \lvert,
+\end{align}
 
+Generalizačná chyba $GE$ pre určitý model je definovaná ako pravdepodobnosť, že model nesprávne klasifikuje novú inštanciu (meria ako dobre model generalizuje nové dáta). Klasifikačná presnosť modelu $ACC$, ďalej len ako presnosť modelu je potom definovaná:
+\begin{equation}
+ACC = 1 - GE.
+\end{equation}
+
+Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použiť namiesto generalizačnej chyby chybu trénovaciu. V takomto prípade by boli generalizačné schopnosti modelu veľmi nízke a znižovali by sa čím viac by bol model preučený.
+
+Medzi najčastejšie využívané odhady generalizačnej chyby patria tie empirické.
 \subsection{Alternatívne metriky}\label{kap1:2.6:2.6.2:Alternatives}
 
 \section{Techniky tvorby stromov}\label{kap1:2.7:DTTechniques}
