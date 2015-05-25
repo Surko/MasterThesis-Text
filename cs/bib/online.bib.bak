@@ -9,6 +9,16 @@
   Year                     = {2014}
 }
 
+@Www{online-,
+  Title                    = {Lecture Notes on Validation},
+  Author                   = {School of Compute Science},
+  Url                      = {http://research.cs.tamu.edu/prism/lectures/iss/iss_l13.pdf},
+  Year                     = {2015},
+
+  Owner                    = {kirrie},
+  Timestamp                = {2015.05.25}
+}
+
 @Online{online-DataMiningWeka,
   Title                    = {Weka 3: Data Mining Software in Java},
   Author                   = {Eibe Frank and Mark Hall and Peter Reutemann and Len Trigg},
@@ -46,7 +56,7 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Year                     = {2015},
   ISSN                     = {0004-6280},
   Pages                    = {279--288},
-  Url                      = {http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.55.4543},
+  Url                      = {http://articles.adsabs.harvard.edu//full/1995PASP..107..279S/0000284.000.html},
   Volume                   = {107}
 }
 
