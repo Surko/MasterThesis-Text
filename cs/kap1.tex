@@ -528,9 +528,16 @@ Generalizačná chyba $GE$ pre určitý model je definovaná ako pravdepodobnos�
 ACC = 1 - GE.
 \end{equation}
 
-Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použiť namiesto generalizačnej chyby chybu trénovaciu. V takomto prípade by boli generalizačné schopnosti modelu veľmi nízke a znižovali by sa čím viac by bol model preučený.
+Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použiť namiesto generalizačnej chyby chybu trénovaciu. V takomto prípade by boli generalizačné schopnosti modelu veľmi nízke a znižovali by sa čím viac by bol model preučený. Lepším odhadom generalizačnej chyby je použiť testovaciu chybu, viď nižšie (empirický odhad).
 
-Medzi najčastejšie využívané odhady generalizačnej chyby patria tie empirické.
+Medzi najčastejšie využívané odhady generalizačnej chyby patria tie empirické. Tento typ odhadov rozdeľuje vstupnú množinu na trénovaciu a testovaciu podmnožinu. Rozdelenie býva najčastejšie náhodne a v pomere 2:1. Väčšia množina je trénovacia a menšia zase testovacia. 
+Model, ako už vieme vytvárame pomocou trénovacej množiny. Testovaciu množinu využívame na vyhodnotenie kvality stromu a na získanie testovacej chyby $Err$. Táto testovacia chyba býva lepším odhadom generalizačnej chyby než je tá trénovacia. Nevýhodou tohoto prístupu je menšia veľkosť trénovacej množiny. Pri veľmi malej vzorke vstupných dát je tvorba trénovacej a testovacej podmnožiny prevádzaná výberom s opakovaním.
+
+Ďalším, veľmi známym odhadom generalizačnej chyby je $n$ krížová validácia. Pri tomto odhade vytvárame $n$ modelov rovnakého typu. Dáta sú rozdelené na $n$ medzi sebou disjunktných podmnožín, najlepšie rovnakých veľkostí. Model testujeme vždy na jednej z $n$ častí. Ostatných $n-1$ častí slúži ako trénovacia množina (rozdelenie množín je teda v pomere n-1:1). Testovacie chyby $Err_{i}$, získané z každého z $n$ modelov môžeme následne použiť na aproximáciu generalizačnej chyby:
+\begin{equation}
+GE \approx \dfrac{1}{n} \sum_{i=1}^{n} Err_{i}
+\end{equation}
+   ()
 \subsection{Alternatívne metriky}\label{kap1:2.6:2.6.2:Alternatives}
 
 \section{Techniky tvorby stromov}\label{kap1:2.7:DTTechniques}
