@@ -528,10 +528,22 @@ Generalizačná chyba $GE$ pre určitý model je definovaná ako pravdepodobnos�
 ACC = 1 - GE.
 \end{equation}
 
-Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použiť namiesto generalizačnej chyby chybu trénovaciu. V takomto prípade by boli generalizačné schopnosti modelu veľmi nízke a znižovali by sa čím viac by bol model preučený. Lepším odhadom generalizačnej chyby je použiť testovaciu chybu, viď nižšie (empirický odhad).
+Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použitie trénovacej chyby. Model by na prvý pohľad (pri použití trénovacej chyby) vyzeral idylicky, no generalizačné schopnosti by boli veľmi nízke. Tento nepriaznivý stav sa nazýva preučenie modelu. Na obrázku \ref{fig:overfit} je vidieť vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Lepším odhadom preto býva použitie testovacej chyby, viď nižšie (empirický odhad).
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap1/DT-overfit.pdf}}}
+\caption{Vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Toto je typický obrázok preučeného modelu.}\label{fig:overfit}
+\end{figure}
 
 Medzi najčastejšie využívané odhady generalizačnej chyby patria tie empirické. Tento typ odhadov rozdeľuje vstupnú množinu na trénovaciu a testovaciu podmnožinu. Rozdelenie býva najčastejšie náhodne a v pomere 2:1. Väčšia množina je trénovacia a menšia zase testovacia. 
-Model, ako už vieme vytvárame pomocou trénovacej množiny. Testovaciu množinu využívame na vyhodnotenie kvality stromu a na získanie testovacej chyby $Err$. Táto testovacia chyba býva lepším odhadom generalizačnej chyby než je tá trénovacia. Nevýhodou tohoto prístupu je menšia veľkosť trénovacej množiny. Pri veľmi malej vzorke vstupných dát je tvorba trénovacej a testovacej podmnožiny prevádzaná výberom s opakovaním.
+Model, ako už vieme vytvárame pomocou trénovacej množiny. Testovaciu množinu využívame na vyhodnotenie kvality stromu a na získanie testovacej chyby $Err$. Táto testovacia chyba býva lepším odhadom generalizačnej chyby, než je tá trénovacia. Nevýhodou tohoto prístupu je menšia veľkosť trénovacej množiny. Pri veľmi malej vzorke vstupných dát je tvorba trénovacej a testovacej podmnožiny dosiahnutá pomocou výberu s opakovaním. Na obrázku \ref{fig:testtrain} je zobrazený vývoj trénovacej a testovacej chyby. Prerušovaná čiara predstavuje najlepší prípad stromu, ktorý môžeme získať pre vstupné dáta (nepreučený model s čo najlepšími generalizačnými schopnosťami).
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap1/DT-testtrain.pdf}}}
+\caption{Vývoj testovacej a trénovacej chyby vzhľadom k veľkosti stromu. Prerušovaná čiara predstavuje najlepšie vytvorený strom vzhľadom k dostupným dátam.}\label{fig:testtrain}
+\end{figure}
 
 Ďalším, veľmi známym postupom na odhad generalizačnej chyby je $n$ krížová validácia. Pri tejto technike vytvárame $n$ modelov rovnakého typu. Dáta sú rozdelené na $n$ medzi sebou disjunktných podmnožín, najlepšie rovnakých veľkostí. Model testujeme vždy na jednej z $n$ častí. Ostatných $n-1$ častí slúži ako trénovacia množina (rozdelenie množín je teda v pomere $n$-1:1). Testovacie chyby $Err_{i}$, kde $i \in \{1,\ldots,n\}$, získané z každého z $n$ modelov môžeme následne použiť na aproximáciu generalizačnej chyby:
 \begin{equation}
@@ -673,7 +685,7 @@ K nevýhodám rozhodovacích stromov patrí:
 \item Krátkozrakosť algoritmu, kde delenia v jednotlivých vrcholoch pracujú iba s priamymi potomkami vrcholu.
 \item Väčšina algoritmov požaduje, aby bol výstupný atribút kategoriálny (C4.5, ID3, \ldots).
 \item Metódy, ktorými sa riešia problémy chýbajúcich hodnôt niektorých atribútov. Trénovacie dáta s chýbajúcimi hodnotami môžu byť napríklad odstránené z trénovacej množiny. Keď hodnota atribútu nechýba náhodou a nevyplnenie popisuje nejakú vlastnosť, tak je odstraňovanie inštancií úplne nevhodné (napr. neuvedený plat u dátovej množiny osôb môže znamenať, že osoba má príliš vysoký/nízky plat a nechcela ho uviesť).
-\item Problém fragmentácie pri rozdeľovaní dát vo vrcholoch. K tomuto problému dochádza v prípade, keď pri deleniach dátových množín vo vrcholoch rozdelíme dátové množiny na rovnako veľké podmnožiny. Strom, ktorý by takto rozdeľoval dátovú množinu veľkosti $n$, obsahuje na ceste z koreňa do listu iba $\log n$ vrcholov, čo je ekvivalentné s otestovaním maximálne $\log n$ atribútov. Toto býva veľký problém pri existencii väčšieho počtu významných atribútov.
+\item Problém fragmentácie pri rozdeľovaní dát vo vrcholoch. K tomuto problému dochádza v prípade, keď dátové množíny vo vrcholoch rozdelíme na rovnako veľké podmnožiny. Strom, ktorý by takto rozdeľoval dátovú množinu veľkosti $n$, obsahuje na ceste z koreňa do listu iba $\log n$ vrcholov, čo je ekvivalentné s otestovaním maximálne $\log n$ atribútov. Toto býva veľký problém pri existencii väčšieho počtu významných atribútov.
 \end{itemize}
 
 \subsection{Filtrovanie šumu z Hubblovho ďalekohľadu}\label{kap1:2.8:2.8.2:Hubble}
