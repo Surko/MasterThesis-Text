@@ -553,6 +553,19 @@ GE \approx \dfrac{1}{n} \sum_{i=1}^{n} Err_{i}
 Viac informácií o ďalších odhadoch je v knihe \cite[s. 56]{kap1-DataMiningForTrees} a vo voľne dostupných zdrojoch \cite{wiki-CrossValidation,online-validation}.
 
 \subsection{Alternatívne metriky}\label{kap1:2.6:2.6.2:Alternatives}
+Presnosť, ktorú sme spomínali v predchádzajúcej časti je síce najdôležitejším kritériom na vyhodnotenie modelu, no v niektorých prípadoch je jej použitie úplne nevhodné. Príkladom, kedy je použitie kritéria presnosti nevhodné je v prípade nerovnomerného rozdelenia hodnôt výstupného atribútu. Kritérium presnosti by v prípade tejto nerovnomernosti preferoval modely, ktoré by vždy predikovali majoritnú hodnotu výstupného atribútu. V tomto prípade je nutné použiť nejaké z alternatívnych metrík. 
+Nadchádzajúce definície uvažujú, pre ľahšie pochopenie binárny prípad výstupného atribútu (pre n-árny prípad \ref{TODO}).
+
+\begin{def-sk}[Confusion Matrix]
+Nech $M$ je prediktívny model a $C$ matica, kde riadky predstavujú predikované triedy modelom $M$ a stĺpce skutočné hodnoty výstupného atribútu. Matica $C$ je potom špeciálna tabuľka používaná na posúdenie kvality modelu $M$ (angl. confusion matrix).
+\end{def-sk}
+
+\begin{itemize}
+\item Citlivosť je schopnosť modelu rozpoznávať pozitívne inštancie
+\item Špecificita je schopnosť modelu rozpoznávať negatívne inštancie
+\item Precíznosť je schopnosť modelu rozpoznávať koľko pozitívne klasifikovaných inštancií je skutočne pozitívnych.
+\item F-miera je schopnosť modelu rozpoznávať koľko pozitívne klasifikovaných inštancií je skutočne pozitívnych.
+\end{itemize}
 
 \section{Techniky tvorby stromov}\label{kap1:2.7:DTTechniques}
 Cieľom tejto časti je predviesť najznámejšie techniky tvorby stromov (regresných aj klasifikačných). Tieto techniky spadajú pod oblasť učenia s učiteľom, ktorá bola bližšie popísaná v oddieli \ref{kap1:2.2:2.2.4:Supervised}. Jedná sa o algoritmy, ktoré vytvárajú strom z trénovacej množiny postupne od koreňa. Dáta sú v algoritme rozdelené podľa deliaceho kritéria na podmnožiny. Ďalej pokračujeme rekurzívnym volaním toho istého algoritmu na každú z týchto podmnožín. V obore dobývania znalostí sa celý tento proces nazýva indukcia rozhodovacích stromov zhora nadol, anglicky top down induction of decision trees (TDIDT). Indukčné algoritmy sú príkladom hladných techník. V praxi sú jedným z najpoužívanejších stratégii pri trénovaní rozhodovacích stromov. V tejto časti sme čerpali z kníh \cite{kap1-DataMiningForTrees,kap1-DataMiningAndAnalysis} pričom na rozšírenie ďalších poznatkov sme použili online zdroje \cite{online-SplitCriterias,online-SplitCriteriasMatter,online-DTLectures}.
