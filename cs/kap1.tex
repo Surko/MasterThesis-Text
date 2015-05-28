@@ -553,19 +553,52 @@ GE \approx \dfrac{1}{n} \sum_{i=1}^{n} Err_{i}
 Viac informácií o ďalších odhadoch je v knihe \cite[s. 56]{kap1-DataMiningForTrees} a vo voľne dostupných zdrojoch \cite{wiki-CrossValidation,online-validation}.
 
 \subsection{Alternatívne metriky}\label{kap1:2.6:2.6.2:Alternatives}
-Presnosť, ktorú sme spomínali v predchádzajúcej časti je síce najdôležitejším kritériom na vyhodnotenie modelu, no v niektorých prípadoch je jej použitie úplne nevhodné. Príkladom, kedy je použitie kritéria presnosti nevhodné je v prípade nerovnomerného rozdelenia hodnôt výstupného atribútu. Kritérium presnosti by v prípade tejto nerovnomernosti preferoval modely, ktoré by vždy predikovali majoritnú hodnotu výstupného atribútu. V tomto prípade je nutné použiť nejaké z alternatívnych metrík. 
-Nadchádzajúce definície uvažujú, pre ľahšie pochopenie binárny prípad výstupného atribútu (pre n-árny prípad \ref{TODO}).
+Presnosť, ktorú sme spomínali v predchádzajúcej časti je síce najdôležitejším kritériom na vyhodnotenie modelu, no v niektorých prípadoch je jej použitie úplne nevhodné. Príkladom, kedy je použitie kritéria presnosti nevhodné je v prípade nerovnomerného rozdelenia hodnôt výstupného atribútu. Kritérium presnosti by v prípade tejto nerovnomernosti preferoval modely, ktoré by vždy predikovali majoritnú hodnotu výstupného atribútu. V tomto prípade je nutné použiť nejaké z alternatívnych metrík.  
+Nadchádzajúce definície kritérií dokážu pracovať aj s $n$-árnym výstupným atribútom, no ich výpočet bude vždy uvedený pre jednu konkrétnu hodnotu výstupného atribútu. Počítanie hodnoty globálneho kritéria (pre celý model) je spoločné pre všetky ostatné kritériá a bude spomenuté na konci tejto časti. Lepšie vysvetlenie s dodatočnými kritériami sa nachádza v scikit príručke \cite{online-NAryConfusion}).
 
-\begin{def-sk}[Confusion Matrix]
-Nech $M$ je prediktívny model a $C$ matica, kde riadky predstavujú predikované triedy modelom $M$ a stĺpce skutočné hodnoty výstupného atribútu. Matica $C$ je potom špeciálna tabuľka používaná na posúdenie kvality modelu $M$ (angl. confusion matrix).
+\begin{def-sk}[Confusion matica]
+Nech hodnoty výstupného atribútu sú z konečnej množiny $C = \{c_{1},\ldots,c_{n}\}$. Ďalej nech $D$ je prediktívny model a $M$ matica, kde riadky predstavujú predikované triedy modelom $D$, stĺpce skutočné hodnoty výstupného atribútu a inštancie sú podľa týchto výstupov zaraďované do jednotlivých buniek $\{c_{11},\ldots,c_{kk}\}$. Maticu $M$ nazveme confusion matica a slúži na posudzovanie kvality modelu $D$ (angl. confusion matrix, obrázok \ref{fig:Confusion}).
 \end{def-sk}
 
-\begin{itemize}
-\item Citlivosť je schopnosť modelu rozpoznávať pozitívne inštancie
-\item Špecificita je schopnosť modelu rozpoznávať negatívne inštancie
-\item Precíznosť je schopnosť modelu rozpoznávať koľko pozitívne klasifikovaných inštancií je skutočne pozitívnych.
-\item F-miera je schopnosť modelu rozpoznávať koľko pozitívne klasifikovaných inštancií je skutočne pozitívnych.
-\end{itemize}
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap1/DT-confusion.pdf}}}
+\caption{Na obrázku sú príklady confusion matíc pre binárny a $k$-árny prípad výstupného atribútu. Inštancie sú zaraďované do jednotlivých buniek matice podľa toho, aký je skutočný a predikovaný výstup tejto inštancie. V binárnom prípade bývajú štyri bunky tejto matice aj pomenované (z angl. TP = true positive, FP = false positive, TN = true negative, FN = false negative)}\label{fig:Confusion}
+\end{figure}
+
+\begin{def-sk}[Kritérium citlivosti]\label{kap1:2.6:2.6.2:Sensitivity}
+Citlivosť (angl. sensitivity ale aj recall) na hodnotu $c_{i}$ je alternatívna metrika, ktorá kvantifikuje kvalitu modelu pri rozpoznávaní inštancií, ktorých skutočná hodnota výstupného atribút je $c_{i}$.
+\begin{equation}
+\mbox{Citlivosť}_{c_{i}} = \dfrac{c_{ii}}{\sum_{j=1}^{k} c_{ji}} \nonumber
+\end{equation}
+\end{def-sk}
+
+\begin{def-sk}[Kritérium precíznosti]\label{kap1:2.6:2.6.2:Sensitivity}
+Precíznosť (angl. precision) pre hodnotu $c_{i}$ je alternatívna metrika, ktorá popisuje kvalitu modelu podľa toho, koľko klasifikovaných inštancií na hodnotu $c_{i}$ je aj naozaj správne klasifikovaných.
+\begin{equation}
+\mbox{Precíznosť}_{c_{i}} = \dfrac{c_{ii}}{\sum_{j=1}^{k} c_{ij}} \nonumber
+\end{equation}
+\end{def-sk}
+
+\begin{def-sk}[Kritérium špecificity]\label{kap1:2.6:2.6.2:Specificity}
+Špecificita (angl. specificity) pre hodnotu $c_{i}$ je metrikou, ktorá kvantifikuje kvalitu modelu pri rozpoznávaní inštancií, ktorých skutočná hodnota výstupného atribút nie je $c_{i}$.
+\begin{equation}
+\mbox{Špecificita}_{c_{i}} = \dfrac{\sum_{l \ne i}^{k}\sum_{j \ne i}^{k} c_{lj}}{\sum_{l = 1}^{k}\sum_{j \ne i}^{k} c_{lj}} \nonumber
+\end{equation}
+\end{def-sk}
+
+\begin{def-sk}[F-metrika]\label{kap1:2.6:2.6.2:Specificity}
+F-metrika (angl. f-measure) pre hodnotu $c_{i}$ je metrikou, ktorá kvantifikuje kvalitu modelu podľa precíznosti a citlivosti. Nech $P_{c_{i}}$ je precíznosť a $S_{c_{i}}$ je citlivosť pre hodnotu $c_{i}$, potom:
+\begin{equation}
+\mbox{F-metrika}_{c_{i}} = \dfrac{2 \times P_{c_{i}} \times R_{c_{i}}}{P_{c_{i}} + R_{c_{i}}} \nonumber
+\end{equation}
+\end{def-sk}
+
+Jedno z kritérií, ktoré môžeme dopočítať z confusion matice je dokonca aj odhad presnosti modelu $ACC$ (tak ako sme o nej písali v predchádzajúcej časti):
+\begin{equation}
+ACC \approx \dfrac{\sum_{i=1}^{k} c_{ii}}{\sum_{i=1}^{k}\sum_{j=1}^{k} c_{ij}} \nonumber
+\end{equation}
+Z confusion matice je pravdaže možné získať viac kritérií, než sme popísali v tejto časti. Viac informácii a zoznam ďalších kritérií poskytuje Wikipediá \cite{wiki-Confusion}.
 
 \section{Techniky tvorby stromov}\label{kap1:2.7:DTTechniques}
 Cieľom tejto časti je predviesť najznámejšie techniky tvorby stromov (regresných aj klasifikačných). Tieto techniky spadajú pod oblasť učenia s učiteľom, ktorá bola bližšie popísaná v oddieli \ref{kap1:2.2:2.2.4:Supervised}. Jedná sa o algoritmy, ktoré vytvárajú strom z trénovacej množiny postupne od koreňa. Dáta sú v algoritme rozdelené podľa deliaceho kritéria na podmnožiny. Ďalej pokračujeme rekurzívnym volaním toho istého algoritmu na každú z týchto podmnožín. V obore dobývania znalostí sa celý tento proces nazýva indukcia rozhodovacích stromov zhora nadol, anglicky top down induction of decision trees (TDIDT). Indukčné algoritmy sú príkladom hladných techník. V praxi sú jedným z najpoužívanejších stratégii pri trénovaní rozhodovacích stromov. V tejto časti sme čerpali z kníh \cite{kap1-DataMiningForTrees,kap1-DataMiningAndAnalysis} pričom na rozšírenie ďalších poznatkov sme použili online zdroje \cite{online-SplitCriterias,online-SplitCriteriasMatter,online-DTLectures}.

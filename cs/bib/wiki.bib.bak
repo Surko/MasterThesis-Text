@@ -2,10 +2,23 @@
 % Encoding: UTF8
 
 
+@Online{wiki-Confusion,
+  Title                    = {Confusion Matrix},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Confusion_matrix}
+}
+
 @Online{wiki-costcompprune,
   Title                    = {Cost complexity pruning},
   Author                   = {Wikipedia},
   Url                      = {http://en.wikipedia.org/wiki/Pruning_%28decision_trees%29#Cost_complexity_pruning},
+  Year                     = {2015}
+}
+
+@Online{wiki-CrossValidation,
+  Title                    = {Cross Validation},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Cross-validation_%28statistics%29},
   Year                     = {2015}
 }
 

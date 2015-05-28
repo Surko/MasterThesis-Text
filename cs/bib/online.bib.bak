@@ -9,16 +9,6 @@
   Year                     = {2014}
 }
 
-@Www{online-validation,
-  Title                    = {Lecture Notes on Validation},
-  Author                   = {School of Compute Science},
-  Url                      = {http://research.cs.tamu.edu/prism/lectures/iss/iss_l13.pdf},
-  Year                     = {2015},
-
-  Owner                    = {kirrie},
-  Timestamp                = {2015.05.25}
-}
-
 @Online{online-DataMiningWeka,
   Title                    = {Weka 3: Data Mining Software in Java},
   Author                   = {Eibe Frank and Mark Hall and Peter Reutemann and Len Trigg},
@@ -40,6 +30,13 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Editor                   = {Society for Psychotherapy Research},
   Url                      = {http://www.tandfonline.com/doi/pdf/10.1080/713664470},
   Year                     = {2002}
+}
+
+@Online{online-DataMiningMatlab,
+  Title                    = {About Matlab},
+  Author                   = {MathWorks},
+  Url                      = {http://www.mathworks.com/products/matlab/},
+  Year                     = {2015}
 }
 
 @Www{online-SplitCriteriasMatter,
@@ -67,6 +64,20 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Year                     = {2015}
 }
 
+@Online{online-DecisionTreeScikit,
+  Title                    = {Decision Trees in Scikit},
+  Author                   = {Scikit},
+  Url                      = {http://scikit-learn.org/stable/modules/tree.html},
+  Year                     = {2015}
+}
+
+@Www{online-NAryConfusion,
+  Title                    = {Model evaluation: quantifying the quality of predictions},
+  Author                   = {Scikit},
+  Url                      = {http://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics},
+  Year                     = {2015}
+}
+
 @Online{online-DecisionTreeTypes,
   Title                    = {Introductory Overview of Decision Trees},
   Author                   = {StatSoft},
@@ -81,21 +92,15 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Year                     = {2015}
 }
 
-@Online{online-DataMiningMatlab,
-  Title                    = {About Matlab},
-  Url                      = {http://www.mathworks.com/products/matlab/},
-  Year                     = {2015}
-}
-
-@Online{online-DecisionTreeScikit,
-  Title                    = {Decision Trees in Scikit},
-  Url                      = {http://scikit-learn.org/stable/modules/tree.html},
-  Year                     = {2015}
-}
-
 @Www{online-SplitCriterias,
   Title                    = {SAS The power to know},
   Url                      = {http://support.sas.com/documentation/cdl/en/stathpug/66410/HTML/default/viewer.htm#stathpug_hpsplit_details10.htm},
+  Year                     = {2015}
+}
+
+@Www{online-validation,
+  Title                    = {School of Computer Science: Lecture Notes on Validation},
+  Url                      = {http://research.cs.tamu.edu/prism/lectures/iss/iss_l13.pdf},
   Year                     = {2015}
 }
 
