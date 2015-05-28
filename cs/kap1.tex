@@ -675,24 +675,24 @@ Existujú rôzne kritéria zastavenia, ktoré prerušia vytváranie stromu. Tým
 \end{itemize}
 
 \subsection{Orezávanie stromov}\label{kap1:2.7:2.7.1:Pruning}
-Pri vytváraní stromov je nutné dať pozor, aké zastavovacie kritérium použijeme. Pri málo obmedzujúcom kritériu dostávame stromy malej veľkosti, no trénovacia chyba takéhoto stromu je príliš vysoká. Na opačnej strane, príliš obmedzujúce kritérium donúti algoritmus vytvoriť veľký preučený strom (malá trénovacia chyba, vysoká generalizačná chyba).
+Pri vytváraní stromov je nutné dať pozor nato, aké zastavovacie kritérium použijeme. Pri málo obmedzujúcom kritériu dostávame stromy malej veľkosti, no trénovacia chyba takéhoto stromu je príliš vysoká. Na opačnej strane, príliš obmedzujúce kritérium donúti algoritmus vytvoriť veľký preučený strom (malá trénovacia chyba, vysoká generalizačná chyba).
 
-Pri preučených stromov je veľmi používanou taktikou orezanie stromu. Strom je typicky zbavovaný prebytočných podstromov, ktoré zhoršujú generalizáciu (keď používame kritérium presnosti). Orezanie stromu je skvelým nástrojom pri dodržaní pravidla Occamovej britvy\footnote{Filozofický prístup založený na preferovaní jednoduchších modelov, pričom rozdiel kvality modelov nie je tak znateľný.}
+Pri preučených stromoch je používanou taktikou orezanie stromu. Strom je typicky zbavovaný prebytočných podstromov, ktoré zhoršujú generalizáciu (keď používame kritérium presnosti). Orezanie stromu je skvelým nástrojom pri dodržaní pravidla Occamovej britvy\footnote{Filozofický prístup založený na preferovaní jednoduchších modelov, pričom rozdiel kvality modelov nie je tak znateľný.}.
 
 Existuje mnoho techník na orezanie stromov. Typickým postupom je vytvorenie stromu nejakým indukčným algoritmom, pričom na vytvorený strom použijeme niektorú z orezávacích techník.
-Orezávanie stromu sa dá generalizovať pre ľubovoľné kritérium.
+Orezávanie stromu sa dá generalizovať pre ľubovoľné kritérium $\epsilon$.
 Tieto techniky vykonávajú prechod stromu zhora nadol (od koreňa k listom) alebo naopak (od listov ku koreňu). Keď strom po orezaní vylepšil predom dané kritérium $\epsilon$ na vyhodnotenie stromu, tak je orezaný strom prijatý.
 Hodnotu vyhodnocovacieho kritéria $\epsilon$ väčšinou počítame na úplne novej, orezávacej množine. Pri malej veľkosti vstupných dát je odporúčané použiť krížovú validáciu alebo iné metódy.
-
 \subsubsection{Orezanie stromu zmenšovaním chyby}
 Známa a veľmi jednoduchá technika orezania stromu. Patrí medzi techniky zhora nadol, ktorá pri každom orezaní zaručuje zmenšenie chyby. Pre každý vrchol stromu zisťujeme, či po jeho nahradení za list (s maximálnou hodnotou výstupného atribútu pre dáta v tomto vrchole), znížime hodnotu kritéria na vyhodnotenie stromu. Hodnotu kritéria počítame na orezávacej množine. Celý proces pokračuje dokým sa takýto vrchol nenájde.
-
 \subsubsection{Orezanie podľa zložitosti stromu}
-Táto technika pracuje v dvoch krokoch. V prvom kroku vybudujeme pomocou trénovacích dát stromy $T_{0},\ldots,T_{n}$, kde $T_{0}$ je strom bez nejakého orezania a $T_{n}$ je koreň. V druhom kroku vyberieme taký strom $T_{i}$, ktorý zlepšuje kritérium $\epsilon$ na vyhodnotenie stromu. Z tohoto stromu vytvoríme nový strom $T_{i+1}$ tak, že niektoré podstromy nahradíme listami. Podstromy na orezanie sú vybrané podľa toho, ako moc zlepšujú (pre generalizačnú chybu minimalizujeme, pre iné kritéria maximalizujeme) hodnotu:
+Táto technika pracuje v dvoch krokoch. V prvom kroku vybudujeme pomocou trénovacích dát stromy $T_{0},\ldots,T_{n}$, kde $T_{0}$ je strom bez nejakého orezania a $T_{n}$ je koreň. V druhom kroku vyberieme taký strom $T_{i}$, ktorý maximalizuje kritérium $\epsilon$ na vyhodnotenie stromu. 
+
+Množina stromov je budovaná postupne. Strom $T_{i+1}$ je vytvorený zo stromu $T_{i}$ tak, že niektoré podstromy nahradíme listami. Podstromy na orezanie sú vybrané podľa toho, ako moc zlepšujú (pre generalizačnú chybu minimalizujeme, pre iné kritéria maximalizujeme) hodnotu:
 \begin{equation}
 \delta = \dfrac{\epsilon(orezanie(T_{i},t),D) - \epsilon(T_{i},D)}{\lvert listy(T_{i}) \lvert - \lvert listy(orezanie(T_{i},t)) \lvert}, \nonumber
 \end{equation}
-pričom $\epsilon(T_{i},D)$ je hodnota daného kritéria pre strom $T_{i}$ a dáta $D$. Potom $listy(T_{i})$ je počet listov stromu $T_{i}$ a orezanie je funkcia, ktorá zmení vrchol $t$ stromu $T_{i}$ na list.
+pričom $\epsilon(T_{i},D)$ je hodnota daného kritéria pre strom $T_{i}$ a dáta $D$. Ďalej $listy(T_{i})$ je počet listov stromu $T_{i}$ a orezanie je funkcia, ktorá zmení vrchol $t$ stromu $T_{i}$ na list.
 
 Viac informácií a ďalšie techniky orezávania stromov sú v knihe \cite[s. 72]{kap1-DecisionTree}.
 
