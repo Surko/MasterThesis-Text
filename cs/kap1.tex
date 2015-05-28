@@ -173,7 +173,6 @@ Nevýhodou tohoto prístupu je buď nutnosť vlastniť Matlab, ktorý je spoplat
 \item \textbf{Python} je vysoko úrovňový dynamický jazyk podobne ako to je u Matlab-u \cite{wiki-Python}. Je to obľúbeným jazykom vedcov a jeho hlavnou filozofiou je zaručiť čitateľnosť kódu. Python podporuje mnoho programátorských paradigmát (objektovo orientovaný, imperatívny, funkcionálny, ...). Taktiež k nemu existuje mnoho knižníc na zjednodušenie práce v širokej škále oborov. Najoblúbenejší nástroj pre štatistické a strojové učenie je obsiahnutý v balíčku scikit-learn \cite{kap1-Scikit}. Tento balík v sebe viaže efektívne a jednoduché nástroje pre dátovú analýzu aj dobývanie znalostí. Stavia na obľúbených knižniciach NumPy, SciPy a matplotlib. Jazyk Python je k tomu voľne dostupný a scikit-learn je so svojou BSD licenciou skvelým kandidátom aj pre obchodné účely. 
 \end{itemize}
 
-
 \section{Základné pojmy rozhodovacích stromov}\label{kap1:2.3:DT}
 V tomto oddieli vysvetlíme základné pojmy, ktoré sa používajú v spojitosti s rozhodovacími stromami. Najprv zadefinujeme čo je strom a čo znamenajú jednotlivé jeho časti v rozhodovacom strome. Informácií o tejto metóde existuje veľa, no základné pojmy sme hlavne čerpali z kníh \cite{kap1-DataMiningForTrees,kap1-DecisionTree} a \cite[s. 481-498]{kap1-DataMiningAndAnalysis}. Ďalšími použitými zdrojmi bola Wikipédia \cite{wiki-DecisionTree} a scikit-learn stránka \cite{online-DecisionTreeScikit}, na ktorej sa nachádzajú zaujímavé príklady.
 
@@ -507,11 +506,11 @@ Najprv v časti \ref{kap1:2.6:2.6.1:Generalize} zadefinujeme generalizačnú chy
 Pred zadefinovaním generalizačnej chyby najprv zavedieme pojmy trénovacia chyba a testovacia chyba.
 Trénovacia chyba $err$ modelu $M$ nad trénovaciou množinou $D$ je definovaná ako:
 \begin{equation}
-err = \dfrac{1}{\lvert D \lvert}\sum_{(x,y) \in D} L(y, M(x)),
+err(M) = \dfrac{1}{\lvert D \lvert}\sum_{(x,y) \in D} L(y, M(x)),
 \end{equation}
 Testovacia chyba $Err$ modelu $M$ nad testovaciou množinou $T$ je definovaná ako:
 \begin{equation}
-Err = \dfrac{1}{\lvert T \lvert}\sum_{(x,y) \in T} L(y, M(x)),
+Err(M) = \dfrac{1}{\lvert T \lvert}\sum_{(x,y) \in T} L(y, M(x)),
 \end{equation}
 V oboch prípadoch je $M(x)$ klasifikácia inštancie $x$ pomocou modelu $M$. V prípade kategoriálneho výstupného atribútu môže byť $L(y,\tilde{y})$ 0-1 stratová funkcia
 \begin{equation}
@@ -523,9 +522,9 @@ L(y,\tilde{y}) &= (y - \tilde{y})^2, \nonumber \\
 L(y,\tilde{y}) &= \lvert y - \tilde{y} \lvert,
 \end{align}
 
-Generalizačná chyba $GE$ pre určitý model je definovaná ako pravdepodobnosť, že model nesprávne klasifikuje novú inštanciu (meria ako dobre model generalizuje nové dáta). Klasifikačná presnosť modelu $ACC$, ďalej len ako presnosť modelu je potom definovaná:
+Generalizačná chyba $GE$ pre určitý model $M$ je definovaná ako pravdepodobnosť, že model nesprávne klasifikuje novú inštanciu (meria ako dobre model generalizuje nové dáta). Klasifikačná presnosť modelu $ACC$, ďalej len ako presnosť modelu je potom definovaná:
 \begin{equation}
-ACC = 1 - GE.
+ACC(M) = 1 - GE(M).
 \end{equation}
 
 Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použitie trénovacej chyby. Model by na prvý pohľad (pri použití trénovacej chyby) vyzeral idylicky, no generalizačné schopnosti by boli veľmi nízke. Tento nepriaznivý stav sa nazýva preučenie modelu. Na obrázku \ref{fig:overfit} je vidieť vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Lepším odhadom preto býva použitie testovacej chyby, viď nižšie (empirický odhad).
@@ -603,9 +602,7 @@ Z confusion matice je pravdaže možné získať viac kritérií, než sme popí
 \section{Techniky tvorby stromov}\label{kap1:2.7:DTTechniques}
 Cieľom tejto časti je predviesť najznámejšie techniky tvorby stromov (regresných aj klasifikačných). Tieto techniky spadajú pod oblasť učenia s učiteľom, ktorá bola bližšie popísaná v oddieli \ref{kap1:2.2:2.2.4:Supervised}. Jedná sa o algoritmy, ktoré vytvárajú strom z trénovacej množiny postupne od koreňa. Dáta sú v algoritme rozdelené podľa deliaceho kritéria na podmnožiny. Ďalej pokračujeme rekurzívnym volaním toho istého algoritmu na každú z týchto podmnožín. V obore dobývania znalostí sa celý tento proces nazýva indukcia rozhodovacích stromov zhora nadol, anglicky top down induction of decision trees (TDIDT). Indukčné algoritmy sú príkladom hladných techník. V praxi sú jedným z najpoužívanejších stratégii pri trénovaní rozhodovacích stromov. V tejto časti sme čerpali z kníh \cite{kap1-DataMiningForTrees,kap1-DataMiningAndAnalysis} pričom na rozšírenie ďalších poznatkov sme použili online zdroje \cite{online-SplitCriterias,online-SplitCriteriasMatter,online-DTLectures}.
 
-Najskôr v časti \ref{kap1:2.7:2.7.1:Pruning} predstavíme techniku orezávania stromov, ktorá sa používa pri zlepšení generalizačných schopností stromov. Ďalej v časti \ref{kap1:2.7:2.7.2:Generic} ukážeme generický algoritmus na indukciu stromov. V ďalších častiach rozoberieme tri najznámejšie indukčné algoritmy na tvorbu stromov. Konkrétne v časti \ref{kap1:2.7:2.7.3:ID3} ukážeme algoritmus ID3. Následne v časti \ref{kap1:2.7:2.7.4:C4.5} predstavíme vylepšený algoritmus C4.5. Pre regresné typy stromov predvedieme v časti \ref{kap1:2.7:2.7.5:CART} obľúbený algoritmus CART.
-
-\subsection{Orezávanie stromov}\label{kap1:2.7:2.7.1:Pruning}
+Najskôr v časti \ref{kap1:2.7:2.7.2:Generic} ukážeme generický algoritmus na indukciu stromov. Ďalej v časti \ref{kap1:2.7:2.7.1:Pruning} predstavíme techniku orezávania stromov, ktorá sa používa pri zlepšení generalizačných schopností stromov.  V ďalších častiach rozoberieme tri najznámejšie indukčné algoritmy na tvorbu stromov. Konkrétne v časti \ref{kap1:2.7:2.7.3:ID3} ukážeme algoritmus ID3. Následne v časti \ref{kap1:2.7:2.7.4:C4.5} predstavíme vylepšený algoritmus C4.5. Pre regresné typy stromov predvedieme v časti \ref{kap1:2.7:2.7.5:CART} obľúbený algoritmus CART.
 
 \subsection{Generický indukčný algoritmus}\label{kap1:2.7:2.7.2:Generic}
 Indukčné algoritmy majú za úlohu vytvoriť rozhodovací strom zo zadanej trénovacej množiny $D$. Hlavnou úlohou pri tvorbe stromov je minimalizovať generalizačnú chybu (\ref{kap1:2.6:2.6.1:Generalize}). Nie vždy sa jedná len o minimalizovanie. Algoritmus sa môže snažiť o vytvorenie stromu s čo najnižšou výškou alebo tiež s obmedzeným počtom vrcholov.
@@ -634,17 +631,7 @@ $T$ - Vytvorený strom
 \State $PodStrom_{i}(T) \gets $ \parbox[t]{280pt}{\textsc{IndukciaStromu}($D_{X_{i} = v_{i}}$,$X$,$Y$,$Del\_Krit$, $Stop\_Krit$)} 
 \State $Hrana_{i}(T) \gets v_{i}$  
 \EndFor \\
-\Return{\textsc{OrezanieStromu}($D$,$T$,$Y$)}
-\EndFunction
-\\
-\Function{OrezanieStromu}{$D$,$T$,$Y$}
-\Repeat 
-\State $t \gets$ \parbox[t]{350pt}{textvrchol stromu T, ktorý po orezaní maximalizuje predom zvolené vyhodnocovacie kritérium}
-\If{$t \neq \emptyset$}:
-\State $T \gets$ orezanie($T$,$t$)
-\EndIf
-\Until{$t = \emptyset$} \\
-\Return{$T$}
+\Return{T}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -686,6 +673,44 @@ Existujú rôzne kritéria zastavenia, ktoré prerušia vytváranie stromu. Tým
 \item Hodnota najlepšieho deliaceho kritéria je menšia než určitý prah.
 \item Počet inštancií v danom uzle je menší než dopredu zadaná konštanta.
 \end{itemize}
+
+\subsection{Orezávanie stromov}\label{kap1:2.7:2.7.1:Pruning}
+Pri vytváraní stromov je nutné dať pozor, aké zastavovacie kritérium použijeme. Pri málo obmedzujúcom kritériu dostávame stromy malej veľkosti, no trénovacia chyba takéhoto stromu je príliš vysoká. Na opačnej strane, príliš obmedzujúce kritérium donúti algoritmus vytvoriť veľký preučený strom (malá trénovacia chyba, vysoká generalizačná chyba).
+
+Pri preučených stromov je veľmi používanou taktikou orezanie stromu. Strom je typicky zbavovaný prebytočných podstromov, ktoré zhoršujú generalizáciu (keď používame kritérium presnosti). Orezanie stromu je skvelým nástrojom pri dodržaní pravidla Occamovej britvy\footnote{Filozofický prístup založený na preferovaní jednoduchších modelov, pričom rozdiel kvality modelov nie je tak znateľný.}
+
+Existuje mnoho techník na orezanie stromov. Typickým postupom je vytvorenie stromu nejakým indukčným algoritmom, pričom na vytvorený strom použijeme niektorú z orezávacích techník.
+Orezávanie stromu sa dá generalizovať pre ľubovoľné kritérium.
+Tieto techniky vykonávajú prechod stromu zhora nadol (od koreňa k listom) alebo naopak (od listov ku koreňu). Keď strom po orezaní vylepšil predom dané kritérium $\epsilon$ na vyhodnotenie stromu, tak je orezaný strom prijatý.
+Hodnotu vyhodnocovacieho kritéria $\epsilon$ väčšinou počítame na úplne novej, orezávacej množine. Pri malej veľkosti vstupných dát je odporúčané použiť krížovú validáciu alebo iné metódy.
+
+\subsubsection{Orezanie stromu zmenšovaním chyby}
+Známa a veľmi jednoduchá technika orezania stromu. Patrí medzi techniky zhora nadol, ktorá pri každom orezaní zaručuje zmenšenie chyby. Pre každý vrchol stromu zisťujeme, či po jeho nahradení za list (s maximálnou hodnotou výstupného atribútu pre dáta v tomto vrchole), znížime hodnotu kritéria na vyhodnotenie stromu. Hodnotu kritéria počítame na orezávacej množine. Celý proces pokračuje dokým sa takýto vrchol nenájde.
+
+\subsubsection{Orezanie podľa zložitosti stromu}
+Táto technika pracuje v dvoch krokoch. V prvom kroku vybudujeme pomocou trénovacích dát stromy $T_{0},\ldots,T_{n}$, kde $T_{0}$ je strom bez nejakého orezania a $T_{n}$ je koreň. V druhom kroku vyberieme taký strom $T_{i}$, ktorý zlepšuje kritérium $\epsilon$ na vyhodnotenie stromu. Z tohoto stromu vytvoríme nový strom $T_{i+1}$ tak, že niektoré podstromy nahradíme listami. Podstromy na orezanie sú vybrané podľa toho, ako moc zlepšujú (pre generalizačnú chybu minimalizujeme, pre iné kritéria maximalizujeme) hodnotu:
+\begin{equation}
+\delta = \dfrac{\epsilon(orezanie(T_{i},t),D) - \epsilon(T_{i},D)}{\lvert listy(T_{i}) \lvert - \lvert listy(orezanie(T_{i},t)) \lvert}, \nonumber
+\end{equation}
+pričom $\epsilon(T_{i},D)$ je hodnota daného kritéria pre strom $T_{i}$ a dáta $D$. Potom $listy(T_{i})$ je počet listov stromu $T_{i}$ a orezanie je funkcia, ktorá zmení vrchol $t$ stromu $T_{i}$ na list.
+
+Viac informácií a ďalšie techniky orezávania stromov sú v knihe \cite[s. 72]{kap1-DecisionTree}.
+
+%\begin{algorithm} 
+%\floatname{algorithm}{Algoritmus}
+%\caption{Pseudo-algoritmus popisujúci proces orezania stromov. Funkcia orezanie(T,t) }\label{fig:pruneAlgorithm}
+%\begin{algorithmic}
+%\Function{OrezanieStromu}{$D$,$T$,$Y$}
+%\Repeat 
+%\State $t \gets$ \parbox[t]{350pt}{vyber vrchol stromu T, ktorý po orezaní maximalizuje predom zvolené vyhodnocovacie kritérium}
+%\If{$t \neq \emptyset$}:
+%\State $T \gets$ orezanie($T$,$t$)
+%\EndIf
+%\Until{$t = \emptyset$} \\
+%\Return{$T$}
+%\EndFunction
+%\end{algorithmic}
+%\end{algorithm}
 
 \subsection{ID3}\label{kap1:2.7:2.7.3:ID3}
 ID3 algoritmus je najznámejší a najjednoduchší z indukčných algoritmov. Deliacim kritériom je Informačný zisk (\ref{kap1:2.5:2.5.2:InfoGainDef}). Kritériom zastavenia je nulový informačný zisk alebo dosiahnutie homogénnosti výstupného atribútu. Algoritmus nevyužíva žiadne techniky orezávania, nedokáže riešiť problémy s chýbajúcimi hodnotami v atribútoch a nevie pracovať s numerickými atribútmi.
