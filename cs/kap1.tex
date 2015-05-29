@@ -616,6 +616,17 @@ ACC(M) \approx \dfrac{\sum_{i=1}^{k} c_{ii}}{\sum_{i=1}^{k}\sum_{j=1}^{k} c_{ij}
 Z matice chybovosti je pravdaže možné získať viac kritérií, než sme popísali v tejto časti. Viac informácii a zoznam ďalších kritérií poskytuje Wikipediá \cite{wiki-Confusion}.
 
 \subsection{Alternatívne metriky založené na zložitosti stromu}
+Veľa techník z dobývania znalostí, ako sú SVM alebo neurónové siete vytvárajú modely, ktoré sa síce snažia zlepšiť kritérium presnosti, no väčšinou fungujú ako čierne skrinky, o vnútornej štruktúre ktorých nevieme skoro nič. Rozhodovacie stromy, ako uź vieme, získali popularitu v rôznych odvetviach hlavne kvôli dvom výhodám: jednoduchosti a zrozumiteľnosti modelu. V prípade príliš veľkých stromov sú ale tieto výhody do istej miery redukované. 
+
+V oblasti medicíny je dôležitou vlastnosťou (popri presnosti modelu) schopnosť interpretovať rozhodnutia, čo priamo súvisí s jednoduchosťou a zrozumiteľnosťou rozhodovacích stromov. Tieto dve vlastnosti stromu uľahčujú doktorovi diagnózu pacientov a zároveň mu dovoľujú nahliadnuť na vnútornú štruktúru stromu. Z nej je vidieť, ako sú tvorené a ako kvalitné sú rozhodnutia tohoto stromu (počet inštancií v listoch určuje kvalitu rozhodnutia).
+
+Najznámejšími a najobľúbenejšími metrikami založenými na zložitosti stromov sú:
+\begin{itemize}
+\item hĺbka stromu, ktorá je definovaná ako maximálna dĺžka cesty od koreňa k nejakému listu,
+\item počet vrcholov stromu,
+\item počet listov stromu,
+\end{itemize}
+pričom medzi ďalšie metriky môžu patriť ľubovoľné vlastnosti stromov/grafov.
 
 \section{Techniky tvorby stromov}\label{kap1:2.7:DTTechniques}
 Cieľom tejto časti je predviesť najznámejšie techniky tvorby stromov (regresných aj klasifikačných). Tieto techniky spadajú pod oblasť učenia s učiteľom, ktorá bola bližšie popísaná v oddieli \ref{kap1:2.2:2.2.4:Supervised}. Jedná sa o algoritmy, ktoré vytvárajú strom z trénovacej množiny postupne od koreňa. Dáta sú v algoritme rozdelené podľa deliaceho kritéria na podmnožiny. Ďalej pokračujeme rekurzívnym volaním toho istého algoritmu na každú z týchto podmnožín. V obore dobývania znalostí sa celý tento proces nazýva indukcia rozhodovacích stromov zhora nadol, anglicky top down induction of decision trees (TDIDT). Indukčné algoritmy sú príkladom hladných techník. V praxi sú jedným z najpoužívanejších stratégii pri trénovaní rozhodovacích stromov. V tejto časti sme čerpali z kníh \cite{kap1-DataMiningForTrees,kap1-DataMiningAndAnalysis} pričom na rozšírenie ďalších poznatkov sme použili online zdroje \cite{online-SplitCriterias,online-SplitCriteriasMatter,online-DTLectures}.
@@ -798,7 +809,7 @@ Dáta, pre účely vytvorenia modelu, boli získané z iného projektu (Project 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics[width=385pt]{../img/kap1/DT-clinical.pdf}}}
-\caption{Získaný model klasifikujúci výsledok liečby (Čísla v elipsách predstavujú veľkosti skupín získané po delení. Percentá pod vrcholmi predstavujú relatívny počet ľudí s lepším verzus horším výsledkom. SCLGSI = Symptom Checklist-90-R Global Severity Index). Obrázok modelu je prebraný a prepísaný z \cite[s. 454]{online-psychoterapy}}\label{fig:ClinicalTree}
+\caption{Získaný model klasifikujúci výsledok liečby. Čísla v elipsách predstavujú veľkosti skupín získané po delení. Percentá pod vrcholmi predstavujú relatívny počet ľudí s lepším verzus horším výsledkom. SCLGSI je skratka pre výsledok testu Symptom Checklist-90-R Global Severity Index. Obrázok modelu je prebraný a prepísaný z \cite[s. 454]{online-psychoterapy}}\label{fig:ClinicalTree}
 \end{figure}
 
 Vytvorený strom metódou CART obsahoval desať listových vrcholov a jeho chybovosť bola 18\%. Zo 448 pacientov, ktorým bol predpovedaný zlý výsledok malo 86\% skutočne zlý výsledok. Zo 182 pacientov s predikovaným dobrým výsledkom malo 74\% dobrý výsledok. Vytvorený strom je na obrázku \ref{fig:ClinicalTree}. Obrázok môže slúžiť ako učebnicová ukážka stromu vytvoreného algoritmom CART.
