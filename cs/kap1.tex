@@ -494,40 +494,46 @@ kde $dom_{1}(X_{i})$ a $dom_{2}(X_{i})$ sú podmnožiny domény atribútu $X_{i}
 
 
 \section{Vyhodnotenie kvality stromov}\label{kap1:2.6:DTEvaluation}
-Pri vytváraní modelov metódami strojového učenia, ako aj pri tvorbe stromov je dôležité vyhodnotiť kvalitu vytvoreného modelu. Z predchádzajúcich oddielov vieme, že pri tvorbe stromu používame trénovaciu množinu. Vytvorený strom následne slúži na klasifikovanie novej inštancie. Takto vytvorený strom je možné ohodnotiť podľa určitých kritérií.
+Tak ako pri vytváraní modelov metódami strojového učenia, tak aj pri tvorbe stromov je dôležité vyhodnotiť kvalitu vytvoreného modelu. Z predchádzajúcich oddielov vieme, že pri tvorbe stromu používame trénovaciu množinu. Vytvorený strom následne slúži na klasifikovanie novej inštancie. Takto vytvorený strom je možné ohodnotiť podľa určitých kritérií.
 
 Najrozumnejšie kritérium je presnosť modelu, no existuje mnoho ďalších. Ďalšími kritériami vyhodnotenia môže byť zložitosť stromu (výška, počet vrcholov stromu, a pod.) ale aj výpočtová zložitosť pri tvorbe, úprave stromu či klasifikovaní nových inštancií. Existujú aj také kritéria, ktoré sa zaoberajú robustnosťou\footnote{Schopnosť modelu správne predikovať inštancie, ktoré obsahujú šum alebo ktorým chýbajú niektoré atribúty.} a stabilitou\footnote{Schopnosť modelu vytvárať podobné/rovnaké stromy pri pozmenení niektorých dát z trénovacej množiny} stromov.
 
 Informácie o rôznych kritériách na vyhodnotenie stromov sú v knihách \cite[s. 364]{kap1-DecisionTree} a \cite[s. 31]{kap1-DataMiningForMasses}. Jednoduché vysvetlenie generalizačnej chyby existuje na Wikipedii \cite{wiki-GeneralizationError}.
 
-Najprv v časti \ref{kap1:2.6:2.6.1:Generalize} zadefinujeme generalizačnú chybu a ukážeme ako súvisí táto chyba s presnosťou modelu. Následne v časti \ref{kap1:2.6:2.6.2:Alternatives} predstavíme niektoré alternatívne metriky pre zhodnotenie kvality stromov.
+Najprv v časti \ref{kap1:2.6:2.6.1:Generalize} zadefinujeme generalizačnú chybu a ukážeme ako súvisí táto chyba s presnosťou modelu. Následne v časti \ref{kap1:2.6:2.6.2:Alternatives} predstavíme niektoré alternatívne metriky pre hodnotenie kvality stromov.
 
 \subsection{Generalizačná chyba}\label{kap1:2.6:2.6.1:Generalize}
 Pred zadefinovaním generalizačnej chyby najprv zavedieme pojmy trénovacia chyba a testovacia chyba.
 Trénovacia chyba $err$ modelu $M$ nad trénovaciou množinou $D$ je definovaná ako:
 \begin{equation}
-err(M) = \dfrac{1}{\lvert D \lvert}\sum_{(x,y) \in D} L(y, M(x)),
+err(M,D) = \dfrac{1}{\lvert D \lvert}\sum_{(x,y) \in D} L(y, M(x)),
 \end{equation}
-Testovacia chyba $Err$ modelu $M$ nad testovaciou množinou $T$ je definovaná ako:
+a testovacia chyba $Err$ modelu $M$ nad testovacou množinou $T$ je definovaná ako:
 \begin{equation}
-Err(M) = \dfrac{1}{\lvert T \lvert}\sum_{(x,y) \in T} L(y, M(x)),
+Err(M,T) = \dfrac{1}{\lvert T \lvert}\sum_{(x,y) \in T} L(y, M(x)),
 \end{equation}
-V oboch prípadoch je $M(x)$ klasifikácia inštancie $x$ pomocou modelu $M$. V prípade kategoriálneho výstupného atribútu môže byť $L(y,\tilde{y})$ 0-1 stratová funkcia
+kde v oboch prípadoch je $M(x)$ klasifikácia inštancie $x$ pomocou modelu $M$ a $L$ je stratová funkcia. V prípade kategoriálneho výstupného atribútu môže byť $L(y,\tilde{y})$ 0-1 stratová funkcia
 \begin{equation}
-L(y,\tilde{y}) = I(y \ne \tilde{y}).
+L(y,\tilde{y}) = 
+\begin{cases}
+1 & \quad \text{ak } y \ne \tilde{y}\\
+0 & \quad \text{ak } y = \tilde{y}\\
+\end{cases}
 \end{equation}
-V prípade spojitého výstupného atribútu môžu byť stratové funkcie definované takto:
-\begin{align}
-L(y,\tilde{y}) &= (y - \tilde{y})^2, \nonumber \\
-L(y,\tilde{y}) &= \lvert y - \tilde{y} \lvert,
-\end{align}
-
-Generalizačná chyba $GE$ pre určitý model $M$ je definovaná ako pravdepodobnosť, že model nesprávne klasifikuje novú inštanciu (meria ako dobre model generalizuje nové dáta). Klasifikačná presnosť modelu $ACC$, ďalej len ako presnosť modelu je potom definovaná:
+V prípade spojitého výstupného atribútu môžu byť stratové funkcie definovaná ako kvadratická odchýlka:
+\begin{equation}
+L(y,\tilde{y}) = (y - \tilde{y})^2, \\
+\end{equation}
+alebo absolútna chyba
+\begin{equation}
+L(y,\tilde{y}) = \lvert y - \tilde{y} \lvert.
+\end{equation}
+Generalizačná chyba $GE$ pre určitý model $M$ je definovaná ako pravdepodobnosť, že model nesprávne klasifikuje novú inštanciu (meria ako dobre model klasifikuje nové dáta). Klasifikačná presnosť modelu $ACC$, ďalej len ako presnosť modelu je potom definovaná:
 \begin{equation}
 ACC(M) = 1 - GE(M).
 \end{equation}
 
-Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použitie trénovacej chyby. Model by na prvý pohľad (pri použití trénovacej chyby) vyzeral idylicky, no generalizačné schopnosti by boli veľmi nízke. Tento nepriaznivý stav sa nazýva preučenie modelu. Na obrázku \ref{fig:overfit} je vidieť vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Lepším odhadom preto býva použitie testovacej chyby, viď nižšie (empirický odhad).
+Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použitie trénovacej chyby. Model by v prípade nízkej hodnoty trénovacej chyby pôsobil na prvý pohľad idylicky, no generalizačné schopnosti by boli veľmi nízke. Tento nepriaznivý stav sa nazýva preučenie modelu. Na obrázku \ref{fig:overfit} je vidieť vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Lepším odhadom je testovacia chyba, viď nižšie (empirický odhad).
 
 \begin{figure}[h]
 \centering
@@ -535,8 +541,8 @@ Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo v
 \caption{Vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Toto je typický obrázok preučeného modelu.}\label{fig:overfit}
 \end{figure}
 
-Medzi najčastejšie využívané odhady generalizačnej chyby patria tie empirické. Tento typ odhadov rozdeľuje vstupnú množinu na trénovaciu a testovaciu podmnožinu. Rozdelenie býva najčastejšie náhodne a v pomere 2:1. Väčšia množina je trénovacia a menšia zase testovacia. 
-Model, ako už vieme vytvárame pomocou trénovacej množiny. Testovaciu množinu využívame na vyhodnotenie kvality stromu a na získanie testovacej chyby $Err$. Táto testovacia chyba býva lepším odhadom generalizačnej chyby, než je tá trénovacia. Nevýhodou tohoto prístupu je menšia veľkosť trénovacej množiny. Pri veľmi malej vzorke vstupných dát je tvorba trénovacej a testovacej podmnožiny dosiahnutá pomocou výberu s opakovaním. Na obrázku \ref{fig:testtrain} je zobrazený vývoj trénovacej a testovacej chyby. Prerušovaná čiara predstavuje najlepší prípad stromu, ktorý môžeme získať pre vstupné dáta (nepreučený model s čo najlepšími generalizačnými schopnosťami).
+Medzi najčastejšie využívané odhady generalizačnej chyby patria tie empirické. Pri tomto type odhadov sa vstupná množina rozdelí na trénovaciu a testovaciu podmnožinu. Rozdelenie býva najčastejšie náhodne a v pomere 2:1. Väčšia množina je trénovacia a menšia zase testovacia. 
+Model, ako už vieme, vytvárame pomocou trénovacej množiny. Testovaciu množinu využívame na vyhodnotenie kvality stromu a na získanie testovacej chyby $Err$. Táto testovacia chyba býva lepším odhadom generalizačnej chyby, než je tá trénovacia. Nevýhodou tohoto prístupu je menšia veľkosť trénovacej množiny. Pri veľmi malej vzorke vstupných dát sa trénovacia a testovacia podmnožina vytvára pomocou výberu s opakovaním. Na obrázku \ref{fig:testtrain} je zobrazený vývoj trénovacej a testovacej chyby. Prerušovaná čiara predstavuje najlepší prípad stromu, ktorý môžeme získať pre vstupné dáta (nepreučený model s čo najlepšími generalizačnými schopnosťami).
 
 \begin{figure}[h]
 \centering
@@ -544,60 +550,72 @@ Model, ako už vieme vytvárame pomocou trénovacej množiny. Testovaciu množin
 \caption{Vývoj testovacej a trénovacej chyby vzhľadom k veľkosti stromu. Prerušovaná čiara predstavuje najlepšie vytvorený strom vzhľadom k dostupným dátam.}\label{fig:testtrain}
 \end{figure}
 
-Ďalším, veľmi známym postupom na odhad generalizačnej chyby je $n$ krížová validácia. Pri tejto technike vytvárame $n$ modelov rovnakého typu. Dáta sú rozdelené na $n$ medzi sebou disjunktných podmnožín, najlepšie rovnakých veľkostí. Model testujeme vždy na jednej z $n$ častí. Ostatných $n-1$ častí slúži ako trénovacia množina (rozdelenie množín je teda v pomere $n$-1:1). Testovacie chyby $Err_{i}$, kde $i \in \{1,\ldots,n\}$, získané z každého z $n$ modelov môžeme následne použiť na aproximáciu generalizačnej chyby:
+Ďalším, veľmi známym postupom na odhad generalizačnej chyby je $n$-násobná krížová validácia. Pri tejto technike vytvárame $n$ modelov rovnakého typu. Dáta sú rozdelené na $n$ medzi sebou disjunktných podmnožín, najlepšie rovnakých veľkostí. Model testujeme vždy na jednej z $n$ častí. Ostatných $n-1$ častí slúži ako trénovacia množina (rozdelenie množín je teda v pomere $n$-1:1). Testovacie chyby $Err_{i}$, kde $i \in \{1,\ldots,n\}$, získané z každého z $n$ modelov môžeme následne použiť na aproximáciu generalizačnej chyby:
 \begin{equation}
-GE \approx \dfrac{1}{n} \sum_{i=1}^{n} Err_{i}
+GE \approx \dfrac{1}{n} \sum_{i=1}^{n} Err_{i}.
 \end{equation}
 
 Viac informácií o ďalších odhadoch je v knihe \cite[s. 56]{kap1-DataMiningForTrees} a vo voľne dostupných zdrojoch \cite{wiki-CrossValidation,online-validation}.
 
-\subsection{Alternatívne metriky}\label{kap1:2.6:2.6.2:Alternatives}
-Presnosť, ktorú sme spomínali v predchádzajúcej časti je síce najdôležitejším kritériom na vyhodnotenie modelu, no v niektorých prípadoch je jej použitie úplne nevhodné. Príkladom, kedy je použitie kritéria presnosti nevhodné je v prípade nerovnomerného rozdelenia hodnôt výstupného atribútu. Kritérium presnosti by v prípade tejto nerovnomernosti preferoval modely, ktoré by vždy predikovali majoritnú hodnotu výstupného atribútu. V tomto prípade je nutné použiť nejaké z alternatívnych metrík.  
-Nadchádzajúce definície kritérií dokážu pracovať aj s $n$-árnym výstupným atribútom, no ich výpočet bude vždy uvedený pre jednu konkrétnu hodnotu výstupného atribútu. Počítanie hodnoty globálneho kritéria (pre celý model) je spoločné pre všetky ostatné kritériá a bude spomenuté na konci tejto časti. Lepšie vysvetlenie s dodatočnými kritériami sa nachádza v scikit príručke \cite{online-NAryConfusion}).
+\subsection{Alternatívne metriky založené na matici chybovosti}\label{kap1:2.6:2.6.2:Alternatives}
+Kritérium presnosti, ktoré sme spomínali v predchádzajúcej časti je síce najdôležitejším kritériom na vyhodnotenie modelu, no v niektorých prípadoch je jeho použitie úplne nevhodné. Príkladom, kedy je použitie kritéria presnosti nevhodné je v prípade nerovnomerného rozdelenia hodnôt výstupného atribútu. Kritérium presnosti by v prípade tejto nerovnomernosti preferoval modely, ktoré by vždy predikovali majoritnú hodnotu výstupného atribútu. V tomto prípade je nutné použiť nejaké z alternatívnych metrík.  
+Nadchádzajúce definície kritérií dokážu pracovať aj s $n$-árnym výstupným atribútom, no ich výpočet bude vždy uvedený pre jednu konkrétnu hodnotu výstupného atribútu. Postup na spočítanie hodnoty globálneho kritéria (pre celý model) je rovnaké pre všetky ostatné kritériá a bude spomenuté na konci tejto časti. Lepšie vysvetlenie s dodatočnými kritériami sa nachádza v scikit príručke \cite{online-NAryConfusion}).
 
-\begin{def-sk}[Confusion matica]
-Nech hodnoty výstupného atribútu sú z konečnej množiny $C = \{c_{1},\ldots,c_{n}\}$. Ďalej nech $D$ je prediktívny model a $M$ matica, kde riadky predstavujú predikované triedy modelom $D$, stĺpce skutočné hodnoty výstupného atribútu a inštancie sú podľa týchto výstupov zaraďované do jednotlivých buniek $\{c_{11},\ldots,c_{kk}\}$. Maticu $M$ nazveme confusion matica a slúži na posudzovanie kvality modelu $D$ (angl. confusion matrix, obrázok \ref{fig:Confusion}).
+\begin{def-sk}[Matica chybovosti]
+Nech hodnoty výstupného atribútu sú z konečnej množiny $C = \{c_{1},\ldots,c_{n}\}$. Ďalej nech $M$ je prediktívny model a $MC$ matica, kde riadky predstavujú predikované triedy modelom $M$, stĺpce skutočné hodnoty výstupného atribútu a inštancie sú podľa týchto výstupov zaraďované do jednotlivých buniek $\{c_{11},\ldots,c_{kk}\}$. Maticu $MC$ nazveme maticou chybovosti a slúži na posudzovanie kvality modelu $M$ (angl. confusion matrix, obrázok \ref{fig:Confusion}).
 \end{def-sk}
 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics{../img/kap1/DT-confusion.pdf}}}
-\caption{Na obrázku sú príklady confusion matíc pre binárny a $k$-árny prípad výstupného atribútu. Inštancie sú zaraďované do jednotlivých buniek matice podľa toho, aký je skutočný a predikovaný výstup tejto inštancie. V binárnom prípade bývajú štyri bunky tejto matice aj pomenované (z angl. TP = true positive, FP = false positive, TN = true negative, FN = false negative)}\label{fig:Confusion}
+\caption{Na obrázku sú príklady matíc chybovosti pre binárny a $k$-árny prípad výstupného atribútu. Inštancie sú zaraďované do jednotlivých buniek matice podľa toho, aký je skutočný a predikovaný výstup tejto inštancie. V binárnom prípade bývajú štyri bunky tejto matice aj pomenované (z angl. TP = true positive, FP = false positive, TN = true negative, FN = false negative)}\label{fig:Confusion}
 \end{figure}
 
 \begin{def-sk}[Kritérium citlivosti]\label{kap1:2.6:2.6.2:Sensitivity}
 Citlivosť (angl. sensitivity ale aj recall) na hodnotu $c_{i}$ je alternatívna metrika, ktorá kvantifikuje kvalitu modelu pri rozpoznávaní inštancií, ktorých skutočná hodnota výstupného atribút je $c_{i}$.
 \begin{equation}
-\mbox{Citlivosť}_{c_{i}} = \dfrac{c_{ii}}{\sum_{j=1}^{k} c_{ji}} \nonumber
+\mbox{Citlivosť}_{c_{i}} = \dfrac{c_{ii}}{\sum_{j=1}^{k} c_{ji}}
 \end{equation}
 \end{def-sk}
 
 \begin{def-sk}[Kritérium precíznosti]\label{kap1:2.6:2.6.2:Sensitivity}
 Precíznosť (angl. precision) pre hodnotu $c_{i}$ je alternatívna metrika, ktorá popisuje kvalitu modelu podľa toho, koľko klasifikovaných inštancií na hodnotu $c_{i}$ je aj naozaj správne klasifikovaných.
 \begin{equation}
-\mbox{Precíznosť}_{c_{i}} = \dfrac{c_{ii}}{\sum_{j=1}^{k} c_{ij}} \nonumber
+\mbox{Precíznosť}_{c_{i}} = \dfrac{c_{ii}}{\sum_{j=1}^{k} c_{ij}}
 \end{equation}
 \end{def-sk}
 
 \begin{def-sk}[Kritérium špecificity]\label{kap1:2.6:2.6.2:Specificity}
 Špecificita (angl. specificity) pre hodnotu $c_{i}$ je metrikou, ktorá kvantifikuje kvalitu modelu pri rozpoznávaní inštancií, ktorých skutočná hodnota výstupného atribút nie je $c_{i}$.
 \begin{equation}
-\mbox{Špecificita}_{c_{i}} = \dfrac{\sum_{l \ne i}^{k}\sum_{j \ne i}^{k} c_{lj}}{\sum_{l = 1}^{k}\sum_{j \ne i}^{k} c_{lj}} \nonumber
+\mbox{Špecificita}_{c_{i}} = \dfrac{\sum_{l \ne i}^{k}\sum_{j \ne i}^{k} c_{lj}}{\sum_{l = 1}^{k}\sum_{j \ne i}^{k} c_{lj}}
 \end{equation}
 \end{def-sk}
 
 \begin{def-sk}[F-metrika]\label{kap1:2.6:2.6.2:Specificity}
 F-metrika (angl. f-measure) pre hodnotu $c_{i}$ je metrikou, ktorá kvantifikuje kvalitu modelu podľa precíznosti a citlivosti. Nech $P_{c_{i}}$ je precíznosť a $S_{c_{i}}$ je citlivosť pre hodnotu $c_{i}$, potom:
 \begin{equation}
-\mbox{F-metrika}_{c_{i}} = \dfrac{2 \times P_{c_{i}} \times R_{c_{i}}}{P_{c_{i}} + R_{c_{i}}} \nonumber
+\mbox{F-metrika}_{\beta, c_{i}} = (1 + \beta^2) \dfrac{P_{c_{i}} \times R_{c_{i}}}{\beta^2 \times P_{c_{i}} + R_{c_{i}}}
 \end{equation}
 \end{def-sk}
 
-Jedno z kritérií, ktoré môžeme dopočítať z confusion matice je dokonca aj odhad presnosti modelu $ACC$ (tak ako sme o nej písali v predchádzajúcej časti):
+Doteraz boli kritéria počítané pre konkrétnu hodnotu výstupného atribútu. Na spočítanie hodnoty globálneho kritéria pre celý model je nutné využiť ďalších počítacích techník. Nech $C = \{c_{1},\ldots,c_{n}\}$ je konečná množina hodnôt pre výstupný atribút, $D$ je dátová množina a $krit_{c_{i}}$ je hodnota ľubovoľného kritéria pre hodnotu výstupného atribútu $c_{i}$. Potom na spočítanie globálnej hodnoty ľubovoľného kritéria $krit$ (citlivosti, precíznosti, $\ldots$) môžeme napríklad použiť priemer podľa veľkosti množiny $C$:
 \begin{equation}
-ACC \approx \dfrac{\sum_{i=1}^{k} c_{ii}}{\sum_{i=1}^{k}\sum_{j=1}^{k} c_{ij}} \nonumber
+krit = \dfrac{1}{\lvert C \lvert} \sum_{c_{i} \in C} krit_{c_{i}},
 \end{equation}
-Z confusion matice je pravdaže možné získať viac kritérií, než sme popísali v tejto časti. Viac informácii a zoznam ďalších kritérií poskytuje Wikipediá \cite{wiki-Confusion}.
+alebo vážený priemer
+\begin{equation}
+krit = \dfrac{1}{\lvert C \lvert} \sum_{c_{i} \in C} \lvert D_{c_{i}} \lvert \times krit_{c_{i}}.
+\end{equation}
+Ďalšie techniky na spočítanie globálnej hodnoty kritéria je na scikit stránke \cite{online-NAryConfusion}. 
+
+Jedno z kritérií, ktoré môžeme dopočítať z matice chybovosti modelu $M$ je dokonca aj odhad presnosti $ACC$(tak ako sme o ňom písali v predchádzajúcej časti):
+\begin{equation}
+ACC(M) \approx \dfrac{\sum_{i=1}^{k} c_{ii}}{\sum_{i=1}^{k}\sum_{j=1}^{k} c_{ij}} \nonumber
+\end{equation}
+Z matice chybovosti je pravdaže možné získať viac kritérií, než sme popísali v tejto časti. Viac informácii a zoznam ďalších kritérií poskytuje Wikipediá \cite{wiki-Confusion}.
+
+\subsection{Alternatívne metriky založené na zložitosti stromu}
 
 \section{Techniky tvorby stromov}\label{kap1:2.7:DTTechniques}
 Cieľom tejto časti je predviesť najznámejšie techniky tvorby stromov (regresných aj klasifikačných). Tieto techniky spadajú pod oblasť učenia s učiteľom, ktorá bola bližšie popísaná v oddieli \ref{kap1:2.2:2.2.4:Supervised}. Jedná sa o algoritmy, ktoré vytvárajú strom z trénovacej množiny postupne od koreňa. Dáta sú v algoritme rozdelené podľa deliaceho kritéria na podmnožiny. Ďalej pokračujeme rekurzívnym volaním toho istého algoritmu na každú z týchto podmnožín. V obore dobývania znalostí sa celý tento proces nazýva indukcia rozhodovacích stromov zhora nadol, anglicky top down induction of decision trees (TDIDT). Indukčné algoritmy sú príkladom hladných techník. V praxi sú jedným z najpoužívanejších stratégii pri trénovaní rozhodovacích stromov. V tejto časti sme čerpali z kníh \cite{kap1-DataMiningForTrees,kap1-DataMiningAndAnalysis} pričom na rozšírenie ďalších poznatkov sme použili online zdroje \cite{online-SplitCriterias,online-SplitCriteriasMatter,online-DTLectures}.
@@ -729,14 +747,14 @@ Jedným z ďalších vylepšení C4.5 je ešte o niečo novší, komerčný algo
 Implementovanú verziu algoritmu C4.5, nazývanú J48 môžeme nájsť už v spomínanom nástroji Weka.
 
 \subsection{CART}\label{kap1:2.7:2.7.5:CART}
-CART je hladný algoritmus, ktorý slúži na tvorbu klasifikačných aj regresných stromov. Autorom algoritmu je Breiman. Vytvorený strom je v tomto prípade vždy binárny (každý vnútorný vrchol ma dvoch potomkov). Algoritmus využíva Twoing kritérium (\ref{kap1:2.5:2.5.5:TwoingDef}) ako deliace kritérium. CART používa na orezávanie stromu metriku, ktorá berie do úvahy počet listov spolu s chybovosťou modelu (\cite{wiki-costcompprune}, \cite[s.382]{kap1-DecisionTree}).
+CART je hladný algoritmus, ktorý slúži na tvorbu klasifikačných aj regresných stromov. Autorom algoritmu je Breiman. Vytvorený strom je v tomto prípade vždy binárny (každý vnútorný vrchol ma dvoch potomkov). Algoritmus využíva Twoing kritérium (\ref{kap1:2.5:2.5.5:TwoingDef}) ako deliace kritérium. CART používa na orezávanie stromu metriku, ktorá berie do úvahy počet listov spolu s chybou modelu (\cite{wiki-costcompprune}, \cite[s.382]{kap1-DecisionTree}).
 
 Dôležitou vlastnosťou algoritmu je vytváranie regresných stromov. Vytvorené stromy obsahujú v listoch reálne hodnoty. V tomto prípade sú deliace body vyberané tak, aby minimalizovali kvadratickú odchýlku predikovaných hodnôt od správnych hodnôt na dátovej množine. V listových vrcholoch je hodnota rovná váženému priemeru výstupnej hodnoty dát v tomto vrchole.
 
 \section{Využitie rozhodovacích stromov pri predikcii}\label{kap1:2.8:DTUsage}
 V tomto oddieli zhrnieme výhody a nevýhody rozhodovacích stromov, ktoré priamo ovplyvňujú využiteľnosť tohoto modelu v praxi. Zároveň predstavíme projekty, ktoré prakticky využívajú techniku rozhodovacích stromov. Knihy s informáciami, ktoré boli použité v tejto časti sú \cite{kap1-DataMiningAndAnalysis,kap1-DataMiningForTrees}. Informácie s praktickým použitím rozhodovacích stromov sme čerpali zo stránok príslušných projektov \cite{online-astronomy} a \cite{online-psychoterapy}.
 
-V časti \ref{kap1:2.8:2.8.1:AdvAndDis} popíšeme výhody a nevýhody rozhodovacích stromov, pri ich využití v praxi. V ďalších častiach predstavíme dva projekty, ktoré využívajú rozhodovacie stromy pri predikcii. Filtrovanie šumu v obrázkoch získaných z Hubblovho vesmírneho ďalekohľadu bude popísané v časti \ref{kap1:2.8:2.8.2:Hubble}. Využitie rozhodovacích stromov pre klinickú prax predvedieme v poslednej časti \ref{kap1:2.8:2.8.3:Clinical}.
+V časti \ref{kap1:2.8:2.8.1:AdvAndDis} popíšeme výhody a nevýhody rozhodovacích stromov pri ich využití v praxi. V ďalších častiach predstavíme dva projekty, ktoré využívajú rozhodovacie stromy pri predikcii. Filtrovanie šumu v obrázkoch získaných z Hubblovho vesmírneho ďalekohľadu bude popísané v časti \ref{kap1:2.8:2.8.2:Hubble}. Využitie rozhodovacích stromov pre klinickú prax predvedieme v poslednej časti \ref{kap1:2.8:2.8.3:Clinical}.
 
 \subsection{Výhody a nevýhody stromov}\label{kap1:2.8:2.8.1:AdvAndDis}
 V predchádzajúcich oddieloch sme spomínali rôzne výhody a nevýhody rozhodovacích stromov. Medzi výhody môžeme zaradiť:
@@ -753,29 +771,29 @@ K nevýhodám rozhodovacích stromov patrí:
 \begin{itemize}
 \item Hladné techniky tvorby stromov môžu uviaznuť v lokálnom optime. Stromy sú taktiež náchylné na preučenie.
 \item Tvorba stromu hladnými technikami sa môže zamerať na nerelevantné atribúty a šum v dátach.
-\item Krátkozrakosť algoritmu, kde delenia v jednotlivých vrcholoch pracujú iba s priamymi potomkami vrcholu.
+\item Krátkozrakosť algoritmu spôsobená tým, že delenia v jednotlivých vrcholoch pracujú iba s priamymi potomkami vrcholu.
 \item Väčšina algoritmov požaduje, aby bol výstupný atribút kategoriálny (C4.5, ID3, \ldots).
-\item Metódy, ktorými sa riešia problémy chýbajúcich hodnôt niektorých atribútov. Trénovacie dáta s chýbajúcimi hodnotami môžu byť napríklad odstránené z trénovacej množiny. Keď hodnota atribútu nechýba náhodou a nevyplnenie popisuje nejakú vlastnosť, tak je odstraňovanie inštancií úplne nevhodné (napr. neuvedený plat u dátovej množiny osôb môže znamenať, že osoba má príliš vysoký/nízky plat a nechcela ho uviesť).
+\item Slabinou môžu byť metódy riešenia problému s chýbajúcimi hodnotami niektorých atribútov. Trénovacie dáta s chýbajúcimi hodnotami môžu byť napríklad odstránené z trénovacej množiny. Keď hodnota atribútu nechýba náhodou a nevyplnenie popisuje nejakú vlastnosť, tak je odstraňovanie inštancií úplne nevhodné (napr. neuvedený plat u dátovej množiny osôb môže znamenať, že osoba má príliš vysoký/nízky plat a nechcela ho uviesť).
 \item Problém fragmentácie pri rozdeľovaní dát vo vrcholoch. K tomuto problému dochádza v prípade, keď dátové množíny vo vrcholoch rozdelíme na rovnako veľké podmnožiny. Strom, ktorý by takto rozdeľoval dátovú množinu veľkosti $n$, obsahuje na ceste z koreňa do listu iba $\log n$ vrcholov, čo je ekvivalentné s otestovaním maximálne $\log n$ atribútov. Toto býva veľký problém pri existencii väčšieho počtu významných atribútov.
 \end{itemize}
 
 \subsection{Filtrovanie šumu z Hubblovho ďalekohľadu}\label{kap1:2.8:2.8.2:Hubble}
-Cieľom autorov tohoto projektu \cite{online-astronomy} bolo vytvoriť klasifikačný model, ktorý by dokázal na obrázkoch získaných z Hubblovho vesmírneho ďalekohľadu rozlišovať medzi hviezdami a šumom. Šum, ktorý je pri takto získaných fotkách veľmi častý, je spôsobený kozmickým žiarením. 
+Ako prvý príklad aplikácie rozhodovacích stromov stručne predstavíme jeden projekt NASA. Cieľom autorov tohoto projektu \cite{online-astronomy} bolo vytvoriť klasifikačný model, ktorý by dokázal na obrázkoch získaných z Hubblovho vesmírneho ďalekohľadu rozlišovať medzi hviezdami a šumom. Šum, ktorý je pri takto získaných fotkách veľmi častý, je spôsobený kozmickým žiarením. 
 
-Trénovacie dáta pozostávajú z príznakov $x_{1},\ldots,x_{20}$. Jednotlivé inštancie získali z okolia (veľkosti $3 \times 3$ pixele) zameraného na svetelné úkazy a z poznatkov o rôznych druhoch žiarenia. Výslednú trénovaciu množinu použili pri konštrukcii rozhodovacie stromu, ktorým bol predikovaný typ žiarenia -- dokázali rozlíšiť hviezdne žiarenie od šumu. Strom, ktorý vytvorili nazvali OC1. Model bol atypický v tom, že uvažoval aj take rozdeľovacie nadroviny, ktoré nie sú rovnobežné s hlavnými osami. Viac o algoritme je priamo v článku \cite[str. 281]{online-astronomy}.
+Trénovacie dáta pozostávajú z príznakov $x_{1},\ldots,x_{20}$. Hodnoty jednotlivých príznakov sa počítajú z okolia pixelu veľkosti $3 \times 3$ a sú založené na meraní rôznych svetelných úkazov s využitím poznatkov o rôznych druhoch žiarenia. Výslednú trénovaciu množinu použili na konštrukciu rozhodovacieho stromu, ktorým bol predikovaný typ žiarenia -- dokázali rozlíšiť žiarenie hviezd od šumu. Strom, ktorý vytvorili nazvali OC1. Model bol atypický v tom, že uvažoval aj také rozdeľovacie nadroviny, ktoré nie sú rovnobežné s hlavnými osami. Viac o algoritme je priamo v článku \cite[str. 281]{online-astronomy}.
 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics{../img/kap1/DT-hubble.pdf}}}
-\caption{Získaný model klasifikujúci vstupný vektor s 20 príznakmi (Čísla v elipsách znamenajú delenia vo vrcholoch. Percentá pod vrcholmi predstavujú relatívny počet hviezd ku kozmickému žiareniu). Obrázok modelu je prebraný a prepísaný z \cite[str. 284]{online-astronomy}}\label{fig:HubbleTree}
+\caption{Získaný model klasifikujúci vstupný vektor s 20 príznakmi (Čísla v elipsách znamenajú delenia vo vrcholoch. Percentá pod vrcholmi predstavujú relatívny pomer počtu hviezd ku kozmickému žiareniu). Obrázok modelu je prebraný a prepísaný z \cite[str. 284]{online-astronomy}}\label{fig:HubbleTree}
 \end{figure}
 
-Na testovacích dátach dosahovali modely, vytvorené metódou OC1, presnosť až 95\%. Vytvorené stromy boli navyše kompaktné. Príklad takto vytvoreného stromu je na obrázku \ref{fig:HubbleTree}. Experimenty, nachádzajúce sa v článku uvádzajú, že zlepšením metód na eliminovanie šumu môže ďalej vylepšiť presnosť vytvorených klasifikátorov.
+Na testovacích dátach dosahovali modely, vytvorené metódou OC1, presnosť až 95\%. Vytvorené stromy boli navyše veľmi kompaktné. Príklad takto vytvoreného stromu je na obrázku \ref{fig:HubbleTree}. Experimenty, popisované v článku uvádzajú, že zlepšením metód na eliminovanie šumu sa môže ďalej vylepšiť presnosť vytvorených klasifikátorov.
 
 \subsection{Rozhodovacie stromy pre klinickú prax}\label{kap1:2.8:2.8.3:Clinical}
-Cieľom práce bolo uľahčiť prácu doktorom a zdravotnému personálu vytvorením modelu, ktorý by varoval pred neúspechom liečby a pomocou správnych rozhodnutí odporúčal, ako čo najlepšie predísť takémuto neúspechu. 
+Ako druhý príklad praktického nasadenia rozhodovacích stromov uvádzame ich použitie v medicíne. Cieľom projekte bolo uľahčiť prácu doktorom a zdravotnému personálu vytvorením modelu, ktorý by varoval pred neúspechom liečby a pomocou správnych rozhodnutí odporúčal, ako čo najlepšie predchádzať takémuto neúspechu. 
 
-Dáta, pre účely vytvorenia modelu, boli získané z iného projektu (Project TR-EAT), ktorý skúmal vzťahy medzi dĺžkou/intenzitou liečby poruchy prijímania potravy a výsledkom liečby. Z dát bola vybratá vzorka ľudí diagnostikovaná bulímiou nervosa ($n$ = 630). Pri výbere dát využívali hlavne údaje o prijatí, liečebnú stratégiu a odpoveď na liečbu. Na výslednú trénovaciu množinu bol použitý algoritmus CART.
+Dáta, pre účely vytvorenia modelu, boli získané z iného projektu (Project TR-EAT), ktorý skúmal vzťahy medzi dĺžkou/intenzitou liečby poruchy prijímania potravy a výsledkom liečby. Z dát bola vybratá vzorka ľudí diagnostikovaná bulímiou nervosa ($n$ = 630). Pri výbere dát využívali hlavne údaje o prijatí, liečebnej stratégii a reakcii na liečbu. Na výslednú trénovaciu množinu bol použitý algoritmus CART.
 
 \begin{figure}[h]
 \centering
@@ -783,4 +801,4 @@ Dáta, pre účely vytvorenia modelu, boli získané z iného projektu (Project 
 \caption{Získaný model klasifikujúci výsledok liečby (Čísla v elipsách predstavujú veľkosti skupín získané po delení. Percentá pod vrcholmi predstavujú relatívny počet ľudí s lepším verzus horším výsledkom. SCLGSI = Symptom Checklist-90-R Global Severity Index). Obrázok modelu je prebraný a prepísaný z \cite[s. 454]{online-psychoterapy}}\label{fig:ClinicalTree}
 \end{figure}
 
-Vytvorený strom metódou CART obsahoval desať listových vrcholov a jeho chybovosť bola 18\%. Zo 448 pacientov, ktorým bol predpovedaný zlý výsledok malo 86\% skutočne zlý výsledok. Zo 182 pacientov s predikovaným dobrým výsledkom malo 74\% dobrý výsledok. Vytvorený strom je na obrázku \ref{fig:ClinicalTree}. Obrázok môže slúžiť ako učebnicová ukážka stromu vytvorená algoritmom CART.
+Vytvorený strom metódou CART obsahoval desať listových vrcholov a jeho chybovosť bola 18\%. Zo 448 pacientov, ktorým bol predpovedaný zlý výsledok malo 86\% skutočne zlý výsledok. Zo 182 pacientov s predikovaným dobrým výsledkom malo 74\% dobrý výsledok. Vytvorený strom je na obrázku \ref{fig:ClinicalTree}. Obrázok môže slúžiť ako učebnicová ukážka stromu vytvoreného algoritmom CART.
