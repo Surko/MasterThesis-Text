@@ -5,7 +5,8 @@
 @Online{wiki-Confusion,
   Title                    = {Confusion Matrix},
   Author                   = {Wikipedia},
-  Url                      = {http://en.wikipedia.org/wiki/Confusion_matrix}
+  Url                      = {http://en.wikipedia.org/wiki/Confusion_matrix},
+  Year                     = {2015}
 }
 
 @Online{wiki-costcompprune,
@@ -50,10 +51,24 @@
   Year                     = {2015}
 }
 
+@Online{wiki-evolution,
+  Title                    = {Evolution},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Evolution},
+  Year                     = {2015}
+}
+
 @Online{wiki-GeneralizationError,
   Title                    = {Generalization error},
   Author                   = {Wikipedia},
   Url                      = {http://en.wikipedia.org/wiki/Generalization_error},
+  Year                     = {2015}
+}
+
+@Online{wiki-genetic,
+  Title                    = {Genetics},
+  Author                   = {Wikipedia},
+  Url                      = {http://en.wikipedia.org/wiki/Genetics},
   Year                     = {2015}
 }
 
