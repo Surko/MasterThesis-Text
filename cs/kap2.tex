@@ -7,9 +7,20 @@ Táto kapitola je delená do viacerých oddielov. V oddieli \ref{kap2:2.1:Info} 
 \section{Základný popis genetických algoritmov}\label{kap2:2.1:Info}
 Genetické algoritmy sú optimalizačné techniky a prehľadávacie heuristiky, ktoré napodobujú princíp prirodzeného výberu vychádzajúceho z darwinovskej teórie. V tomto oddieli ponúkneme úvod ku genetickým algoritmom s popisom, ako by mal taký genetický algoritmus vyzerať. Informácie o genetických algoritmoch sme čerpali z knihy \cite{kap2-evolution} a úvod do oblasti genetiky zase z voľne dostupnej učebnice biológie \cite{online-biology}. Ďalšie doplňujúce poznatky boli získané z online zdrojov \cite{wiki-evolution,wiki-genetics}.
 
-V časti
+V časti \ref{kap2:2.1:2.1.1:Genetics} najprv z pohľadu biológie vysvetlíme základné pojmy z genetiky. Ďalej v časti \ref{kap2:2.2:2.1.2:}.
 
 \subsection{Genetika z pohľadu Biológie}\label{kap2:2.1:2.1.1:Genetics}
+Na popísanie a zadefinovanie ďalších súčastí genetických algoritmov je dobré pripomenúť niektoré základné pojmy z oblasti genetiky. 
+
+Bunka je základnou stavebnou jednotkou každého organizmu. Každá bunka má uložený popis ako vyzerá a ako sa má správať pri typických bunečných procesoch. Tento popis sa nazýva genetická informácia a v organizmoch je uskladnená v DNA, čo je obrovská molekula, polymér zložený z veľkého množstva pospájaných nukleotidov (kyselina fosforečná s deoxyribózou a naviazanou dusíkatou bázou). Tieto nukleotidy a konkrétne ich báze sú zodpovedné zato, ako vyzerá genetický kód tejto genetickej informácie. Malý kúsok vybraný zo sekvencie DNA, ktorý kóduje nejakú funkčnosť bunky alebo proces v bunke sa nazýva gén. DNA v bunkách je kvôli jej veľkosti ďalej komprimovaná do štruktúry nazývanej chromozóm.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=250pt]{../img/kap2/DNA.pdf}}}
+\caption{Na obrázku je príklad bunky s jadrom, v ktorom sú viditeľné chromozómy. Jeden z chromozómov je v spodnej časti roztiahnutý do DNA, ktorej jednotlivé časti sú popísané. Značky A,G,T predstavujú nukleotidové báze adenín, guanín a cytozín.}\label{fig:DNA}
+\end{figure}
+
+Úlohou každého živého organizmu je preniesť svoju genetickú informáciu a tým pádom aj jeho gény. 
 
 \section{Genetické operátory}\label{kap2:2.2:Operators}
 
