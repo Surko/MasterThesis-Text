@@ -14,7 +14,7 @@ Na popísanie a zadefinovanie ďalších súčastí genetických algoritmov je d
 
 Bunka je základnou stavebnou jednotkou každého organizmu. Každá bunka má uložený popis toho ako sa má správať pri typických bunečných procesoch. Tento popis sa nazýva genetická informácia a v organizmoch je uskladnená v DNA, čo je obrovská molekula, polymér zložený z veľkého množstva pospájaných nukleotidov (kyselina fosforečná s deoxyribózou a naviazanou dusíkatou bázou). Tieto nukleotidy a konkrétne ich báze sú zodpovedné zato, ako vyzerá genetický kód tejto genetickej informácie. Malý kúsok vybraný zo sekvencie DNA, ktorý kóduje nejakú funkčnosť bunky alebo proces v bunke, sa nazýva gén. Presnejšie vyjadrenie by bolo, že gén je zodpovedný za tvorbu proteínov, ktoré sú ovplyvňujú funkčnosť bunky. Gén si je teda možné predstaviť ako významnú črtu organizmu (napríklad farba očí). Rôzne nastavenia génu nazývame alely (modré, hnedé, zelené oči).
 
-DNA je kvôli jej veľkosti ďalej komprimovaná do štruktúry nazývaná chromozóm. Chromozóm sa nachádza v jadre bunky. Organizmy môžu mať v jadre viacero rôznych chromozómov. Podľa typu organizmu môžu byť tieto chromozómy spárované (diploidné organizmy) alebo nespárované (haploidné organizmy). Genóm organizmu potom nazývame genetický materiál zo všetkých chromozómov dokopy. Určitá množina génov z genómu organizmu sa nazýva genotyp. Vo vývojovom štádiu jedinca ovplyvňuje genotyp výzor a ďalšie charakteristiky organizmu, nazývané aj fenotyp.
+DNA je kvôli jej veľkosti ďalej komprimovaná do štruktúry nazývaná chromozóm. Chromozóm sa nachádza v jadre bunky. Organizmy môžu mať v jadre viacero rôznych chromozómov. Podľa typu organizmu môžu byť tieto chromozómy spárované (diploidné organizmy) alebo nespárované (haploidné organizmy). Genóm organizmu potom nazývame genetický materiál získaný zo všetkých chromozómov dokopy. Určitá množina génov z genómu organizmu sa nazýva genotyp. Vo vývojovom štádiu jedinca ovplyvňuje genotyp výzor a ďalšie charakteristiky organizmu (výška, farba očí, IQ, ...), nazývané aj fenotyp.
 
 \begin{figure}[h]
 \centering
@@ -27,7 +27,7 @@ DNA je kvôli jej veľkosti ďalej komprimovaná do štruktúry nazývaná chrom
 \item Kríženie jednoduchých buniek alebo komplexných živočíchov, kde každá dvojica chromozómov si medzi sebou vymieňa gény a vytvára nové chromozómy.
 \item Mutácia vytvorených chromozómov, pri ktorej sú niektoré nukleotidy pozmenené kvôli chýbam pri krížení.
 \end{itemize}
-Po reprodukcii dostávame nové chromozómy, ktoré tvoria genóm novo vytvoreného organizmu.
+Po reprodukcii dostávame nové chromozómy, ktoré tvoria genóm novo vytvoreného organizmu. Na obrázku \ref{fig:Chromosomes} je príklad reprodukcie nespárovaných chromozómov pre haploidné organizmy.
 
 \begin{figure}[h]
 \centering
@@ -37,9 +37,35 @@ Po reprodukcii dostávame nové chromozómy, ktoré tvoria genóm novo vytvoren�
 
 Z biologického hľadiska je nutné popísať kvalitu nových organizmov. Tú je možné vyhodnotiť pomocou pravdepodobnosti, že sa jedinec dožije ďalšieho párenia. Ďalším kritériom môže byť plodnosť potomka.
 
-\subsection{Genetický algoritmus}
+\subsection{Popis genetických algoritmov}
+V tejto časti zadefinujeme, čo sú to genetické algoritmy, pričom jednotlivé pojmy budú podobné tým, ktoré sme predstavili v predchádzajúcej časti. 
+
+Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a z nich nájsť to najlepšie. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
+
+V prípade genetických algoritmov sú chromozómy novo vytvorených organizmov jednotlivé riešenia. Chromozóm môže byť kódovaný rôzne. Medzi najznámejšie kódovania jedincov patria:
+\begin{itemize}
+\item binárne, pri ktorom reprezentujeme jedinca bitovým reťazcom/poľom určitej dĺžky,
+\item znakové, kde je jedinec reprezentovaný reťazcom, ktorého hodnoty sú z konečnej množiny symbolov,
+\item celočíselné, kde je jedinec reprezentovaný reťazcom celočíselných hodnôt,
+\item kódovanie s reálnymi číslami, pri ktorom reprezentujeme jedinca reťazcom, ktorého hodnoty sú reálne čísla,
+\item stromové, kde sú jedince reprezentované ako stromy z teórie grafov,
+\item a mnoho ďalších ako sú permutácie, matice, konečné automaty, neurónové siete,...
+\end{itemize}
+Pri použití binárneho kódovania sú jedinci reprezentovaní ako bitové reťazce. V tomto prípade sú jednotlivé prvky alebo skupiny prvkov v tomto poli génmi jedinca. Alela je v prípade bitovej hodnoty 0 alebo 1. Pri iných reprezentáciách sú alely komplikovanejšie.
+
+Kríženie v genetických algoritmoch je realizované výmenou hodnôt medzi rodičmi. To o aké hodnoty sa jedná záleží na zvolenej reprezentácií (hodnoty v reťazci, stromy, ...). Typ kríženia, ktorý môžeme použiť, závisí od zvoleného kódovania a reprezentácie jedinca. 
+Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi. Podobne ako pri krížení závisí na typu kríženia aj na zvolenej reprezentácií. 
+
+Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcom je typ kríženia obmedzený na bodové a uniformné kríženie. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
+
+\subsection{Jednoduchý genetický algoritmus}
 
 \section{Genetické operátory}\label{kap2:2.2:Operators}
+V prípade kódovania, ktoré využíva reprezentáciu reťazcom môžeme použiť
+\begin{itemize}
+\item bodové kríženie, ktoré je založené na zvolení náhodných $n$ bodov. Takto zvolené body rozdelia reťazec na $n+1$ častí, pričom sa odpovedajúce časti vymenia s určitou pravdepodobnosťou. Tento typ kríženia sa ďalej pomenováva podľa počtu vybraných bodov (jednobodové, dvojbodové, ...).
+\item uniformné kríženie, ktoré vypĺňa jednotlivé hodnoty z určitého rodiča. U každej položky hádžeme mincou, ktorá rozhoduje z ktorého rodiča hodnotu vyberieme.
+\end{itemize}
 
 \section{Vyhodnotenie jedincov}\label{kap2:2.3:Fitnesses}
 
