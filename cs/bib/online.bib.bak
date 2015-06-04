@@ -32,7 +32,7 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Year                     = {2002}
 }
 
-@Www{,
+@Www{online-biology,
   Title                    = {Kimball's Biology Pages},
   Author                   = {John Kimball},
   Url                      = {http://home.comcast.net/~john.kimball1/BiologyPages/index.html},
@@ -97,6 +97,16 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Author                   = {Dr. Benno Stein},
   Url                      = {http://www.uni-weimar.de/medien/webis/teaching/lecturenotes/machine-learning/unit-en-decision-trees-impurity.pdf},
   Year                     = {2015}
+}
+
+@Online{online-shuffling,
+  Title                    = {Sex and genetic shuffling: the details},
+  Editor                   = {University of California Museum of Paleontology's Understanding Evolution},
+  Url                      = {http://evolution.berkeley.edu/evolibrary/article/side_0_0/shufflingdetails_01},
+  Year                     = {2015},
+
+  Owner                    = {kirrie},
+  Timestamp                = {2015.06.04}
 }
 
 @Www{online-SplitCriterias,
