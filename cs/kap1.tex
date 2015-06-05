@@ -494,11 +494,11 @@ kde $dom_{1}(X_{i})$ a $dom_{2}(X_{i})$ sú podmnožiny domény atribútu $X_{i}
 
 
 \section{Vyhodnotenie kvality stromov}\label{kap1:2.6:DTEvaluation}
-Tak ako pri vytváraní modelov metódami strojového učenia, tak aj pri tvorbe stromov je dôležité vyhodnotiť kvalitu vytvoreného modelu. Z predchádzajúcich oddielov vieme, že pri tvorbe stromu používame trénovaciu množinu. Vytvorený strom následne slúži na klasifikovanie novej inštancie. Takto vytvorený strom je možné ohodnotiť podľa určitých kritérií.
+Tak ako pri vytváraní modelov metódami strojového učenia, tak aj pri tvorbe stromov je dôležité vyhodnotiť kvalitu vytvoreného modelu. Z predchádzajúcich oddielov vieme, že pri tvorbe stromu používame trénovaciu množinu. Vytvorený strom následne slúži na klasifikovanie nových inštancií. Takto vytvorený strom je možné ohodnotiť podľa určitých kritérií.
 
-Najrozumnejšie kritérium je presnosť modelu, no existuje mnoho ďalších. Ďalšími kritériami vyhodnotenia môže byť zložitosť stromu (výška, počet vrcholov stromu, a pod.) ale aj výpočtová zložitosť pri tvorbe, úprave stromu či klasifikovaní nových inštancií. Existujú aj také kritéria, ktoré sa zaoberajú robustnosťou\footnote{Schopnosť modelu správne predikovať inštancie, ktoré obsahujú šum alebo ktorým chýbajú niektoré atribúty.} a stabilitou\footnote{Schopnosť modelu vytvárať podobné/rovnaké stromy pri pozmenení niektorých dát z trénovacej množiny} stromov.
+Najrozumnejším kritériom sa zdá byť presnosť modelu, no existuje mnoho ďalších. Ďalšími kritériami vyhodnotenia môžu byť zložitosť stromu (výška, počet vrcholov stromu, a pod.) ale aj výpočtová zložitosť budovania stromu, úprav stromu či klasifikovania nových inštancií. Existujú aj také kritéria, ktoré sa zaoberajú robustnosťou\footnote{Schopnosť modelu správne predikovať inštancie, ktoré obsahujú šum, alebo ktorým chýbajú niektoré atribúty.} a stabilitou\footnote{Schopnosť modelu vytvárať podobné/rovnaké stromy pri pozmenení niektorých dát z trénovacej množiny} stromov.
 
-Informácie o rôznych kritériách na vyhodnotenie stromov sú v knihách \cite[s. 364]{kap1-DecisionTree} a \cite[s. 31]{kap1-DataMiningForMasses}. Jednoduché vysvetlenie generalizačnej chyby existuje na Wikipedii \cite{wiki-GeneralizationError}.
+Informácie o rôznych kritériách na vyhodnotenie stromov sú v knihách \cite[s. 364]{kap1-DecisionTree} a \cite[s. 31]{kap1-DataMiningForMasses}. Jednoduché vysvetlenie generalizačnej chyby existuje na Wikipédii \cite{wiki-GeneralizationError}.
 
 Najprv v časti \ref{kap1:2.6:2.6.1:Generalize} zadefinujeme generalizačnú chybu a ukážeme ako súvisí táto chyba s presnosťou modelu. Následne v časti \ref{kap1:2.6:2.6.2:Alternatives} predstavíme niektoré alternatívne metriky pre hodnotenie kvality stromov.
 
@@ -516,11 +516,11 @@ kde v oboch prípadoch je $M(x)$ klasifikácia inštancie $x$ pomocou modelu $M$
 \begin{equation}
 L(y,\tilde{y}) = 
 \begin{cases}
-1 & \quad \text{ak } y \ne \tilde{y}\\
-0 & \quad \text{ak } y = \tilde{y}\\
+1 & \quad \text{ak } y \ne \tilde{y},\\
+0 & \quad \text{ak } y = \tilde{y}.\\
 \end{cases}
 \end{equation}
-V prípade spojitého výstupného atribútu môžu byť stratové funkcie definovaná ako kvadratická odchýlka:
+V prípade spojitého výstupného atribútu môže byť stratová funkcia definovaná ako kvadratická odchýlka:
 \begin{equation}
 L(y,\tilde{y}) = (y - \tilde{y})^2, \\
 \end{equation}
@@ -528,29 +528,29 @@ alebo absolútna chyba
 \begin{equation}
 L(y,\tilde{y}) = \lvert y - \tilde{y} \lvert.
 \end{equation}
-Generalizačná chyba $GE$ pre určitý model $M$ je definovaná ako pravdepodobnosť, že model nesprávne klasifikuje novú inštanciu (meria ako dobre model klasifikuje nové dáta). Klasifikačná presnosť modelu $ACC$, ďalej len ako presnosť modelu je potom definovaná:
+Generalizačná chyba $GE$ pre určitý model $M$ je definovaná ako pravdepodobnosť, že model nesprávne klasifikuje novú inštanciu (meria ako dobre model klasifikuje nové dáta). Klasifikačná presnosť modelu $ACC$, ďalej označovaná len ako presnosť modelu, je potom definovaná:
 \begin{equation}
 ACC(M) = 1 - GE(M).
 \end{equation}
 
-Presnosť modelu je najdôležitejším kritériom na vyhodnotenie modelov. Vo väčšine prípadov sa ale nedá použiť, pretože generalizačná chyba nie je predom známa. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom by bolo použitie trénovacej chyby. Model by v prípade nízkej hodnoty trénovacej chyby pôsobil na prvý pohľad idylicky, no generalizačné schopnosti by boli veľmi nízke. Tento nepriaznivý stav sa nazýva preučenie modelu. Na obrázku \ref{fig:overfit} je vidieť vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Lepším odhadom je testovacia chyba, viď nižšie (empirický odhad).
+Presnosť modelu je najdôležitejším kritériom ohodnotenia modelov. Vo väčšine prípadov sa ale nedá použiť, pretože nepoznáme generalizačnú chybu. Namiesto presnej hodnoty generalizačnej chyby sa preto používajú odhady (empirické alebo teoretické). Jednoduchým, ale nesprávnym odhadom generalizačnej chyby je hodnota trénovacej chyby. V prípade nízkej hodnoty trénovacej chyby môže model pôsobiť na prvý pohľad idylicky, no jeho generalizačné schopnosti môžu byť veľmi nízke. Tento nepriaznivý stav sa nazýva preučenie modelu. Na obrázku \ref{fig:overfit} je vidieť vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Lepším odhadom generalizačnej chyby je testovacia chyba, viď nižšie (empirický odhad).
 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics{../img/kap1/DT-overfit.pdf}}}
-\caption{Vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Toto je typický obrázok preučeného modelu.}\label{fig:overfit}
+\caption{Vývoj generalizačnej a trénovacej chyby vzhľadom k veľkosti stromu. Toto je typický graf pre preučený model.}\label{fig:overfit}
 \end{figure}
 
-Medzi najčastejšie využívané odhady generalizačnej chyby patria tie empirické. Pri tomto type odhadov sa vstupná množina rozdelí na trénovaciu a testovaciu podmnožinu. Rozdelenie býva najčastejšie náhodne a v pomere 2:1. Väčšia množina je trénovacia a menšia zase testovacia. 
-Model, ako už vieme, vytvárame pomocou trénovacej množiny. Testovaciu množinu využívame na vyhodnotenie kvality stromu a na získanie testovacej chyby $Err$. Táto testovacia chyba býva lepším odhadom generalizačnej chyby, než je tá trénovacia. Nevýhodou tohoto prístupu je menšia veľkosť trénovacej množiny. Pri veľmi malej vzorke vstupných dát sa trénovacia a testovacia podmnožina vytvára pomocou výberu s opakovaním. Na obrázku \ref{fig:testtrain} je zobrazený vývoj trénovacej a testovacej chyby. Prerušovaná čiara predstavuje najlepší prípad stromu, ktorý môžeme získať pre vstupné dáta (nepreučený model s čo najlepšími generalizačnými schopnosťami).
+Medzi najčastejšie využívané odhady generalizačnej chyby patria tie empirické. Pri tomto type odhadov sa vstupná množina rozdelí na trénovaciu a testovaciu podmnožinu. Rozdelenie býva najčastejšie náhodné a v pomere 2:1. Väčšia množina je trénovacia a menšia zase testovacia. 
+Model, ako už vieme, vytvárame pomocou trénovacej množiny. Testovaciu množinu využívame na vyhodnotenie kvality stromu a na získanie testovacej chyby $Err$. Táto testovacia chyba býva lepším odhadom generalizačnej chyby, než je tá trénovacia. Nevýhodou tohoto prístupu je menšia veľkosť trénovacej množiny. Pri veľmi malej vzorke vstupných dát sa trénovacia aj testovacia podmnožina vytvára pomocou výberu s opakovaním. Na obrázku \ref{fig:testtrain} je zobrazený vývoj trénovacej a testovacej chyby. Prerušovaná čiara v minime testovacej chyby predstavuje najlepší strom, ktorý môžeme získať pre vstupné dáta (nepreučený model s čo najlepšími generalizačnými schopnosťami).
 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics{../img/kap1/DT-testtrain.pdf}}}
-\caption{Vývoj testovacej a trénovacej chyby vzhľadom k veľkosti stromu. Prerušovaná čiara predstavuje najlepšie vytvorený strom vzhľadom k dostupným dátam.}\label{fig:testtrain}
+\caption{Vývoj testovacej a trénovacej chyby vzhľadom k veľkosti stromu. Prerušovaná čiara predstavuje najlepší vytvorený strom vzhľadom k dostupným dátam.}\label{fig:testtrain}
 \end{figure}
 
-Ďalším, veľmi známym postupom na odhad generalizačnej chyby je $n$-násobná krížová validácia. Pri tejto technike vytvárame $n$ modelov rovnakého typu. Dáta sú rozdelené na $n$ medzi sebou disjunktných podmnožín, najlepšie rovnakých veľkostí. Model testujeme vždy na jednej z $n$ častí. Ostatných $n-1$ častí slúži ako trénovacia množina (rozdelenie množín je teda v pomere $n$-1:1). Testovacie chyby $Err_{i}$, kde $i \in \{1,\ldots,n\}$, získané z každého z $n$ modelov môžeme následne použiť na aproximáciu generalizačnej chyby:
+Ďalším, veľmi známym postupom na odhad generalizačnej chyby je $n$-násobná krížová validácia. Pri tejto technike vytvárame $n$ modelov rovnakého typu. Dáta sú rozdelené na $n$ navzájom disjunktných podmnožín, najlepšie rovnakých veľkostí. Model testujeme vždy na jednej z $n$ častí. Ostatných $n-1$ častí slúži ako trénovacia množina (rozdelenie množín je teda v pomere $n-1:1$). Testovacie chyby $Err_{i}$, kde $i \in \{1,\ldots,n\}$, získané z každého z $n$ modelov môžeme následne použiť na aproximáciu generalizačnej chyby:
 \begin{equation}
 GE \approx \dfrac{1}{n} \sum_{i=1}^{n} Err_{i}.
 \end{equation}
@@ -559,16 +559,16 @@ Viac informácií o ďalších odhadoch je v knihe \cite[s. 56]{kap1-DataMiningF
 
 \subsection{Alternatívne metriky založené na matici chybovosti}\label{kap1:2.6:2.6.2:Alternatives}
 Kritérium presnosti, ktoré sme spomínali v predchádzajúcej časti je síce najdôležitejším kritériom na vyhodnotenie modelu, no v niektorých prípadoch je jeho použitie úplne nevhodné. Príkladom, kedy je použitie kritéria presnosti nevhodné je v prípade nerovnomerného rozdelenia hodnôt výstupného atribútu. Kritérium presnosti by v prípade tejto nerovnomernosti preferoval modely, ktoré by vždy predikovali majoritnú hodnotu výstupného atribútu. V tomto prípade je nutné použiť nejaké z alternatívnych metrík.  
-Nadchádzajúce definície kritérií dokážu pracovať aj s $n$-árnym výstupným atribútom, no ich výpočet bude vždy uvedený pre jednu konkrétnu hodnotu výstupného atribútu. Postup na spočítanie hodnoty globálneho kritéria (pre celý model) je rovnaké pre všetky ostatné kritériá a bude spomenuté na konci tejto časti. Lepšie vysvetlenie s dodatočnými kritériami sa nachádza v scikit príručke \cite{online-NAryConfusion}).
+Nadchádzajúce definície kritérií dokážu pracovať aj s $n$-árnym výstupným atribútom, no ich výpočet bude vždy uvedený pre jednu konkrétnu hodnotu výstupného atribútu. Postup na spočítanie hodnoty globálneho kritéria (pre celý model) je rovnaký pre všetky ostatné kritériá a bude spomenutý na konci tejto časti. Lepšie vysvetlenie s dodatočnými kritériami sa nachádza v scikit príručke \cite{online-NAryConfusion}).
 
 \begin{def-sk}[Matica chybovosti]
-Nech hodnoty výstupného atribútu sú z konečnej množiny $C = \{c_{1},\ldots,c_{n}\}$. Ďalej nech $M$ je prediktívny model a $MC$ matica, kde riadky predstavujú predikované triedy modelom $M$, stĺpce skutočné hodnoty výstupného atribútu a inštancie sú podľa týchto výstupov zaraďované do jednotlivých buniek $\{c_{11},\ldots,c_{kk}\}$. Maticu $MC$ nazveme maticou chybovosti a slúži na posudzovanie kvality modelu $M$ (angl. confusion matrix, obrázok \ref{fig:Confusion}).
+Nech hodnoty výstupného atribútu sú z konečnej množiny $C = \{c_{1},\ldots,c_{n}\}$. Ďalej nech $M$ je prediktívny model a $MC$ je matica nezáporných čísel, kde riadky predstavujú predikované triedy modelom $M$, stĺpce skutočné hodnoty výstupného atribútu a inštancie sú podľa týchto výstupov zaraďované do jednotlivých buniek $\{c_{11},\ldots,c_{kk}\}$. Maticu $MC$ nazveme maticou chybovosti a slúži na posudzovanie kvality modelu $M$ (angl. confusion matrix, obrázok \ref{fig:Confusion}).
 \end{def-sk}
 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics{../img/kap1/DT-confusion.pdf}}}
-\caption{Na obrázku sú príklady matíc chybovosti pre binárny a $k$-árny prípad výstupného atribútu. Inštancie sú zaraďované do jednotlivých buniek matice podľa toho, aký je skutočný a predikovaný výstup tejto inštancie. V binárnom prípade bývajú štyri bunky tejto matice aj pomenované (z angl. TP = true positive, FP = false positive, TN = true negative, FN = false negative)}\label{fig:Confusion}
+\caption{Na obrázku sú príklady matíc chybovosti pre binárny a $k$-árny výstupný atribút. Inštancie sú zaraďované do jednotlivých buniek matice podľa toho, aký je skutočný a predikovaný výstup tejto inštancie. V binárnom prípade bývajú štyri bunky tejto matice aj pomenované (z angl. TP = true positive, FP = false positive, TN = true negative, FN = false negative)}\label{fig:Confusion}
 \end{figure}
 
 \begin{def-sk}[Kritérium citlivosti]\label{kap1:2.6:2.6.2:Sensitivity}
@@ -599,7 +599,7 @@ F-metrika (angl. f-measure) pre hodnotu $c_{i}$ je metrikou, ktorá kvantifikuje
 \end{equation}
 \end{def-sk}
 
-Doteraz boli kritéria počítané pre konkrétnu hodnotu výstupného atribútu. Na spočítanie hodnoty globálneho kritéria pre celý model je nutné využiť ďalších počítacích techník. Nech $C = \{c_{1},\ldots,c_{n}\}$ je konečná množina hodnôt pre výstupný atribút, $D$ je dátová množina a $krit_{c_{i}}$ je hodnota ľubovoľného kritéria pre hodnotu výstupného atribútu $c_{i}$. Potom na spočítanie globálnej hodnoty ľubovoľného kritéria $krit$ (citlivosti, precíznosti, $\ldots$) môžeme napríklad použiť priemer podľa veľkosti množiny $C$:
+Doteraz boli kritéria počítané pre konkrétnu hodnotu výstupného atribútu. Na spočítanie hodnoty globálneho kritéria pre celý model je nutné použiť ďalšie výpočtové techniky. Nech $C = \{c_{1},\ldots,c_{n}\}$ je konečná množina hodnôt pre výstupný atribút, $D$ je dátová množina a $krit_{c_{i}}$ je hodnota ľubovoľného kritéria pre hodnotu výstupného atribútu $c_{i}$. Potom na spočítanie globálnej hodnoty ľubovoľného kritéria $krit$ (citlivosti, precíznosti, $\ldots$) môžeme napríklad použiť priemer podľa veľkosti množiny $C$:
 \begin{equation}
 krit = \dfrac{1}{\lvert C \lvert} \sum_{c_{i} \in C} krit_{c_{i}},
 \end{equation}
@@ -607,18 +607,18 @@ alebo vážený priemer
 \begin{equation}
 krit = \dfrac{1}{\lvert C \lvert} \sum_{c_{i} \in C} \lvert D_{c_{i}} \lvert \times krit_{c_{i}}.
 \end{equation}
-Ďalšie techniky na spočítanie globálnej hodnoty kritéria je na scikit stránke \cite{online-NAryConfusion}. 
+Ďalšie techniky na spočítanie globálnej hodnoty kritéria sú na scikit stránke \cite{online-NAryConfusion}. 
 
-Jedno z kritérií, ktoré môžeme dopočítať z matice chybovosti modelu $M$ je dokonca aj odhad presnosti $ACC$(tak ako sme o ňom písali v predchádzajúcej časti):
+Jedno z kritérií, ktoré môžeme dopočítať z matice chybovosti modelu $M$ je dokonca aj odhad presnosti $ACC$ (tak ako sme o ňom písali v predchádzajúcej časti):
 \begin{equation}
 ACC(M) \approx \dfrac{\sum_{i=1}^{k} c_{ii}}{\sum_{i=1}^{k}\sum_{j=1}^{k} c_{ij}} \nonumber
 \end{equation}
-Z matice chybovosti je pravdaže možné získať viac kritérií, než sme popísali v tejto časti. Viac informácii a zoznam ďalších kritérií poskytuje Wikipediá \cite{wiki-Confusion}.
+Z matice chybovosti je pravdaže možné získať viac kritérií, než sme popísali v tejto časti. Viac informácii a zoznam ďalších kritérií poskytuje Wikipédia \cite{wiki-Confusion}.
 
 \subsection{Alternatívne metriky založené na zložitosti stromu}
 Veľa techník z dobývania znalostí, ako sú SVM alebo neurónové siete vytvárajú modely, ktoré sa síce snažia zlepšiť kritérium presnosti, no väčšinou fungujú ako čierne skrinky, o vnútornej štruktúre ktorých nevieme skoro nič. Rozhodovacie stromy, ako uź vieme, získali popularitu v rôznych odvetviach hlavne kvôli dvom výhodám: jednoduchosti a zrozumiteľnosti modelu. V prípade príliš veľkých stromov sú ale tieto výhody do istej miery redukované. 
 
-V oblasti medicíny je dôležitou vlastnosťou (popri presnosti modelu) schopnosť interpretovať rozhodnutia, čo priamo súvisí s jednoduchosťou a zrozumiteľnosťou rozhodovacích stromov. Tieto dve vlastnosti stromu uľahčujú doktorovi diagnózu pacientov a zároveň mu dovoľujú nahliadnuť na vnútornú štruktúru stromu. Z nej je vidieť, ako sú tvorené a ako kvalitné sú rozhodnutia tohoto stromu (počet inštancií v listoch určuje kvalitu rozhodnutia).
+V oblasti medicíny je dôležitou vlastnosťou (popri presnosti modelu) schopnosť interpretovať rozhodnutia, čo priamo súvisí s jednoduchosťou a zrozumiteľnosťou rozhodovacích stromov. Tieto dve vlastnosti stromu uľahčujú lekárovi diagnózu pacientov a zároveň mu dovoľujú nahliadnuť na vnútornú štruktúru stromu. Z nej je vidieť, ako sú tvorené a ako kvalitné sú rozhodnutia tohoto stromu (počet správne klasifikovaných inštancií v listoch určuje kvalitu rozhodnutia).
 
 Najznámejšími a najobľúbenejšími metrikami založenými na zložitosti stromov sú:
 \begin{itemize}
@@ -704,24 +704,28 @@ Existujú rôzne kritéria zastavenia, ktoré prerušia vytváranie stromu. Tým
 \end{itemize}
 
 \subsection{Orezávanie stromov}\label{kap1:2.7:2.7.1:Pruning}
-Pri vytváraní stromov je nutné dať pozor nato, aké zastavovacie kritérium použijeme. Pri málo obmedzujúcom kritériu dostávame stromy malej veľkosti, no trénovacia chyba takéhoto stromu je príliš vysoká. Na opačnej strane, príliš obmedzujúce kritérium donúti algoritmus vytvoriť veľký preučený strom (malá trénovacia chyba, vysoká generalizačná chyba).
+Pri vytváraní stromov je nutné dať pozor nato, aké zastavovacie kritérium použijeme. Pri málo obmedzujúcom kritériu zastavenia dostávame stromy malej veľkosti, no trénovacia chyba takéhoto stromu je príliš vysoká. Na opačnej strane, príliš obmedzujúce kritérium zastavenia donúti algoritmus vytvoriť veľký preučený strom (malá trénovacia chyba, vysoká generalizačná chyba).
 
-Pri preučených stromoch je používanou taktikou orezanie stromu. Strom je typicky zbavovaný prebytočných podstromov, ktoré zhoršujú generalizáciu (keď používame kritérium presnosti). Orezanie stromu je skvelým nástrojom pri dodržaní pravidla Occamovej britvy\footnote{Filozofický prístup založený na preferovaní jednoduchších modelov, pričom rozdiel kvality modelov nie je tak znateľný.}.
+Pri preučených stromoch je používanou taktikou orezanie stromu. Strom je typicky zbavovaný prebytočných podstromov, ktoré zhoršujú generalizáciu (keď používame kritérium presnosti). Orezanie stromu je skvelým nástrojom pri dodržaní pravidla Occamovej britvy\footnote{Filozofický prístup založený na preferovaní jednoduchších modelov pri zachovaní približne rovnakej kvality.}.
 
-Existuje mnoho techník na orezanie stromov. Typickým postupom je vytvorenie stromu nejakým indukčným algoritmom, pričom na vytvorený strom použijeme niektorú z orezávacích techník.
+Existuje mnoho techník na orezanie stromov. Typickým postupom je 
+\begin{enumerate}
+\item Vytvorenie stromu nejakým indukčným algoritmom.
+\item Zmenšenie stromu aplikáciou nejakej techniky orezávania.
+\end{enumerate}
 Orezávanie stromu sa dá generalizovať pre ľubovoľné kritérium $\epsilon$.
-Tieto techniky vykonávajú prechod stromu zhora nadol (od koreňa k listom) alebo naopak (od listov ku koreňu). Keď strom po orezaní vylepšil predom dané kritérium $\epsilon$ na vyhodnotenie stromu, tak je orezaný strom prijatý.
-Hodnotu vyhodnocovacieho kritéria $\epsilon$ väčšinou počítame na úplne novej, orezávacej množine. Pri malej veľkosti vstupných dát je odporúčané použiť krížovú validáciu alebo iné metódy.
+Tieto techniky vykonávajú prechod stromu zhora nadol (od koreňa k listom) alebo naopak (od listov ku koreňu). Keď strom po orezaní vylepšil predom dané kritérium kvality stromu $\epsilon$, tak je orezaný strom prijatý.
+Hodnotu vyhodnocovacieho kritéria $\epsilon$ väčšinou počítame na úplne novej, orezávacej množine nezávislej na trénovacej a testovacej množine. Pri malej veľkosti vstupných dát je odporúčané použiť krížovú validáciu alebo iné metódy.
 \subsubsection{Orezanie stromu zmenšovaním chyby}
-Známa a veľmi jednoduchá technika orezania stromu. Patrí medzi techniky zhora nadol, ktorá pri každom orezaní zaručuje zmenšenie chyby. Pre každý vrchol stromu zisťujeme, či po jeho nahradení za list (s maximálnou hodnotou výstupného atribútu pre dáta v tomto vrchole), znížime hodnotu kritéria na vyhodnotenie stromu. Hodnotu kritéria počítame na orezávacej množine. Celý proces pokračuje dokým sa takýto vrchol nenájde.
+Rozšírená a veľmi jednoduchá technika orezania stromu. Patrí medzi techniky zhora nadol, ktorá pri každom orezaní zaručuje zmenšenie chyby. Pre každý vrchol stromu zisťujeme, či po jeho nahradení za list (s maximálnou hodnotou výstupného atribútu pre dáta v tomto vrchole), znížime hodnotu kritéria kvality stromu. Hodnotu kritéria počítame na orezávacej množine. Celý proces pokračuje dokým sa takýto vrchol nenájde.
 \subsubsection{Orezanie podľa zložitosti stromu}
-Táto technika pracuje v dvoch krokoch. V prvom kroku vybudujeme pomocou trénovacích dát stromy $T_{0},\ldots,T_{n}$, kde $T_{0}$ je strom bez nejakého orezania a $T_{n}$ je koreň. V druhom kroku vyberieme taký strom $T_{i}$, ktorý maximalizuje kritérium $\epsilon$ na vyhodnotenie stromu. 
+Táto technika pracuje v dvoch krokoch. V prvom kroku vybudujeme pomocou trénovacích dát stromy $T_{0},\ldots,T_{n}$, kde $T_{0}$ je strom bez nejakého orezania a $T_{n}$ je koreň. V druhom kroku vyberieme taký strom $T_{i}$, ktorý maximalizuje kritérium kvality stromu $\epsilon$. 
 
 Množina stromov je budovaná postupne. Strom $T_{i+1}$ je vytvorený zo stromu $T_{i}$ tak, že niektoré podstromy nahradíme listami. Podstromy na orezanie sú vybrané podľa toho, ako moc zlepšujú (pre generalizačnú chybu minimalizujeme, pre iné kritéria maximalizujeme) hodnotu:
 \begin{equation}
 \delta = \dfrac{\epsilon(orezanie(T_{i},t),D) - \epsilon(T_{i},D)}{\lvert listy(T_{i}) \lvert - \lvert listy(orezanie(T_{i},t)) \lvert}, \nonumber
 \end{equation}
-pričom $\epsilon(T_{i},D)$ je hodnota daného kritéria pre strom $T_{i}$ a dáta $D$. Ďalej $listy(T_{i})$ je počet listov stromu $T_{i}$ a orezanie je funkcia, ktorá zmení vrchol $t$ stromu $T_{i}$ na list.
+pričom $\epsilon(T_{i},D)$ je hodnota daného kritéria pre strom $T_{i}$ a dáta $D$. Ďalej $listy(T_{i})$ je množina listov stromu $T_{i}$ a $orezanie(T_{i},t)$ je funkcia, ktorá zmení vrchol $t$ stromu $T_{i}$ na list.
 
 Viac informácií a ďalšie techniky orezávania stromov sú v knihe \cite[s. 72]{kap1-DecisionTree}.
 

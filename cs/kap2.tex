@@ -40,9 +40,43 @@ Z biologického hľadiska je nutné popísať kvalitu nových organizmov. Tú je
 \subsection{Popis genetických algoritmov}
 V tejto časti zadefinujeme, čo sú to genetické algoritmy, pričom jednotlivé pojmy budú podobné tým, ktoré sme predstavili v predchádzajúcej časti. 
 
-Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a z nich nájsť to najlepšie. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
+Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a z nich nájsť to najlepšie. Pri genetických algoritmoch je zvyčajne stotožňovaní jedinec s chromozómom a riešením daného problému. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
 
-V prípade genetických algoritmov sú chromozómy novo vytvorených organizmov jednotlivé riešenia. Chromozóm môže byť kódovaný rôzne. Medzi najznámejšie kódovania jedincov patria:
+Tieto algoritmy fungujú v cykloch, ktoré predstavujú generácie. V každom cykle pracujeme s množinou jedincov, populáciou pre tú danú generáciu. V každej generácii sa snažíme zlepšiť aktuálne riešenie vytváraním nových jedincov. V konečnej generácii je vytvorená taká populácia, ktorá obsahuje tých najvhodnejších jedincov, medzi ktorými sa nachádza ten najlepší.
+
+Každý problém môže mať odlišnú reprezentáciu jedincov. S týmto súvisí úloha, ako rozumne a správne zakódovať jedincov. Takýchto kódovaní je mnoho, no medzi najznámejšie patrí binárne kódovanie, znakové kódovanie, kódovanie reálnymi číslami, ale aj kódovanie pomocou stromov, gramatík a mnoho ďalších. Napríklad pri použití binárneho kódovania sú jedinci reprezentovaní ako bitové reťazce. V tomto prípade sú jednotlivé prvky alebo skupiny prvkov v tomto poli génmi jedinca. Alela je v prípade bitovej hodnoty 0 alebo 1. Pri iných reprezentáciách sú alely komplikovanejšie.
+
+Kríženie v genetických algoritmoch je realizované výmenou hodnôt medzi rodičmi. To o aké hodnoty sa jedná záleží na zvolenej reprezentácií (hodnoty v reťazci, stromy, ...). Typ kríženia, ktorý môžeme použiť, závisí od zvoleného kódovania a od jeho reprezentácie. 
+Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi. Podobne ako pri krížení závisí na typu kríženia aj na zvolenej reprezentácií. 
+
+Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcom je typ kríženia obmedzený na bodové a uniformné kríženie. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
+
+\subsection{Jednoduchý genetický algoritmus}
+Podľa doposiaľ zadefinovaných pojmov môžeme predviesť, ako taký genetický algoritmus pracuje. Majme daný problém P, ktorý chceme vyriešiť. Pre zjednodušenie uvažujme jedincov s binárnym kódovaním. Zjednodušený algoritmus \ref{fig:geneticAlgoritm} potom popisuje jednotlivé kroky genetického algoritmu, ktorý rieši problém P.
+\begin{algorithm} 
+\floatname{algorithm}{Algoritmus}
+\caption{Kroky zjednodušeného genetického algoritmu, ktorý pracuje s binárne kódovanými jedincami.}\label{fig:geneticAlgoritm}
+$fP$ - Kritérium na vyhodnotenie jedincov pre problém $P$\\
+$A$ - Aktuálna populácia \\
+$k$ - Dĺžka reťazca/chromozómu/riešenia \\
+$max\_gen$ - Maximálny počet generácií \\
+$max\_pop$ - Maximálny počet jedincov v populácií \\
+\begin{algorithmic}
+
+\State \parbox[t]{400pt}{$A \gets $ náhodne vygenerovaná populácia s $n$ jedincami (každé z nich dĺžky $k$).}
+
+\For{$i = 1$ kým $i \leq max\_gen$}
+	\State Krok()
+\EndFor
+
+\Procedure{Krok}{\mbox{}}
+	\State Spočítaj kvalitu každého jedinca pomocou kritéria $fP$.
+	\State Vyber dva 
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\section{Kódovanie jedincov}\label{kap2:2.2:Coding}
 \begin{itemize}
 \item binárne, pri ktorom reprezentujeme jedinca bitovým reťazcom/poľom určitej dĺžky,
 \item znakové, kde je jedinec reprezentovaný reťazcom, ktorého hodnoty sú z konečnej množiny symbolov,
@@ -51,25 +85,17 @@ V prípade genetických algoritmov sú chromozómy novo vytvorených organizmov 
 \item stromové, kde sú jedince reprezentované ako stromy z teórie grafov,
 \item a mnoho ďalších ako sú permutácie, matice, konečné automaty, neurónové siete,...
 \end{itemize}
-Pri použití binárneho kódovania sú jedinci reprezentovaní ako bitové reťazce. V tomto prípade sú jednotlivé prvky alebo skupiny prvkov v tomto poli génmi jedinca. Alela je v prípade bitovej hodnoty 0 alebo 1. Pri iných reprezentáciách sú alely komplikovanejšie.
 
-Kríženie v genetických algoritmoch je realizované výmenou hodnôt medzi rodičmi. To o aké hodnoty sa jedná záleží na zvolenej reprezentácií (hodnoty v reťazci, stromy, ...). Typ kríženia, ktorý môžeme použiť, závisí od zvoleného kódovania a reprezentácie jedinca. 
-Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi. Podobne ako pri krížení závisí na typu kríženia aj na zvolenej reprezentácií. 
-
-Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcom je typ kríženia obmedzený na bodové a uniformné kríženie. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
-
-\subsection{Jednoduchý genetický algoritmus}
-
-\section{Genetické operátory}\label{kap2:2.2:Operators}
+\section{Genetické operátory}\label{kap2:2.3:Operators}
 V prípade kódovania, ktoré využíva reprezentáciu reťazcom môžeme použiť
 \begin{itemize}
 \item bodové kríženie, ktoré je založené na zvolení náhodných $n$ bodov. Takto zvolené body rozdelia reťazec na $n+1$ častí, pričom sa odpovedajúce časti vymenia s určitou pravdepodobnosťou. Tento typ kríženia sa ďalej pomenováva podľa počtu vybraných bodov (jednobodové, dvojbodové, ...).
 \item uniformné kríženie, ktoré vypĺňa jednotlivé hodnoty z určitého rodiča. U každej položky hádžeme mincou, ktorá rozhoduje z ktorého rodiča hodnotu vyberieme.
 \end{itemize}
 
-\section{Vyhodnotenie jedincov}\label{kap2:2.3:Fitnesses}
+\section{Vyhodnotenie jedincov}\label{kap2:2.4:Fitnesses}
 
-\section{Výber jedincov}\label{kap2:2.4:Selection}
+\section{Výber jedincov}\label{kap2:2.5:Selection}
 
-\section{Nastavenie správnych parametrov}\label{kap2:2.5:Parameters}
+\section{Nastavenie správnych parametrov}\label{kap2:2.6:Parameters}
 
