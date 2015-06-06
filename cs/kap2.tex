@@ -52,13 +52,16 @@ Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi, pričom podo
 Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcom je typ kríženia obmedzený na bodové a uniformné kríženie. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
 
 \subsection{Jednoduchý genetický algoritmus}
-Podľa doposiaľ zadefinovaných pojmov môžeme predviesť, ako taký genetický algoritmus pracuje. Majme daný problém P, ktorý chceme vyriešiť. Pre zjednodušenie uvažujme jedincov s binárnym kódovaním. Zjednodušený algoritmus \ref{fig:geneticAlgoritm} potom popisuje jednotlivé kroky genetického algoritmu, ktorý rieši problém P.
-\begin{algorithm} 
+Podľa doposiaľ zadefinovaných pojmov môžeme predviesť, ako taký genetický algoritmus pracuje. Majme daný problém P, ktorý chceme vyriešiť. Pre zjednodušenie uvažujme jedincov s binárnym kódovaním. Zjednodušený Algoritmus \ref{fig:geneticAlgoritm} potom popisuje jednotlivé kroky genetického algoritmu, ktorý rieši problém P.
+\begin{algorithm}
 \floatname{algorithm}{Algoritmus}
 \caption{Kroky zjednodušeného genetického algoritmu, ktorý pracuje s binárne kódovanými jedincami.}\label{fig:geneticAlgoritm}
-$fP$ - Kritérium na vyhodnotenie jedincov pre problém $P$\\
 $A$ - Aktuálna populácia \\
+$O$ - Potomkovia \\
 $k$ - Dĺžka reťazca/chromozómu/riešenia \\
+$fP$ - Kritérium na vyhodnotenie jedincov pre problém $P$\\
+$p_{k}$ - Pravdepodobnosť kríženia \\
+$p_{m}$ - Pravdepodobnosť mutácie \\
 $max\_gen$ - Maximálny počet generácií \\
 $max\_pop$ - Maximálny počet jedincov v populácií \\
 \begin{algorithmic}
@@ -68,13 +71,31 @@ $max\_pop$ - Maximálny počet jedincov v populácií \\
 \For{$i = 1$ kým $i \leq max\_gen$}
 	\State Krok()
 \EndFor
-
+\\
 \Procedure{Krok}{\mbox{}}
-	\State Spočítaj kvalitu každého jedinca pomocou kritéria $fP$.
-	\State Vyber dva 
+	\State $O \gets \{\}$
+	\State Spočítaj kvalitu každého jedinca pomocou kritéria $fP$.	
+	\While{$\lvert O \rvert < max\_pop$}
+		\State \parbox[t]{350pt}{$J1,J2 \gets $ dva jedinci z populácie $A$ (výber s opakovaním). Pravdepodobnosť že vyberieme jedinca je úmerná hodnote kritéria $fP$.}
+		\State \parbox[t]{350pt}{$O1,O2 \gets $ \textsc{Kríženie(J1,J2)}}
+		\State \parbox[t]{350pt}{$O1,O2 \gets $ \textsc{Mutácia(O1,O2)}}
+		\State $O \gets \{O1,O2\} \cup O$.
+	\EndWhile
+	\State $A \gets O$.
 \EndProcedure
+\\
+\Function{Kríženie}{$J1$,$J2$} \\
+\Return{\parbox[t]{350pt}{$O1, O2$, ktorí vznikli prekrížením rodičov $J1, J2$ s pravdepodobnosťou $p_{k}$ v ľubovoľnom mieste reťazca. Bez použitého kríženia bude $O1 \gets J1$ a $O2 \gets J2$.}}
+\EndFunction
+\\
+\Function{Mutácia}{$J1$,$J2$} \\
+\Return{\parbox[t]{350pt}{$O1, O2$, ktorí vznikli mutáciou jedincov $J1, J2$ v jednotlivých hodnotách reťazca. Mutácia je na hodnote v reťazci použitá s pravdepodobnosťou $p_{m}$.}}
+\EndFunction
 \end{algorithmic}
 \end{algorithm}
+Každá iterácia algoritmu predstavuje novú generáciu jedincov. Počet generácii závisí na typu úlohu, no zvyčajne ich býva 50 až 500. V poslednom behu algoritmu dostávame konečnú populáciu, v ktorej je viacero kvalitných jedincov. Na zreprodukovanie výsledkov je kvôli stochastickému správaniu algoritmu nutné zvoliť rovnaký seed (pri používaní pseudo náhodných generátorov). 
+
+Väčšina genetických algoritmov pracuje podobne ako zjednodušený algoritmus. Najväčšia zmena býva vtom akú taktiku na výber jedincov a aké kríženie a mutáciu použijeme. Komplikovanejšie genetické algoritmy taktiež používajú princíp elitizmu, ktorý ovplyvňuje aké percento rodičovských jedincov sa dostane do ďalšej generácie.
 
 \section{Kódovanie jedincov}\label{kap2:2.2:Coding}
 \begin{itemize}
