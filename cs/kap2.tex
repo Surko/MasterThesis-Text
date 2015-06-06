@@ -2,19 +2,19 @@
 Hlavným cieľom práce je optimalizovanie tvorby rozhodovacích stromov pomocou genetických algoritmov (GA). Preto 
 v tejto kapitole predstavíme genetické algoritmy a podrobnejšie popíšeme jeho jednotlivé časti, ktoré budeme ďalej potrebovať v ďalšej kapitole.
 
-Táto kapitola je delená do viacerých oddielov. V oddieli \ref{kap2:2.1:Info} popíšeme základné informácie o genetických algoritmoch. Genetické operátory používané v genetických algoritmoch zavedieme v oddieli \ref{kap2:2.2:Operators}. Rôzne druhy funkcií, používaných na vyhodnotenie jedincov, zadefinujeme v oddieli \ref{kap2:2.3:Fitnesses}. Ďalej v časti \ref{kap2:2.4:Selection} predvedieme najzákladnejšie metódy na výber jedincov. Nakoniec v časti \ref{kap2:2.5:Parameters} popíšeme problém výberu správnych parametrov v genetických algoritmoch.
+Táto kapitola je delená do viacerých oddielov. V oddieli \ref{kap2:2.1:Info} popíšeme základné informácie o genetických algoritmoch. Popis rôznych kódovaní jedincov je v oddieli \ref{kap2:2.2:Coding}. Ďalej v časti \ref{kap2:2.3:Selection} predvedieme najzákladnejšie metódy na výber jedincov. Genetické operátory používané v genetických algoritmoch zavedieme v oddieli \ref{kap2:2.4:Operators}. Rôzne druhy funkcií, používaných na vyhodnotenie jedincov, zadefinujeme v oddieli \ref{kap2:2.5:Fitnesses}. Nakoniec v časti \ref{kap2:2.6:Parameters} popíšeme problém výberu správnych parametrov v genetických algoritmoch.
 
 \section{Základný popis genetických algoritmov}\label{kap2:2.1:Info}
 Genetické algoritmy sú optimalizačné techniky a prehľadávacie heuristiky, ktoré napodobujú princíp prirodzeného výberu vychádzajúceho z darwinovskej teórie. V tomto oddieli ponúkneme úvod ku genetickým algoritmom s popisom, ako by mal taký genetický algoritmus vyzerať. Informácie o genetických algoritmoch sme čerpali z knihy \cite{kap2-evolution} a úvod do oblasti genetiky zase z voľne dostupnej učebnice biológie \cite{online-biology}. Ďalšie doplňujúce poznatky boli získané z online zdrojov \cite{wiki-evolution,wiki-genetics}.
 
-V časti \ref{kap2:2.1:2.1.1:Genetics} najprv z pohľadu biológie vysvetlíme základné pojmy z genetiky. Ďalej v časti \ref{kap2:2.2:2.1.2:}.
+V časti \ref{kap2:2.1:2.1.1:Genetics} najprv z pohľadu biológie vysvetlíme základné pojmy z genetiky. Ďalej v časti \ref{kap2:2.1:2.1.2:AboutGeneticAlgo} popíšeme ako pracujú genetické algoritmy. Nakoniec v časti \ref{kap2:2.1:2.1.3:SimpleGeneticAlgo} predvedieme zjednodušený GA, ktorého hlavná myšlienka je rovnaká aj pri komplikovaných genetických algoritmoch.
 
 \subsection{Genetika z pohľadu Biológie}\label{kap2:2.1:2.1.1:Genetics}
 Na popísanie a zadefinovanie ďalších súčastí genetických algoritmov je dobré pripomenúť niektoré základné pojmy z oblasti genetiky. 
 
-Bunka je základnou stavebnou jednotkou každého organizmu. Každá bunka má uložený popis toho ako sa má správať pri typických bunečných procesoch. Tento popis sa nazýva genetická informácia a v organizmoch je uskladnená v DNA, čo je obrovská molekula, polymér zložený z veľkého množstva pospájaných nukleotidov (kyselina fosforečná s deoxyribózou a naviazanou dusíkatou bázou). Tieto nukleotidy a konkrétne ich báze sú zodpovedné zato, ako vyzerá genetický kód tejto genetickej informácie. Malý kúsok vybraný zo sekvencie DNA, ktorý kóduje nejakú funkčnosť bunky alebo proces v bunke, sa nazýva gén. Presnejšie vyjadrenie by bolo, že gén je zodpovedný za tvorbu proteínov, ktoré sú ovplyvňujú funkčnosť bunky. Gén si je teda možné predstaviť ako významnú črtu organizmu (napríklad farba očí). Rôzne nastavenia génu nazývame alely (modré, hnedé, zelené oči).
+Bunka je základnou stavebnou jednotkou každého organizmu. Každá bunka má uložený popis toho, ako sa má správať pri typických bunečných procesoch. Tento popis sa nazýva genetická informácia a v organizmoch je uskladnená v DNA, čo je obrovská molekula, polymér zložený z veľkého množstva pospájaných nukleotidov (kyselina fosforečná s deoxyribózou a naviazanou dusíkatou bázou). Tieto nukleotidy a konkrétne ich báze sú zodpovedné zato, ako vyzerá genetický kód tejto genetickej informácie. Malý kúsok vybraný zo sekvencie DNA, ktorý kóduje nejakú funkčnosť bunky alebo proces v bunke, sa nazýva gén. Presnejšie vyjadrenie by bolo, že gén je zodpovedný za tvorbu proteínov, ktoré sú ovplyvňujú funkčnosť bunky. Gén si je teda možné predstaviť ako významnú črtu organizmu (napríklad farba očí). Rôzne nastavenia génu nazývame alely (modré, hnedé, zelené oči).
 
-DNA je kvôli jej veľkosti ďalej komprimovaná do štruktúry nazývaná chromozóm. Chromozóm sa nachádza v jadre bunky. Organizmy môžu mať v jadre viacero rôznych chromozómov. Podľa typu organizmu môžu byť tieto chromozómy spárované (diploidné organizmy) alebo nespárované (haploidné organizmy). Genóm organizmu potom nazývame genetický materiál získaný zo všetkých chromozómov dokopy. Určitá množina génov z genómu organizmu sa nazýva genotyp. Vo vývojovom štádiu jedinca ovplyvňuje genotyp výzor a ďalšie charakteristiky organizmu (výška, farba očí, IQ, ...), nazývané aj fenotyp.
+DNA je kvôli jej veľkosti ďalej komprimovaná do štruktúry nazývaná chromozóm. Chromozóm sa nachádza v jadre bunky. Organizmy môžu mať v jadre viacero rôznych chromozómov. Podľa typu organizmu môžu byť tieto chromozómy spárované (diploidné organizmy) alebo nespárované (haploidné organizmy). Genóm organizmu potom nazývame genetický materiál získaný zo všetkých chromozómov dokopy. Určitá množina génov z genómu organizmu sa nazýva genotyp. Vo vývojovom štádiu jedinca ovplyvňuje genotyp výzor a ďalšie charakteristiky organizmu (výška, farba očí, IQ, ...) nazývané fenotyp.
 
 \begin{figure}[h]
 \centering
@@ -37,7 +37,7 @@ Po reprodukcii dostávame nové chromozómy, ktoré tvoria genóm novo vytvoren�
 
 Z biologického hľadiska je nutné popísať kvalitu nových organizmov. Tú je možné vyhodnotiť pomocou pravdepodobnosti, že sa jedinec dožije ďalšieho párenia. Ďalším kritériom môže byť plodnosť potomka.
 
-\subsection{Popis genetických algoritmov}
+\subsection{Popis genetických algoritmov}\label{kap2:2.1:2.1.2:AboutGeneticAlgo}
 V tejto časti zadefinujeme, čo sú to genetické algoritmy, pričom jednotlivé pojmy budú podobné tým, ktoré sme predstavili v predchádzajúcej časti. 
 
 Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a z nich nájsť to najlepšie. Algoritmus pracuje s jedincami, na ktorých aplikujeme operátory kríženia a mutácie. Podľa kvality jedinca rozhodujeme, či sa bude s jedincom ďalej pracovať. V genetických algoritmoch získavame riešenia z jedincov po príslušnom dekódovaní. Jedinec a chromozóm sú v rámci genetických algoritmov synonymami. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši po dekódovaní zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
@@ -51,7 +51,7 @@ Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi, pričom podo
 
 Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcom je typ kríženia obmedzený na bodové a uniformné kríženie. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
 
-\subsection{Jednoduchý genetický algoritmus}
+\subsection{Jednoduchý genetický algoritmus}\label{kap2:2.1:2.1.3:SimpleGeneticAlgo}
 Podľa doposiaľ zadefinovaných pojmov môžeme predviesť, ako taký genetický algoritmus pracuje. Majme daný problém P, ktorý chceme vyriešiť. Pre zjednodušenie uvažujme jedincov s binárnym kódovaním. Zjednodušený Algoritmus \ref{fig:geneticAlgoritm} potom popisuje jednotlivé kroky genetického algoritmu, ktorý rieši problém P.
 \begin{algorithm}
 \floatname{algorithm}{Algoritmus}
@@ -98,25 +98,40 @@ Každá iterácia algoritmu predstavuje novú generáciu jedincov. Počet gener�
 Väčšina genetických algoritmov pracuje podobne ako zjednodušený algoritmus. Najväčšia zmena býva vtom akú taktiku na výber jedincov a aké kríženie a mutáciu použijeme. Komplikovanejšie genetické algoritmy taktiež používajú princíp elitizmu, ktorý ovplyvňuje aké percento rodičovských jedincov sa dostane do ďalšej generácie.
 
 \section{Kódovanie jedincov}\label{kap2:2.2:Coding}
+V predchádzajúcom oddieli sme uviedli, že jedince môžu byť rôzne kódované. Výber správneho kódovania záleží hlavne na typu úlohy, ktorú riešime. Každé jedno z kódovaní pracuje s určitou reprezentáciou jedinca. Aplikácie genetických algoritmov používajú buď reprezentácie s pevne zadanou dĺžkou, alebo s variabilnou dĺžkou. Existuje mnoho kódovaní jedincov, pričom tie najznámejšie sú
 \begin{itemize}
 \item binárne, pri ktorom reprezentujeme jedinca bitovým reťazcom/poľom určitej dĺžky,
 \item znakové, kde je jedinec reprezentovaný reťazcom, ktorého hodnoty sú z konečnej množiny symbolov,
 \item celočíselné, kde je jedinec reprezentovaný reťazcom celočíselných hodnôt,
 \item kódovanie s reálnymi číslami, pri ktorom reprezentujeme jedinca reťazcom, ktorého hodnoty sú reálne čísla,
 \item stromové, kde sú jedince reprezentované ako stromy z teórie grafov,
-\item a mnoho ďalších ako sú permutácie, matice, konečné automaty, neurónové siete,...
-\end{itemize}
+\item a mnoho ďalších ako je permutačné kódovanie, maticové kódovanie, kódovanie založené na gramatikách, ...
+\end{itemize} 
 
-\section{Genetické operátory}\label{kap2:2.3:Operators}
+V tomto oddieli budú jednotlivé časti popisovať rôzne kódovania jedincov. V časti \ref{kap2:2.2:2.2.1:Binary} popíšeme binárne kódovanie, ktoré bolo historicky prvým kódovaním jedincov v genetických algoritmoch. Kódovanie s reálnymi číslami zadefinujeme v časti \ref{kap2:2.2:2.2.2:RealValued}. Nakoniec v časti \ref{kap2:2.2:2.2.3:Tree} uvedieme kódovanie pomocou stromov z teórie grafov.
+\subsection{Binárne kódovanie}\label{kap2:2.2:2.2.1:Binary}
+Binárne kódovanie je prvý typ kódovania, s ktorým pracovali prvé, originálne genetické algoritmy.
+Tento typ kódovania je najčastejšie používaným kódovaním jedincov už od dôb Hollanda. Obľúbenosť si získalo hlavne kvôli tomu, že 
+\begin{enumerate}
+\item Holland a jeho študenti sa venovali tomuto kódovaniu najdlhšie, čo malo za následok, že väčšinu teoretických poznatkov máme dokázaných pre binárne kódovanie (príkladom môže byť veta o schémach).
+\item Pre binárne kódovanie existujú určité heuristiky, ako správne zvoliť parametre genetického algoritmu.
+\end{enumerate}
+
+Veľa teoretických poznatkov sa dá rozšíriť aj na nebinárne kódovanie, no tieto rozšírenia nie sú tak dobre zdokumentované, ako to je v prípade originálneho GA.
+\subsection{Kódovanie reálnymi číslami}\label{kap2:2.2:2.2.2:RealValued}
+
+\subsection{Kódovanie stromami}\label{kap2:2.2:2.2.3:Tree}
+
+\section{Výber jedincov}\label{kap2:2.3:Selection}
+
+\section{Genetické operátory}\label{kap2:2.4:Operators}
 V prípade kódovania, ktoré využíva reprezentáciu reťazcom môžeme použiť
 \begin{itemize}
 \item bodové kríženie, ktoré je založené na zvolení náhodných $n$ bodov. Takto zvolené body rozdelia reťazec na $n+1$ častí, pričom sa odpovedajúce časti vymenia s určitou pravdepodobnosťou. Tento typ kríženia sa ďalej pomenováva podľa počtu vybraných bodov (jednobodové, dvojbodové, ...).
 \item uniformné kríženie, ktoré vypĺňa jednotlivé hodnoty z určitého rodiča. U každej položky hádžeme mincou, ktorá rozhoduje z ktorého rodiča hodnotu vyberieme.
 \end{itemize}
 
-\section{Vyhodnotenie jedincov}\label{kap2:2.4:Fitnesses}
-
-\section{Výber jedincov}\label{kap2:2.5:Selection}
+\section{Vyhodnotenie jedincov}\label{kap2:2.5:Fitnesses}
 
 \section{Nastavenie správnych parametrov}\label{kap2:2.6:Parameters}
 
