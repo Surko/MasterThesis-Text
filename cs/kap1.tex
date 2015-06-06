@@ -554,6 +554,7 @@ Model, ako už vieme, vytvárame pomocou trénovacej množiny. Testovaciu množi
 \begin{equation}
 GE \approx \dfrac{1}{n} \sum_{i=1}^{n} Err_{i}.
 \end{equation}
+Následne nie je ťažké dopočítať rozptyl a smerodajnú odchýlku tohoto odhadu. Pomocou týchto údajov je potom možné zistiť interval, v ktorom sa s určitou pravdepodobnosťou nachádza skutočná generalizačná chyba. Tento interval je pri použití $n$-násobnej krížovej validácie kvalitnejší ako v prípade odhadu pomocou jednej testovacej chyby.
 
 Viac informácií o ďalších odhadoch je v knihe \cite[s. 56]{kap1-DataMiningForTrees} a vo voľne dostupných zdrojoch \cite{wiki-CrossValidation,online-validation}.
 
@@ -562,7 +563,7 @@ Kritérium presnosti, ktoré sme spomínali v predchádzajúcej časti je síce 
 Nadchádzajúce definície kritérií dokážu pracovať aj s $n$-árnym výstupným atribútom, no ich výpočet bude vždy uvedený pre jednu konkrétnu hodnotu výstupného atribútu. Postup na spočítanie hodnoty globálneho kritéria (pre celý model) je rovnaký pre všetky ostatné kritériá a bude spomenutý na konci tejto časti. Lepšie vysvetlenie s dodatočnými kritériami sa nachádza v scikit príručke \cite{online-NAryConfusion}).
 
 \begin{def-sk}[Matica chybovosti]
-Nech hodnoty výstupného atribútu sú z konečnej množiny $C = \{c_{1},\ldots,c_{n}\}$. Ďalej nech $M$ je prediktívny model a $MC$ je matica nezáporných čísel, kde riadky predstavujú predikované triedy modelom $M$, stĺpce skutočné hodnoty výstupného atribútu a inštancie sú podľa týchto výstupov zaraďované do jednotlivých buniek $\{c_{11},\ldots,c_{kk}\}$. Maticu $MC$ nazveme maticou chybovosti a slúži na posudzovanie kvality modelu $M$ (angl. confusion matrix, obrázok \ref{fig:Confusion}).
+Nech hodnoty výstupného atribútu sú z konečnej množiny $C = \{c_{1},\ldots,c_{n}\}$. Ďalej nech $M$ je prediktívny model a $MC$ je matica nezáporných čísel, kde riadky predstavujú predikované triedy modelom $M$, stĺpce skutočné hodnoty výstupného atribútu a jednotlivé položky $c_{ij}$ predstavujú počet takých inštancií, ktorých predikovaná hodnota výstupného atribútu je $c_{i}$ a skutočná hodnota je $c_{j}$. Maticu $MC$ nazveme maticou chybovosti a slúži na posudzovanie kvality modelu $M$ (angl. confusion matrix, obrázok \ref{fig:Confusion}).
 \end{def-sk}
 
 \begin{figure}[h]

@@ -40,14 +40,14 @@ Z biologického hľadiska je nutné popísať kvalitu nových organizmov. Tú je
 \subsection{Popis genetických algoritmov}
 V tejto časti zadefinujeme, čo sú to genetické algoritmy, pričom jednotlivé pojmy budú podobné tým, ktoré sme predstavili v predchádzajúcej časti. 
 
-Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a z nich nájsť to najlepšie. Pri genetických algoritmoch je zvyčajne stotožňovaní jedinec s chromozómom a riešením daného problému. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
+Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a z nich nájsť to najlepšie. Algoritmus pracuje s jedincami, na ktorých aplikujeme operátory kríženia a mutácie. Podľa kvality jedinca rozhodujeme, či sa bude s jedincom ďalej pracovať. V genetických algoritmoch získavame riešenia z jedincov po príslušnom dekódovaní. Jedinec a chromozóm sú v rámci genetických algoritmov synonymami. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši po dekódovaní zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
 
 Tieto algoritmy fungujú v cykloch, ktoré predstavujú generácie. V každom cykle pracujeme s množinou jedincov, populáciou pre tú danú generáciu. V každej generácii sa snažíme zlepšiť aktuálne riešenie vytváraním nových jedincov. V konečnej generácii je vytvorená taká populácia, ktorá obsahuje tých najvhodnejších jedincov, medzi ktorými sa nachádza ten najlepší.
 
 Každý problém môže mať odlišnú reprezentáciu jedincov. S týmto súvisí úloha, ako rozumne a správne zakódovať jedincov. Takýchto kódovaní je mnoho, no medzi najznámejšie patrí binárne kódovanie, znakové kódovanie, kódovanie reálnymi číslami, ale aj kódovanie pomocou stromov, gramatík a mnoho ďalších. Napríklad pri použití binárneho kódovania sú jedinci reprezentovaní ako bitové reťazce. V tomto prípade sú jednotlivé prvky alebo skupiny prvkov v tomto poli génmi jedinca. Alela je v prípade bitovej hodnoty 0 alebo 1. Pri iných reprezentáciách sú alely komplikovanejšie.
 
-Kríženie v genetických algoritmoch je realizované výmenou hodnôt medzi rodičmi. To o aké hodnoty sa jedná záleží na zvolenej reprezentácií (hodnoty v reťazci, stromy, ...). Typ kríženia, ktorý môžeme použiť, závisí od zvoleného kódovania a od jeho reprezentácie. 
-Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi. Podobne ako pri krížení závisí na typu kríženia aj na zvolenej reprezentácií. 
+Kríženie v genetických algoritmoch je realizované výmenou hodnôt medzi rodičmi. To o aké hodnoty sa jedná záleží na zvolenej reprezentácií (hodnoty v reťazci, stromy, ...). Typ kríženia, ktorý môžeme použiť, závisí od zvoleného kódovania a od jeho reprezentácie jedincov. 
+Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi, pričom podobne ako pri krížení je závislá na kódovaní jedincov a od použitej reprezentácie. 
 
 Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcom je typ kríženia obmedzený na bodové a uniformné kríženie. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
 
