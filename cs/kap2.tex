@@ -111,16 +111,26 @@ V predchádzajúcom oddieli sme uviedli, že jedince môžu byť rôzne kódovan
 V tomto oddieli budú jednotlivé časti popisovať rôzne kódovania jedincov. V časti \ref{kap2:2.2:2.2.1:Binary} popíšeme binárne kódovanie, ktoré bolo historicky prvým kódovaním jedincov v genetických algoritmoch. Kódovanie s reálnymi číslami zadefinujeme v časti \ref{kap2:2.2:2.2.2:RealValued}. Nakoniec v časti \ref{kap2:2.2:2.2.3:Tree} uvedieme kódovanie pomocou stromov z teórie grafov.
 \subsection{Binárne kódovanie}\label{kap2:2.2:2.2.1:Binary}
 Binárne kódovanie je prvý typ kódovania, s ktorým pracovali prvé, originálne genetické algoritmy.
-Tento typ kódovania je najčastejšie používaným kódovaním jedincov už od dôb Hollanda. Obľúbenosť si získalo hlavne kvôli tomu, že 
+Tento typ kódovania je najčastejšie používaným kódovaním jedincov už od dôb Hollanda. Kódovanie uvažuje jedincov, ktorí sú reprezentovaní ako reťazec, ktorého hodnoty sú binárne. Obľúbenosť si získalo hlavne kvôli tomu, že 
 \begin{enumerate}
 \item Holland a jeho študenti sa venovali tomuto kódovaniu najdlhšie, čo malo za následok, že väčšinu teoretických poznatkov máme dokázaných pre binárne kódovanie (príkladom môže byť veta o schémach).
 \item Pre binárne kódovanie existujú určité heuristiky, ako správne zvoliť parametre genetického algoritmu.
 \end{enumerate}
-
 Veľa teoretických poznatkov sa dá rozšíriť aj na nebinárne kódovanie, no tieto rozšírenia nie sú tak dobre zdokumentované, ako to je v prípade originálneho GA.
+
+Praktické použitie genetického algoritmu, ktorý pracuje s binárne kódovanými jedincami je napríklad problém batohu. Batoh si je možné predstaviť ako binárny reťazec. Počet predmetov, ktoré je možné vložiť do batohu je $N$. Jednička v reťazci na mieste $i$ predstavuje vloženie predmetu $i$ do batohu, pričom batoh nezostane zároveň preplnený.
 \subsection{Kódovanie reálnymi číslami}\label{kap2:2.2:2.2.2:RealValued}
+Historicky prvé pokusy boli postavené na zakódovaní reálnych čísiel do bitovej reprezentácie. Dnes sa tento typ zakódovania nepoužíva dokým nie nato je naozaj dobrý dôvod. Neskoršie bolo kódovanie reálnych čísiel postavené na prirodzenejšej reprezentácii, ktorá zostala až dodnes. Takáto reprezentácia využíva reťazce, ktorého hodnoty sú čísla s plávajúcou čiarkou (floatové čísla). Genetické operátory musia byť zvolené tak, aby rešpektovali takéto reťazce reálnych čísiel.
+
+Príkladom použitia genetického algoritmu, ktorý pracuje s jedincami kódovanými reálnymi číslami je mnoho kriteriálna optimalizácia funkcií. Pri tejto úlohe sa snažíme minimalizovať (alebo maximalizovať) hodnotu viacero zadaných funkcií, čo je ale NP ťažké. Reálne kódovaný jedinec predstavuje bod v $n$-dimenzionálnom priestore. Genetický algoritmus prehľadáva priestor riešení a na konci vráti takého jedinca, ktorý čo najlepšie minimalizuje všetky funkcie.
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap2/encoding.pdf}}}
+\caption{Príklady kódovania jedincov. Na obrázku a) je binárne kódovaný jedinec/chromozóm. Na obrázku b) je jedinec kódovaný reálnymi číslami. Obidva chromozómy sú reprezentovaní reťazcami.}\label{fig:Encoding}
+\end{figure}
 
 \subsection{Kódovanie stromami}\label{kap2:2.2:2.2.3:Tree}
+
 
 \section{Výber jedincov}\label{kap2:2.3:Selection}
 
