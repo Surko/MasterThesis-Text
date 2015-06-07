@@ -9,6 +9,16 @@
   Year                     = {2014}
 }
 
+@Online{online-NSGA,
+  Title                    = {Non-dominated Sorting Genetic Algorithm},
+  Author                   = {Jason Brownlee},
+  Url                      = {http://www.cleveralgorithms.com/nature-inspired/evolution/nsga.html},
+  Year                     = {2015},
+
+  Owner                    = {kirrie},
+  Timestamp                = {2015.06.07}
+}
+
 @Online{online-DataMiningWeka,
   Title                    = {Weka 3: Data Mining Software in Java},
   Author                   = {Eibe Frank and Mark Hall and Peter Reutemann and Len Trigg},
@@ -103,10 +113,7 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Title                    = {Sex and genetic shuffling: the details},
   Editor                   = {University of California Museum of Paleontology's Understanding Evolution},
   Url                      = {http://evolution.berkeley.edu/evolibrary/article/side_0_0/shufflingdetails_01},
-  Year                     = {2015},
-
-  Owner                    = {kirrie},
-  Timestamp                = {2015.06.04}
+  Year                     = {2015}
 }
 
 @Www{online-SplitCriterias,

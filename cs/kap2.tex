@@ -142,8 +142,44 @@ Príklad GA pracujúceho s jedincami kódovanými stromami je metóda genetické
 \caption{Príklad kódovania jedincov pomocou stromov. Metóda genetického programovania pracuje s rovnako vyzerajúcimi jedincami. Strom na tomto obrázku kóduje funkciu $\left(X - \dfrac{Y}{8}\right) + \left(7 * \cos(Z)\right)$. Vnútorné vrcholy predstavujú operácie a listy predstavujú konštanty. }\label{fig:TreEncoding}
 \end{figure}
 
-
 \section{Vyhodnotenie jedincov}\label{kap2:2.3:Fitnesses}
+Dôležitou častou genetických algoritmov je nejakým spôsobom ohodnotiť kvalitu jedincov. V GA určuje kvalita jedinca väčšinou kvalitu riešenia zadanej úlohy, no zároveň popisuje aj to, ako často sa jedinec zúčastní procesu reprodukcie. Kritérium na ohodnotenie kvality jedinca je v GA nazývaná fitness. Úlohy, ktoré hodnotia jedinca iba podľa jedného kritéria nazývame jedno kriteriálne (angl. SOEA). 
+
+V prípade úloh, pri ktorých určujeme kvalitu jedinca pomocou dvoch a viacerých kritérií (mnoho kriteriálne problémy angl. MOEA) je potrebné pozmeniť genetický algoritmus tak, aby s nimi vedel nejako rozumne pracovať. To je možné dosiahnuť rôznymi metódami.
+V časti \ref{kap2:2.3:2.3.1:Weighted} predvedieme metódu, ktorá rieši problém viacerých kritérií agregáciou fitness. Ďalej v časti \ref{kap2:2.3:2.3.2:Priority} popíšeme metódu ktorá určuje kvalitu jedincov podľa kritérií, ktorých poradie definuje ich prioritu. Nakoniec v časti \ref{kap2:2.3:2.3.3:Pareto} zadefinujeme, ako sa dá určiť kvalita jedincov (pomocou viacerých kritérií) podľa paretovej fronty.
+
+\subsection{Agregácia fitness}\label{kap2:2.3:2.3.1:Weighted}
+Podstatou tejto techniky je vytvoriť zo zadaných kritérií $f_{i}$, $i=1,\ldots,k$ jednu hodnotu $f$. V podstate sa snažíme previesť mnoho kriteriálny problém na jedno kriteriálny problém. To sa dá docieliť spočítaním váženej sumy jednotlivých kritérií, kde váhy kritérií sú predom definované vo váhovom vektore $\mathbf{w}$ veľkosti $k$.
+\begin{equation}
+f = \sum_{i=1}^{k} w_{i} * f_{i} \nonumber
+\end{equation}
+Problém tejto metódy spočíva v správnom nastavení váhového vektora $\mathbf{w}$.
+\subsection{Prioritná fitness}\label{kap2:2.3:2.3.2:Priority}
+Prioritná fitness rieši mnoho kriteriálny problém tak, že priraďuje priority ku zadaním kritériám $f_{i}$, $i=1,\ldots,k$. Priorita môže byť predom určená podľa poradia v akom sú kritéria zadané (prvé kritérium má najväčšiu prioritu). Postup pri porovnaní dvoch jedincov potom funguje následovne:
+\begin{enumerate}
+\item Pre oboch jedincov spočítame hodnoty kritéria s najväčšou prioritou.
+\item Keď sú spočítané hodnoty rôzne, tak budú jedinci usporiadaní podľa nich.
+\item Keď sú spočítané hodnoty rovnaké, tak ďalej porovnávame jedincov podľa ďalšieho kritéria v poradí.
+\end{enumerate}
+
+\subsection{Pareto fitness}\label{kap2:2.3:2.3.3:Pareto}
+Táto metóda rieši mnoho kriteriálne problémy pomocou paretovej fronty. Na pochopenie pareto fronty je najprv nutné zadefinovať niektoré pojmy.
+\begin{def-sk}
+Nech $\{f_{1}, \ldots, f_{k}\}$ je množina kritérií (fitness funkcií) podľa ktorých chceme ohodnotiť jedincov. Ďalej nech $x$ a $y$ sú dva jedince. Jedinec $x$ slabo dominuje jedinca $y$, práve vtedy keď $f_{i}(x) \leq f_{i}(y)$, pre $i = 1,\ldots,k$.
+\end{def-sk}
+\begin{def-sk}
+Nech $\{f_{1}, \ldots, f_{k}\}$ je množina kritérií (fitness funkcií) podľa ktorých chceme ohodnotiť jedincov. Ďalej nech $x$ a $y$ sú dva jedince. Jedinec $x$ dominuje jedinca $y$, práve vtedy keď ho slabo dominuje a existuje $j$: $f_{j}(x) \le f_{j}(y)$.
+\end{def-sk}
+\begin{def-sk}
+Nech $x$ a $y$ sú dva jedinci. Jedinci $x$ a $y$ sú neporovnateľní, keď $x$ nedominuje $y$ ani $y$ nedominuje $x$.
+\end{def-sk}
+\begin{def-sk}
+Nech $x$ a $y$ sú dva jedinci. Jedinec $x$ nedominuje $y$ práve vtedy, keď $y$ slabo dominuje $x$ alebo sú $x$ a $y$ neporovnateľní.
+\end{def-sk}
+\begin{def-sk}
+Paretova fronta je definovaná ako množina jedincov, ktorí nie sú dominovaní žiadnym iným jedincom.
+\end{def-sk}
+Potom jedným z postupov ako vybrať správneho jedinca z paretovej fronty je postavený na tom, aké kritérium chceme najviac optimalizovať. Existujú aj iné techniky, ktoré sú založené na dominancii jedincov. Najznámejšie z nich sú NSGA a NSGAII \cite{online-NSGA}.
 
 \section{Výber jedincov}\label{kap2:2.4:Selection}
 
