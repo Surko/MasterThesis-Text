@@ -146,7 +146,7 @@ Príklad GA pracujúceho s jedincami kódovanými stromami je metóda genetické
 Dôležitou častou genetických algoritmov je nejakým spôsobom ohodnotiť kvalitu jedincov. V GA určuje kvalita jedinca väčšinou kvalitu riešenia zadanej úlohy, no zároveň popisuje aj to, ako často sa jedinec zúčastní procesu reprodukcie. Kritérium na ohodnotenie kvality jedinca je v GA nazývaná fitness. Úlohy, ktoré hodnotia jedinca iba podľa jedného kritéria nazývame jedno kriteriálne (angl. SOEA). 
 
 V prípade úloh, pri ktorých určujeme kvalitu jedinca pomocou dvoch a viacerých kritérií (mnoho kriteriálne problémy angl. MOEA) je potrebné pozmeniť genetický algoritmus tak, aby s nimi vedel nejako rozumne pracovať. To je možné dosiahnuť rôznymi metódami.
-V časti \ref{kap2:2.3:2.3.1:Weighted} predvedieme metódu, ktorá rieši problém viacerých kritérií agregáciou fitness. Ďalej v časti \ref{kap2:2.3:2.3.2:Priority} popíšeme metódu ktorá určuje kvalitu jedincov podľa kritérií, ktorých poradie definuje ich prioritu. Nakoniec v časti \ref{kap2:2.3:2.3.3:Pareto} zadefinujeme, ako sa dá určiť kvalita jedincov (pomocou viacerých kritérií) podľa paretovej fronty.
+V časti \ref{kap2:2.3:2.3.1:Weighted} predvedieme metódu, ktorá rieši problém viacerých kritérií agregáciou fitness. Ďalej v časti \ref{kap2:2.3:2.3.2:Priority} popíšeme metódu ktorá určuje kvalitu jedincov podľa kritérií s danou prioritou. Nakoniec v časti \ref{kap2:2.3:2.3.3:Pareto} zadefinujeme, ako sa dá určiť kvalita jedincov (pomocou viacerých kritérií) podľa paretovej fronty.
 
 \subsection{Agregácia fitness}\label{kap2:2.3:2.3.1:Weighted}
 Podstatou tejto techniky je vytvoriť zo zadaných kritérií $f_{i}$, $i=1,\ldots,k$ jednu hodnotu $f$. V podstate sa snažíme previesť mnoho kriteriálny problém na jedno kriteriálny problém. To sa dá docieliť spočítaním váženej sumy jednotlivých kritérií, kde váhy kritérií sú predom definované vo váhovom vektore $\mathbf{w}$ veľkosti $k$.
@@ -165,23 +165,50 @@ Prioritná fitness rieši mnoho kriteriálny problém tak, že priraďuje priori
 \subsection{Pareto fitness}\label{kap2:2.3:2.3.3:Pareto}
 Táto metóda rieši mnoho kriteriálne problémy pomocou paretovej fronty. Na pochopenie pareto fronty je najprv nutné zadefinovať niektoré pojmy.
 \begin{def-sk}
-Nech $\{f_{1}, \ldots, f_{k}\}$ je množina kritérií (fitness funkcií) podľa ktorých chceme ohodnotiť jedincov. Ďalej nech $x$ a $y$ sú dva jedince. Jedinec $x$ slabo dominuje jedinca $y$, práve vtedy keď $f_{i}(x) \leq f_{i}(y)$, pre $i = 1,\ldots,k$.
+Nech $F = \{f_{1}, \ldots, f_{k}\}$ je množina kritérií (fitness funkcií) podľa ktorých chceme ohodnotiť jedincov. Ďalej nech $x$ a $y$ sú dva jedince. Jedinec $x$ slabo dominuje jedinca $y$, práve vtedy keď $f_{i}(x) \leq f_{i}(y)$, pre $i = 1,\ldots,k$.
 \end{def-sk}
 \begin{def-sk}
-Nech $\{f_{1}, \ldots, f_{k}\}$ je množina kritérií (fitness funkcií) podľa ktorých chceme ohodnotiť jedincov. Ďalej nech $x$ a $y$ sú dva jedince. Jedinec $x$ dominuje jedinca $y$, práve vtedy keď ho slabo dominuje a existuje $j$: $f_{j}(x) \le f_{j}(y)$.
+Nech $F = \{f_{1}, \ldots, f_{k}\}$ je množina kritérií (fitness funkcií) podľa ktorých chceme ohodnotiť jedincov. Ďalej nech $x$ a $y$ sú dva jedince. Jedinec $x$ dominuje jedinca $y$, práve vtedy keď ho slabo dominuje a existuje $j$: $f_{j}(x) < f_{j}(y)$.
 \end{def-sk}
 \begin{def-sk}
-Nech $x$ a $y$ sú dva jedinci. Jedinci $x$ a $y$ sú neporovnateľní, keď $x$ nedominuje $y$ ani $y$ nedominuje $x$.
+Nech $x$ a $y$ sú dva jedinci. Potom hovoríme, že $x$ a $y$ sú neporovnateľní, keď $x$ nedominuje $y$ a $y$ nedominuje $x$.
 \end{def-sk}
 \begin{def-sk}
 Nech $x$ a $y$ sú dva jedinci. Jedinec $x$ nedominuje $y$ práve vtedy, keď $y$ slabo dominuje $x$ alebo sú $x$ a $y$ neporovnateľní.
 \end{def-sk}
 \begin{def-sk}
-Paretova fronta je definovaná ako množina jedincov, ktorí nie sú dominovaní žiadnym iným jedincom.
+Paretova fronta je definovaná ako množina jedincov, ktorí nie sú dominovaní žiadnym iným jedincom (obrázok \ref{fig:Pareto}).
 \end{def-sk}
 Potom jedným z postupov ako vybrať správneho jedinca z paretovej fronty je postavený na tom, aké kritérium chceme najviac optimalizovať. Existujú aj iné techniky, ktoré sú založené na dominancii jedincov. Najznámejšie z nich sú NSGA a NSGAII \cite{online-NSGA}.
 
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap2/pareto.pdf}}}
+\caption{Príklad ako vyzerá paretova fronta pre dve kritéria $f_{1}$ a $f_{2}$. Jedinci sú označení čiernymi štvorcami. Na paretovej fronte (čiara spájajúca štvorce) sú jedinci, ktorí nie sú dominovaní žiadnym iným jedincom.}\label{fig:Pareto}
+\end{figure}
+
 \section{Výber jedincov}\label{kap2:2.4:Selection}
+Po zadefinovaní kódovania a kritérií na vyhodnotenie jedincov môžeme definovať metódy na výber jedincov k reprodukcii, ďalej ako selekcia (angl. selection methods). Hlavnou úlohou týchto metód je vyberať tých najkvalitnejších jedincov z aktuálnej generácie (podobnosť s prirodzeným výberom z prírody) na vytvorenie novej, kvalitnejšej generácie potomkov.
+
+Pri riešení úloh je nutné rozumne zvoliť metódy výberu jedincov z populácie. Pri zvolení selekcie, ktorá by vyberala iba tých najlepších jedincov z populácie vedie ku novej generácii neoptimálnych jedincov. Toto by malo za následok zníženie diverzity, čo by viedlo k rýchlej konvergencii genetického algoritmu do nejakého lokálneho optima. Naopak výber selekcie, ktorá by vyberala jedincov náhodne vedie k príliš dlhej konvergencii genetického algoritmu. Univerzálny návod nato, ako zvoliť vhodnú selekciu v GA nie je doteraz známy.
+
+Príklady metód na výber jedincov sú: ruletová selekcia, turnajová selekcia, SUS (angl. stochastic universal sampling), sigmoidálna selekcia, \ldots. V tomto oddieli popíšeme tie najznámejšie z nich. V prvej časti \ref{kap2:2.4:2.4.1:RoulletteWheel} predvedieme ako funguje historicky prvá, ruletová selekcia, ktorá bola použitá v originálnom GA. V časti \ref{kap2:2.4:2.4.2:Tournament} zadefinujeme ako funguje výkonnejšia turnajová selekcia.
+
+\subsection{Ruletová selekcia}\label{kap2:2.4:2.4.1:RoulletteWheel}
+Originálny GA od Hollanda používal selekciu, ktorá vyberala jedincov podľa ich kvality. Takýto typ selekcie sa dá implementovať pomocou "rulety", ktorá funguje tak, že jedincom z populácie priraďujeme jednotlivé kúsky tejto pomyselnej "rulety". Veľkosť priradeného kúsku závisí na fitness hodnote jedinca. Pravdepodobnosť výberu je potom úmerná tejto fitness.
+
+Vytvorenie rulety prebieha v dvoch krokoch:
+\begin{enumerate}
+\item Sčítaj fitness každého jedinca.
+\item Prepočítaj pravdepodobnosti výberu jedincov (fitness jedinca vydelená sumou).
+\end{enumerate}
+Na vytvorenie $n$ jedincov otáčame touto "ruletou" $n$-krát. Vybraný jedinec je zaradený do novej populácie potomkov, na ktorú sú ďalej použité rôzne genetické operátory.
+\subsection{Turnajová selekcia}\label{kap2:2.4:2.4.2:Tournament}
+Turnajová selekcia je výpočtovo efektívnejšou a paralelne prístupnejšia metóda na výber jedincov. Oproti ruletovej selekcii je efektívnejšia v tom, že nemusí dva razy prechádzať populáciou a výber jednotlivcov je celkovo zjednodušený. Turnajová selekcia s parametrom $k$ funguje v dvoch krokoch
+\begin{enumerate}
+\item Vyber dvoch náhodných jedincov z populácie.
+\item Zvoľ náhodné číslo $r$, $0 < r < 1$. Keď je $r < k$, tak zvolíme jedinca s lepšou fitness. Inak zvolíme jedinca s menšou fitness. 
+\end{enumerate} 
 
 \section{Genetické operátory}\label{kap2:2.5:Operators}
 V prípade kódovania, ktoré využíva reprezentáciu reťazcom môžeme použiť
