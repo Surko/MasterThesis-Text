@@ -192,7 +192,7 @@ Po zadefinovaní kódovania a kritérií na vyhodnotenie jedincov môžeme defin
 
 Pri riešení úloh je nutné rozumne zvoliť metódy výberu jedincov z populácie. Pri zvolení selekcie, ktorá by vyberala iba tých najlepších jedincov z populácie vedie ku novej generácii neoptimálnych jedincov. Toto by malo za následok zníženie diverzity, čo by viedlo k rýchlej konvergencii genetického algoritmu do nejakého lokálneho optima. Naopak výber selekcie, ktorá by vyberala jedincov náhodne vedie k príliš dlhej konvergencii genetického algoritmu. Univerzálny návod nato, ako zvoliť vhodnú selekciu v GA nie je doteraz známy.
 
-Príklady metód na výber jedincov sú: ruletová selekcia, turnajová selekcia, SUS (angl. stochastic universal sampling), sigmoidálna selekcia, \ldots. V tomto oddieli popíšeme tie najznámejšie z nich. V prvej časti \ref{kap2:2.4:2.4.1:RoulletteWheel} predvedieme ako funguje historicky prvá, ruletová selekcia, ktorá bola použitá v originálnom GA. V časti \ref{kap2:2.4:2.4.2:Tournament} zadefinujeme ako funguje výkonnejšia turnajová selekcia.
+Príklady metód na výber jedincov sú: ruletová selekcia, turnajová selekcia, SUS (angl. stochastic universal sampling), sigmoidálna selekcia, \ldots. V tomto oddieli popíšeme tie najznámejšie z nich. V prvej časti \ref{kap2:2.4:2.4.1:RoulletteWheel} predvedieme ako funguje historicky prvá, ruletová selekcia, ktorá bola použitá v originálnom GA. V časti \ref{kap2:2.4:2.4.2:Tournament} predstavíme ako funguje výkonnejšia turnajová selekcia. V poslednej časti \ref{kap2:2.4:2.4.3:Elitism} zadefinujeme pojem elitizmus a akú úlohu zohráva pri výbere jedincov.
 
 \subsection{Ruletová selekcia}\label{kap2:2.4:2.4.1:RoulletteWheel}
 Originálny GA od Hollanda používal selekciu, ktorá vyberala jedincov podľa ich kvality. Takýto typ selekcie sa dá implementovať pomocou "rulety", ktorá funguje tak, že jedincom z populácie priraďujeme jednotlivé kúsky tejto pomyselnej "rulety". Veľkosť priradeného kúsku závisí na fitness hodnote jedinca. Pravdepodobnosť výberu je potom úmerná tejto fitness.
@@ -210,6 +210,9 @@ Turnajová selekcia je výpočtovo efektívnejšou a paralelne prístupnejšia m
 \item Zvoľ náhodné číslo $r$, $0 < r < 1$. Keď je $r < k$, tak zvolíme jedinca s lepšou fitness. Inak zvolíme jedinca s menšou fitness. 
 \end{enumerate} 
 
+\subsection{Elitizmus}\label{kap2:2.4:2.4.3:Elitism}
+
+
 \section{Genetické operátory}\label{kap2:2.5:Operators}
 V prípade kódovania, ktoré využíva reprezentáciu reťazcom môžeme použiť
 \begin{itemize}
@@ -218,4 +221,8 @@ V prípade kódovania, ktoré využíva reprezentáciu reťazcom môžeme použi
 \end{itemize}
 
 \section{Nastavenie správnych parametrov}\label{kap2:2.6:Parameters}
+Poslednou úlohou pri práci s genetickými algoritmami je problém nastavenia vhodných parametrov ako je veľkosť populácie, pravdepodobnosť kríženia, pravdepodobnosť mutácie prípadne hodnota elitizmu. Hľadanie riešenia pomocou GA závisí (pomimo vhodných operátorov) hlavne na týchto parametroch.
 
+Naivným spôsobom by bolo optimalizovať parametre postupne. Toto v prípade GA nie je možné, keďže sa jednotlivé parametre navzájom ovplyvňujú. Problém správneho nastavenia parametrov či adaptácie parametrov je obľúbenou témou genetických algoritmov a existuje mnoho článkov a výskumov, ktoré sa tejto téme venujú. Napriek tomu neexistuje žiadny univerzálny návod a väčšinou sa používajú také hodnoty parametrov, ktoré už v minulosti dávali dobré výsledky. Pravdaže nastavenie parametrov, vo väčšine prípadov, závisí na typu úlohy. To znamená, že jedno špeciálne nastavenie, ktoré dobre fungovalo na jednom type úlohy môže dávať katastrofické výsledky na inom type úlohy.
+
+Jeden z pánov, ktorý experimentoval s nastavením parametrov pričom dávali dobré výsledky, bol De Jong. Ten skúmal úlohy s binárnym kódovaním. Jeho experimenty uvádzali veľkosť populácie približne 50 až 100 jedincov. Pravdepodobnosť jednobodového kríženia bola približne 0.6 a pravdepodobnosť mutácie bola 0.001 na jeden bit. Iná skupina ľudí uviedla, že najvhodnejšími parametrami bola veľkosť populácie 20-30, pravdepodobnosť kríženia 0.75 až 0.95 a pravdepodobnosť mutácie na jeden bit 0.005 až 0.001. Jednou z možnosti ako nastaviť vhodné parametre je využiť ďalší GA na ich optimalizáciu.
