@@ -219,9 +219,9 @@ Dôležitou úlohou genetických algoritmov je zvoliť vhodné genetické operá
 Historicky su najviac preskúmané operátory kríženia a mutácie. Konkrétnejšie sú to tie, ktoré pracujú s binárne kódovanými jedincami. To je dôsledok toho, že originálny genetický algoritmus pracoval s týmto kódovaním. Operátory kríženia a mutácie nie sú ale jediné existujúce operátory. Pomimo nich existujú ďalšie ako je operátor inverzie, operátor skupín a iné.
 Existuje veľké množstvo článkov a výskumov, ktoré sa venujú tomu, ako správne zvoliť operátory pre danú úlohu. Výber vhodného operátora ale nie je ľahkou úlohou a doposiaľ neexistuje jednoduchý návod.
 
-V tomto oddieli predstavíme dva najznámejšie typy operátorov. V časti \ref{kap2:2.5:2.5.1:Crossover} zadefinujeme operátor kríženia. V druhej časti \ref{kap2:2.5:2.5.1:Mutation} predvedieme operátor mutácie. Obidve časti uvedú rôzne druhy krížení pre rôzne kódovania jedincov.
+V tomto oddieli predstavíme dva najznámejšie typy operátorov. V časti \ref{kap2:2.5:2.5.1:Crossover} zadefinujeme operátor kríženia. V druhej časti \ref{kap2:2.5:2.5.1:Mutation} predvedieme operátor mutácie. Obidve časti uvedú rôzne druhy krížení pre rôzne kódovania jedincov. Špeciálne sa zameriame na kódovania reprezentované reťazcami a kódovanie pomocou stromov.
 \subsection{Kríženie}
-Kríženie je jeden z najznámejších operátorov. V originálnom GA je kríženie hlavným operátorom. Hlavnou úlohou je prekombinovať vlastnosti rodičov (za určitej pravdepodobnosti), ktorí boli vybraní niektorou z metód selekcie. Pri tomto kombinovaní dúfame v to, že povedie k lepšej kvalite jedincov.
+Kríženie je jeden z najznámejších operátorov. V originálnom GA je kríženie hlavným operátorom, ktoré je zodpovedné za variabilitu a inováciu jedincov. Hlavnou úlohou je prekombinovať vlastnosti rodičov (za určitej pravdepodobnosti), ktorí boli vybraní niektorou z metód selekcie. Pri tomto kombinovaní dúfame v to, že povedie k lepšej kvalite jedincov.
 
 Typ použitého kríženia je závislý na kódovaní jedincov.
 V prípade kódovaní jedincov, ktorí sú reprezentovaní reťazcom (binárne, celočíselné, \ldots) môžeme použiť
@@ -232,8 +232,26 @@ V prípade kódovaní jedincov, ktorí sú reprezentovaní reťazcom (binárne, 
 U jedincov kódovaných pomocou stromov musíme použiť trochu inšie techniky kríženia. V tomto prípade nedávajú zmysel bodové ani uniformné kríženia. Najznámejším krížením, ktoré môžeme aplikovať na stromových jedincov funguje tak, že v každom jedincovi vyberieme jeden podstrom a navzájom ich vymeníme.
 
 \subsection{Mutácia}\label{kap2:2.5:2.5.1:Mutation}
+Mutácia je popri kríženiu ďalším obľúbeným operátorom. Jeho úlohou je robiť malé a väčšinou nové zmeny (za určitej pravdepodobnosti), ktoré nie sú možné dosiahnuť pomocou kríženia. Napriek tomu, že kríženie býva považované za primárny operátor je mutácia dôležitou súčasťou GA. Niektoré evolučné metódy dokonca využívajú iba operátor mutácie a neuvažujú kríženie (evolučné stratégie,\ldots). V niektorých článkoch je zase kríženie zadefinované ako makro mutácia. V tejto dobe existuje mnoho štúdií, ktoré sa venujú mutácií (skúmanie nových typov mutácií).
 
-
+Tak isto, ako pri kríženie, je operátor mutácie závislý na kódovaní jedincov. Delenie mutácií je oproti kríženiu trochu komplikovanejšie. V niektorých prípadoch je ešte nutné rozlišovať medzi zaťaženou a nezaťaženou mutáciou. 
+\begin{itemize}
+\item V prípade binárnych jedincov je najznámejšou mutáciou invertovanie jedného bitu.
+\item Mutácie u jedincov, ktorí sú kódovaní pomocou konečnej množiny symbolov, ďalej delíme na:
+\begin{itemize}
+\item nezaťažené, ktoré priraďujú do poľa v reťazci hodnotu z celého rozsahu množiny. Funkčné aj pre množiny s nedefinovaným usporiadaním.
+\item zaťažené, ktoré posúvajú aktuálnu hodnotu v poli reťazca. Nefunkčné, keď u množiny nedáva usporiadanie zmysel.  
+\end{itemize}
+\end{itemize}
+V prípade jedincov kódovaných pomocou stromov sú typickými metódami:
+\begin{itemize}
+\item zmena náhodného vrcholu na list,
+\item zmena ľubovoľného listu na vrchol,
+\item zmena hodnoty vo vrchole stromu, ktoré môžu byť znova rozdelené na zaťažené a nezaťažené varianty,
+\item priradenie nového podstromu (napríklad predom definovaná množina podstromov) do vrcholu stromu,
+\item rotácie inšpirované AVL-stromami,
+\item a mnoho ďalších.
+\end{itemize}
 
 \section{Nastavenie správnych parametrov}\label{kap2:2.6:Parameters}
 Poslednou úlohou pri práci s genetickými algoritmami je rozhodnúť, ako zvoliť vhodné hodnoty parametrov, ktorými sú veľkosť populácie, pravdepodobnosť kríženia, pravdepodobnosť mutácie prípadne hodnota elitizmu. Hľadanie riešenia pomocou GA závisí (pomimo vhodných operátorov) hlavne na týchto parametroch.
