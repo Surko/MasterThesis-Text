@@ -214,14 +214,29 @@ Turnajová selekcia je výpočtovo efektívnejšou a paralelne prístupnejšia m
 Elitizmus o hodnote $k$, ktorý bol po prvý krát predstavený pánom De Jong, je špeciálnym typom výberu jedincov. Na vybraných jedincoch nie sú aplikované žiadne operátory. Namiesto toho ich priamo zaraďujeme do ďalšej generácie. Týmto donútime genetický algoritmus, aby si ponechal určité percento $k$ najlepších jedincov a tým neriskujeme ich stratu (krížením alebo mutáciou). Bolo ukázané, že použitie elitizmu o hodnote $k$ signifikantne zlepšuje efektivitu genetických algoritmov.
 
 \section{Genetické operátory}\label{kap2:2.5:Operators}
-V prípade kódovania, ktoré využíva reprezentáciu reťazcom môžeme použiť
-\begin{itemize}
+Dôležitou úlohou genetických algoritmov je zvoliť vhodné genetické operátory, ktoré by boli v každom kroku aplikované. Úloha operátorov v GA je dôležitá hlavne kvôli tomu, že sa snažia čo najlepšie udržať diverzitu vytvorených populácií. Voľba vhodného genetického operátora závisí hlavne na kódovaní jedincov (spomínaných v oddieli \ref{kap2:2.2:Coding}), s ktorým musí byť konzistentné. Operátory musia byť ďalej zvolené rozumne, čo znamená nevyberať také operátory, ktoré by zbytočne znižovali efektivitu GA. 
+
+Historicky su najviac preskúmané operátory kríženia a mutácie. Konkrétnejšie sú to tie, ktoré pracujú s binárne kódovanými jedincami. To je dôsledok toho, že originálny genetický algoritmus pracoval s týmto kódovaním. Operátory kríženia a mutácie nie sú ale jediné existujúce operátory. Pomimo nich existujú ďalšie ako je operátor inverzie, operátor skupín a iné.
+Existuje veľké množstvo článkov a výskumov, ktoré sa venujú tomu, ako správne zvoliť operátory pre danú úlohu. Výber vhodného operátora ale nie je ľahkou úlohou a doposiaľ neexistuje jednoduchý návod.
+
+V tomto oddieli predstavíme dva najznámejšie typy operátorov. V časti \ref{kap2:2.5:2.5.1:Crossover} zadefinujeme operátor kríženia. V druhej časti \ref{kap2:2.5:2.5.1:Mutation} predvedieme operátor mutácie. Obidve časti uvedú rôzne druhy krížení pre rôzne kódovania jedincov.
+\subsection{Kríženie}
+Kríženie je jeden z najznámejších operátorov. V originálnom GA je kríženie hlavným operátorom. Hlavnou úlohou je prekombinovať vlastnosti rodičov (za určitej pravdepodobnosti), ktorí boli vybraní niektorou z metód selekcie. Pri tomto kombinovaní dúfame v to, že povedie k lepšej kvalite jedincov.
+
+Typ použitého kríženia je závislý na kódovaní jedincov.
+V prípade kódovaní jedincov, ktorí sú reprezentovaní reťazcom (binárne, celočíselné, \ldots) môžeme použiť
+\begin{itemize}\label{kap2:2.5:2.5.1:Crossover}
 \item bodové kríženie, ktoré je založené na zvolení náhodných $n$ bodov. Takto zvolené body rozdelia reťazec na $n+1$ častí, pričom sa odpovedajúce časti vymenia s určitou pravdepodobnosťou. Tento typ kríženia sa ďalej pomenováva podľa počtu vybraných bodov (jednobodové, dvojbodové, ...).
 \item uniformné kríženie, ktoré vypĺňa jednotlivé hodnoty z určitého rodiča. U každej položky hádžeme mincou, ktorá rozhoduje z ktorého rodiča hodnotu vyberieme.
 \end{itemize}
+U jedincov kódovaných pomocou stromov musíme použiť trochu inšie techniky kríženia. V tomto prípade nedávajú zmysel bodové ani uniformné kríženia. Najznámejším krížením, ktoré môžeme aplikovať na stromových jedincov funguje tak, že v každom jedincovi vyberieme jeden podstrom a navzájom ich vymeníme.
+
+\subsection{Mutácia}\label{kap2:2.5:2.5.1:Mutation}
+
+
 
 \section{Nastavenie správnych parametrov}\label{kap2:2.6:Parameters}
-Poslednou úlohou pri práci s genetickými algoritmami je problém nastavenia vhodných parametrov ako je veľkosť populácie, pravdepodobnosť kríženia, pravdepodobnosť mutácie prípadne hodnota elitizmu. Hľadanie riešenia pomocou GA závisí (pomimo vhodných operátorov) hlavne na týchto parametroch.
+Poslednou úlohou pri práci s genetickými algoritmami je rozhodnúť, ako zvoliť vhodné hodnoty parametrov, ktorými sú veľkosť populácie, pravdepodobnosť kríženia, pravdepodobnosť mutácie prípadne hodnota elitizmu. Hľadanie riešenia pomocou GA závisí (pomimo vhodných operátorov) hlavne na týchto parametroch.
 
 Naivným spôsobom by bolo optimalizovať parametre postupne. Toto v prípade GA nie je možné, keďže sa jednotlivé parametre navzájom ovplyvňujú. Problém správneho nastavenia parametrov či adaptácie parametrov je obľúbenou témou genetických algoritmov a existuje mnoho článkov a výskumov, ktoré sa tejto téme venujú. Napriek tomu neexistuje žiadny univerzálny návod a väčšinou sa používajú také hodnoty parametrov, ktoré už v minulosti dávali dobré výsledky. Pravdaže nastavenie parametrov, vo väčšine prípadov, závisí na typu úlohy. To znamená, že jedno špeciálne nastavenie, ktoré dobre fungovalo na jednom type úlohy môže dávať katastrofické výsledky na inom type úlohy.
 
