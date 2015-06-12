@@ -13,10 +13,7 @@
   Title                    = {Non-dominated Sorting Genetic Algorithm},
   Author                   = {Jason Brownlee},
   Url                      = {http://www.cleveralgorithms.com/nature-inspired/evolution/nsga.html},
-  Year                     = {2015},
-
-  Owner                    = {kirrie},
-  Timestamp                = {2015.06.07}
+  Year                     = {2015}
 }
 
 @Online{online-DataMiningWeka,
@@ -113,6 +110,12 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Title                    = {Sex and genetic shuffling: the details},
   Editor                   = {University of California Museum of Paleontology's Understanding Evolution},
   Url                      = {http://evolution.berkeley.edu/evolibrary/article/side_0_0/shufflingdetails_01},
+  Year                     = {2015}
+}
+
+@Online{online-geneticsoverview,
+  Title                    = {GGenetic Overview},
+  Url                      = {http://www.newbornscreening.info/Pro/genetics.html},
   Year                     = {2015}
 }
 
