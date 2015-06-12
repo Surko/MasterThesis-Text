@@ -258,16 +258,16 @@ Tak isto, ako pri krížení, je operátor mutácie závislý na kódovaní jedi
 \item V prípade binárnych jedincov je najznámejšou mutáciou invertovanie jedného bitu.
 \item Mutácie u jedincov, ktorí sú kódovaní pomocou konečnej množiny symbolov, ďalej delíme na:
 \begin{itemize}
-\item nezaťažené, ktoré priraďujú do poľa v reťazci hodnotu z celého rozsahu množiny. Funkčné aj pre množiny s nedefinovaným usporiadaním.
-\item zaťažené, ktoré posúvajú aktuálnu hodnotu v poli reťazca. Nefunkčné, keď u množiny nedáva usporiadanie zmysel.  
+\item nezaťažené, ktoré zmenia hodnotu prvku $x \in D_x$ reťazca na novú hodnotu $x'$ vybranú rovnomerne náhodne z množiny $D_x$. Toto funguje aj pre množiny s nedefinovaným usporiadaním.
+\item zaťažené, ktoré zmenia aktuálnu hodnotu prvku $x \in D_x, D_x = [l_x,u_x]$ reťazca na novú hodnotu $x' = x \pm \delta, \delta \in [l_x - x, u_x - x]$. Toto nie je možné, keď $D_x$ nemá definované usporiadanie. Hodnota parametra $\delta$ je väčšinou na začiatku algoritmu väčšia a postupne sa blíži k nule.
 \end{itemize}
 \end{itemize}
 V prípade jedincov kódovaných pomocou stromov sú typickými metódami:
 \begin{itemize}
-\item zmena náhodného vrcholu na list,
-\item zmena ľubovoľného listu na vrchol,
-\item zmena hodnoty vo vrchole stromu, ktoré môžu byť znova rozdelené na zaťažené a nezaťažené varianty,
-\item priradenie nového podstromu (napríklad predom definovaná množina podstromov) do vrcholu stromu,
+\item zmena náhodného vnútorného uzlu na list,
+\item zmena ľubovoľného listu na vnútorný uzol,
+\item zmena hodnoty uzlu stromu, ktorá môže mať znova zaťaženú alebo nezaťaženú variantu,
+\item priradenie nového podstromu (napríklad z predom definovanej množiny podstromov) do vrcholu stromu,
 \item rotácie inšpirované AVL-stromami,
 \item a mnoho ďalších.
 \end{itemize}
@@ -277,4 +277,4 @@ Poslednou úlohou pri práci s genetickými algoritmami je rozhodnúť, ako zvol
 
 Naivným spôsobom by bolo optimalizovať parametre postupne. Toto v prípade GA nie je možné, keďže sa jednotlivé parametre navzájom ovplyvňujú. Problém správneho nastavenia parametrov či adaptácie parametrov je obľúbenou témou genetických algoritmov a existuje mnoho článkov a výskumov, ktoré sa tejto téme venujú. Napriek tomu neexistuje žiadny univerzálny návod a väčšinou sa používajú také hodnoty parametrov, ktoré už v minulosti dávali dobré výsledky. Pravdaže nastavenie parametrov, vo väčšine prípadov, závisí na typu úlohy. To znamená, že jedno špeciálne nastavenie, ktoré dobre fungovalo na jednom type úlohy môže dávať katastrofické výsledky na inom type úlohy.
 
-Jeden z pánov, ktorý experimentoval s nastavením parametrov pričom dávali dobré výsledky, bol De Jong. Ten skúmal úlohy s binárnym kódovaním. Jeho experimenty uvádzali veľkosť populácie približne 50 až 100 jedincov. Pravdepodobnosť jednobodového kríženia bola približne 0.6 a pravdepodobnosť mutácie bola 0.001 na jeden bit. Iná skupina ľudí uviedla, že najvhodnejšími parametrami bola veľkosť populácie 20-30, pravdepodobnosť kríženia 0.75 až 0.95 a pravdepodobnosť mutácie na jeden bit 0.005 až 0.001. Jednou z možnosti ako nastaviť vhodné parametre je využiť ďalší GA na ich optimalizáciu.
+De Jong, ktorý skúmal úlohy s binárnym kódovaním, uvádza veľkosť populácie približne 50 až 100 jedincov, pravdepodobnosť jednobodového kríženia približne 0.6 a pravdepodobnosť mutácie 0.001 na jeden bit. Iná skupina ľudí uviedla, že najvhodnejšími parametrami bola veľkosť populácie 20-30, pravdepodobnosť kríženia 0.75 až 0.95 a pravdepodobnosť mutácie na jeden bit 0.005 až 0.001. Jednou z možnosti ako nastaviť vhodné parametre je využiť ďalší GA na ich optimalizáciu.
