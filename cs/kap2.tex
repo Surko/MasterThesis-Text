@@ -248,7 +248,13 @@ V prípade kódovaní jedincov, ktoré sú reprezentované reťazcom (binárne, 
 \item bodové kríženie, ktoré je založené na zvolení náhodných $n$ bodov z vnútrajšku reťazca. Takto zvolené body rozdelia reťazec na $n+1$ častí, pričom sa odpovedajúce časti vymenia s určitou pravdepodobnosťou. Tento typ kríženia sa ďalej pomenováva podľa počtu vybraných bodov (jednobodové, dvojbodové, ...).
 \item uniformné kríženie, ktoré vypĺňa položky reťazca náhodne z prvého alebo druhého rodiča. U každej položky hádžeme mincou, ktorá rozhoduje, z ktorého rodiča hodnotu okopírujeme.
 \end{itemize}
-U jedincov kódovaných pomocou stromov musíme použiť trochu iné techniky kríženia. V tomto prípade nedávajú zmysel bodové ani uniformné kríženia. Najznámejším krížením, ktoré môžeme aplikovať na stromových jedincov funguje tak, že v každom jedincovi vyberieme jeden podstrom a navzájom ich vymeníme.
+U jedincov kódovaných pomocou stromov musíme použiť trochu iné techniky kríženia. V tomto prípade nedávajú zmysel bodové ani uniformné kríženia. Najznámejším krížením, ktoré môžeme aplikovať na stromových jedincov funguje tak, že v každom jedincovi vyberieme jeden podstrom a navzájom ich vymeníme (obrázok \ref{fig:TreeCrossover}).
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap2/treecrossover.pdf}}}
+\caption{Príklad kríženia stromových jedincov, ktoré vymieňa náhodné zvolené podstromy medzi dvoma rodičovskými jedincami. Zvolené podstromy v rodičovských jedincoch sú na obrázku označené prerušovanou čiarou. Vytvorení potomkovia sú v spodnej časti obrázka.}\label{fig:TreeCrossover}
+\end{figure}
 
 \subsection{Mutácia}\label{kap2:2.5:2.5.1:Mutation}
 Mutácia je popri kríženiu ďalším obľúbeným operátorom. Jeho úlohou je umožniť malé a väčšinou nové zmeny (za určitej pravdepodobnosti), ktoré nie sú možné dosiahnuť pomocou kríženia. Napriek tomu, že kríženie býva považované za primárny operátor je mutácia dôležitou súčasťou GA. Niektoré evolučné metódy dokonca využívajú iba operátor mutácie a neuvažujú kríženie (evolučné stratégie,\ldots). V niektorých článkoch je zase kríženie zadefinované ako makro mutácia. V súčasnosti existuje mnoho štúdií, ktoré sa venujú mutácií. To zahŕňa skúmanie existujúcich mutácií ale aj snaha o vytvorenie úplne nových. 
@@ -264,13 +270,19 @@ Tak isto, ako pri krížení, je operátor mutácie závislý na kódovaní jedi
 \end{itemize}
 V prípade jedincov kódovaných pomocou stromov sú typickými metódami:
 \begin{itemize}
-\item zmena náhodného vnútorného uzlu na list,
+\item zmena náhodného vnútorného uzlu na list (obrázok \ref{fig:TreeMutation}),
 \item zmena ľubovoľného listu na vnútorný uzol,
 \item zmena hodnoty uzlu stromu, ktorá môže mať znova zaťaženú alebo nezaťaženú variantu,
 \item priradenie nového podstromu (napríklad z predom definovanej množiny podstromov) do vrcholu stromu,
 \item rotácie inšpirované AVL-stromami,
 \item a mnoho ďalších.
 \end{itemize}
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap2/treemutation.pdf}}}
+\caption{Príklad mutácie stromového jedinca, ktorá zmení náhodne zvolený vnútorný uzol na list. Zvolený vnútorný uzol je na obrázku označený prerušovanou čiarou.}\label{fig:TreeMutation}
+\end{figure}
 
 \section{Nastavenie správnych parametrov}\label{kap2:2.6:Parameters}
 Poslednou úlohou pri práci s genetickými algoritmami je rozhodnúť, ako zvoliť vhodné hodnoty parametrov, ktorými sú veľkosť populácie, pravdepodobnosť kríženia, pravdepodobnosť mutácie prípadne hodnota elitizmu. Hľadanie riešenia pomocou GA závisí (pomimo vhodných operátorov) hlavne na týchto parametroch.
