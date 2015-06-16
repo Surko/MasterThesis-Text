@@ -42,7 +42,8 @@ V tejto časti zadefinujeme, čo sú to genetické algoritmy, pričom jednotliv�
 
 Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a z nich nájsť to najlepšie. Algoritmus pracuje s jedincami, na ktorých aplikujeme operátory kríženia a mutácie. Podľa kvality jedinca rozhodujeme, či sa bude s jedincom ďalej pracovať. V genetických algoritmoch získavame riešenia z jedincov po príslušnom dekódovaní. Jedinec a chromozóm sú v rámci genetických algoritmov synonymami. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši po dekódovaní zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
 
-Tieto algoritmy fungujú v cykloch, ktoré predstavujú generácie. V každom cykle pracujeme s množinou jedincov, populáciou pre tú danú generáciu. V každej generácii sa snažíme zlepšiť aktuálne riešenie vytváraním nových jedincov. Z populácie, ktorá vznikne v poslednej generácii si potom vyberieme najkvalitnejšieho jedinca.
+Tieto algoritmy fungujú v cykloch, ktoré predstavujú generácie. V každom cykle pracujeme s množinou jedincov, populáciou pre tú danú generáciu. V každej generácii sa snažíme zlepšiť aktuálne riešenie vytváraním nových jedincov.
+Z populácie, ktorá vznikne v poslednej generácii si potom vyberieme najkvalitnejšieho jedinca. Genetický algoritmus môže mať dodatočne zadefinované zastavovacie kritérium, ktoré ho donúti predčasne zastaviť (maximálny počet cyklov, nezlepšenie kvality jedincov v $x$ generáciách). Na obrázku \ref{fig:GAdiagram} uvádzame diagram generického genetického algoritmu.
 
 Každý problém môže mať odlišnú reprezentáciu jedincov. S týmto súvisí úloha, ako rozumne a správne zakódovať jedincov. Takýchto kódovaní je mnoho, no medzi najznámejšie patrí binárne kódovanie, znakové kódovanie, kódovanie reálnymi číslami, ale aj kódovanie pomocou stromov, gramatík a mnoho ďalších. Napríklad pri použití binárneho kódovania sú jedinci reprezentovaní ako bitové reťazce. V tomto prípade sú jednotlivé prvky alebo skupiny prvkov reťazca génmi jedinca. Alela je v prípade bitovej hodnoty 0 alebo 1. Pri iných reprezentáciách sú alely komplikovanejšie.
 
@@ -51,8 +52,16 @@ Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi, pričom podo
 
 Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcami si môžeme vystačiť s jednobodovým alebo uniformným krížením. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
 
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=275pt]{../img/kap2/gadiagram.pdf}}}
+\caption{Diagram genetického algoritmu. V strede obrázku je cyklus zodpovedný za vytváranie novej generácie reprodukovaním aktuálnej generácie. V každom cykle zároveň testujeme či sa má algoritmus predčasne zastaviť (vyhodnotenie kritéria zastavenie). Na konci algoritmu väčšinou vyberieme jedinca, ktorý kóduje najlepšie riešenie úlohy.}\label{fig:GAdiagram}
+\end{figure}
+
 \subsection{Jednoduchý genetický algoritmus}\label{kap2:2.1:2.1.3:SimpleGeneticAlgo}
-Podľa doposiaľ zadefinovaných pojmov môžeme predviesť, ako taký genetický algoritmus pracuje. Majme daný problém P, ktorý chceme vyriešiť. Pre zjednodušenie uvažujme jedincov s binárnym kódovaním. Zjednodušený Algoritmus \ref{fig:geneticAlgoritm} potom popisuje jednotlivé kroky genetického algoritmu, ktorý rieši problém P.
+Z predchádzajúcej časti vieme, že celý proces (generického) genetického algoritmu sa dá popísať diagramom na obrázku \ref{fig:GAdiagram}. Podľa tohoto diagramu a doposiaľ zadefinovaných pojmov môžeme uviesť pseudokód genetického algoritmu.
+
+Pre lepšiu predstavu uvádzame zjednodušenú formu genetického algoritmu, ktorý uvažuje jedincov s binárnym kódovaním. Majme daný problém P, ktorý chceme vyriešiť. Zjednodušený Algoritmus \ref{fig:geneticAlgoritm} potom popisuje jednotlivé kroky genetického algoritmu, ktorý rieši problém P.
 \begin{algorithm}
 \floatname{algorithm}{Algoritmus}
 \caption{Kroky zjednodušeného genetického algoritmu, ktorý pracuje s binárne kódovanými jedincami.}\label{fig:geneticAlgoritm}
@@ -92,25 +101,26 @@ $max\_pop$ - maximálny počet jedincov v populácií \\
 \State \Return \parbox[t]{300pt}{$O_1$,$O_2$, ktorí boli vybraný z aktuálnej populácie $A$ podľa ich kvality. Kvalita je daná kritériom $f$.}
 \EndFunction
 \\
-\Function{Kríženie}{$J1$,$J2$}
+\Function{Kríženie}{$J_1$,$J_2$}
 \State $r \gets [0,1]$
 \If{$r < p_k$}
-	\State \Return \parbox[t]{300pt}{$K_1$,$K_2$, ktorí vznikli prekrížením jedincov $J1$,$J2$ v ľubovoľnom mieste reťazca.}
+	\State \Return \parbox[t]{300pt}{$K_1$,$K_2$, ktorí vznikli prekrížením jedincov $J_1$,$J_2$ v ľubovoľnom mieste reťazca.}
 	\Else 
 	\State \Return $J_1$,$J_2$
 \EndIf 
 \EndFunction
 \\
-\Function{Mutácia}{$J_1$,$J_2$}
+\Function{Mutácia}{$K_1$,$K_2$}
 \State $r \gets [0,1]$
 \If{$r < p_m$}
-	\State \Return \parbox[t]{300pt}{$O_1$,$O_2$, ktorí vznikli mutáciou jedincov $J1$,$J2$ v jednotlivých bodoch reťazca.}
+	\State \Return \parbox[t]{300pt}{$O_1$,$O_2$, ktorí vznikli mutáciou jedincov $K_1$,$K_2$ v jednotlivých bodoch reťazca.}
 	\Else 
-	\State \Return $J_1$,$J_2$
+	\State \Return $K_1$,$K_2$
 \EndIf 
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
+
 Každé volanie procedúry Krok spočíta novú generáciu jedincov. Počet generácii závisí na type úlohy, no zvyčajne ich býva 50 až 500. V poslednom volaní procedúry Krok dostaneme konečnú populáciu. Aby sme mohli zreprodukovať výsledky, je kvôli stochastickému správaniu algoritmu nutné zvoliť rovnaké semienko (angl. seed) pre pseudo-náhodný generátor čísiel.
 
 Väčšina genetických algoritmov pracuje podobne ako zjednodušený algoritmus. Najväčšia zmena býva v tom akú taktiku na výber jedincov a aké kríženie a mutáciu použijeme. Komplikovanejšie genetické algoritmy taktiež používajú princíp elitizmu, ktorý ovplyvňuje aké percento najlepších rodičovských jedincov sa dostane do ďalšej generácie bez zmeny
@@ -118,10 +128,22 @@ Väčšina genetických algoritmov pracuje podobne ako zjednodušený algoritmus
 \section{Kódovanie jedincov}\label{kap2:2.2:Coding}
 V predchádzajúcom oddieli sme uviedli, že jedince môžu byť rôzne kódované. Výber správneho kódovania záleží hlavne na type úlohy, ktorú riešime. Každé jedno z kódovaní pracuje s určitou reprezentáciou jedinca. Aplikácie genetických algoritmov používajú buď reprezentácie s pevne zadanou dĺžkou, alebo s variabilnou dĺžkou. Existuje mnoho kódovaní jedincov, pričom tie najznámejšie sú
 \begin{itemize}
-\item binárne, pri ktorom reprezentujeme jedinca bitovým reťazcom/poľom určitej dĺžky,
-\item znakové, kde je jedinec reprezentovaný reťazcom, ktorého hodnoty sú z konečnej množiny symbolov,
-\item celočíselné, kde je jedinec reprezentovaný reťazcom celočíselných hodnôt,
-\item kódovanie s reálnymi číslami, pri ktorom reprezentujeme jedinca reťazcom, ktorého hodnoty sú reálne čísla,
+\item binárne, pri ktorom reprezentujeme jedinca $J$ bitovým reťazcom/poľom dĺžky $k$,
+\begin{equation}
+J = (j_1,\ldots,j_k), j_i \in \{0,1\}, 1 \leq i \leq k, \nonumber
+\end{equation}
+\item znakové, kde je jedinec $J$ reprezentovaný reťazcom dĺžky $k$, ktorého hodnoty sú z konečnej množiny symbolov $S$,
+\begin{equation}
+J = (j_1,\ldots,j_k), j_i \in S, 1 \leq i \leq k, \nonumber
+\end{equation}
+\item celočíselné, kde je jedinec $J$ reprezentovaný reťazcom celočíselných hodnôt dĺžky $k$ z určitého intervalu,
+\begin{equation}
+J = (j_1,\ldots,j_k), j_i \in [a_i,b_i], [a_i,b_i] \subseteq \mathbb{Z}, 1 \leq i \leq k, \nonumber
+\end{equation}
+\item kódovanie s reálnymi číslami, pri ktorom reprezentujeme jedinca $J$ reťazcom, ktorého hodnoty sú reálne čísla z určitého intervalu reálnych čísiel $\mathbb{R}$,
+\begin{equation}
+J = (j_1,\ldots,j_k), j_i \in [a_i,b_i], [a_i,b_i] \subseteq \mathbb{R}, 1 \leq i \leq k, \nonumber
+\end{equation}
 \item stromové, kde sú jedince reprezentované ako stromy z teórie grafov,
 \item a mnoho ďalších ako je permutačné kódovanie, maticové kódovanie, kódovanie založené na gramatikách, ...
 \end{itemize} 
@@ -208,16 +230,19 @@ Príklady metód na výber jedincov sú: ruletová selekcia, turnajová selekcia
 \subsection{Ruletová selekcia}\label{kap2:2.4:2.4.1:RoulletteWheel}
 Originálny GA od Hollanda používal selekciu, ktorá vyberala jedincov podľa ich kvality. Takýto typ selekcie sa dá implementovať pomocou ``rulety'', ktorá funguje tak, že jedincom z populácie priraďujeme jednotlivé kúsky tejto pomyselnej ``rulety''. Veľkosť prideleného kúsku závisí na fitness hodnote jedinca. Pravdepodobnosť výberu je potom úmerná tejto fitness. Aby sme mohli túto metódu selekcie použiť budeme predpokladať, že hodnota fitness každého jedinca je nezáporná.
 
-Vytvorenie rulety prebieha v dvoch krokoch:
+Vytvorenie rulety pre $n$ jedincov prebieha v dvoch krokoch:
 \begin{enumerate}
-\item Sčítaj fitness každého jedinca.
-\item Spočítaj pravdepodobnosti výberu jedincov (fitness jedinca vydelená sumou).
+\item Sčítaj fitness $f_i, 1 \leq i \leq n$ každého jedinca.
+\item Spočítaj pravdepodobnosti výberu $\{p_1,\ldots,p_n\}$ týchto jedincov (fitness jedinca vydelená sumou).
+\begin{equation}
+p_i = \dfrac{f_i}{\sum_{j=1}^{n}f_i}, 1 \leq i \leq n \nonumber
+\end{equation}
 \end{enumerate}
 Na vytvorenie $n$ jedincov otáčame touto ``ruletou'' $n$-krát. Vybraný jedinec je zaradený do novej populácie potomkov, na ktorú sú potom použité ďalšie genetické operátory.
 \subsection{Turnajová selekcia}\label{kap2:2.4:2.4.2:Tournament}
 Turnajová selekcia je výpočtovo efektívnejšia a lepšie paralelizovateľná metóda výberu jedincov. Oproti ruletovej selekcii je efektívnejšia v tom, že nemusí dva razy prechádzať populáciou a výber jednotlivcov je celkovo zjednodušený. Turnajová selekcia nad populáciou $P$ s parametrom $p \in [0,1]$ napodobuje priebeh skutočného $k$-turnaja a funguje následovne
 \begin{enumerate}
-\item Vytvoríme množinu jedincov $T = \{j_1,\ldots,j_k\}, 2 \leq k \leq \lvert P \lvert$ a $j_i \in P, 1 < i < k$.
+\item Vytvoríme množinu jedincov $T = \{j_1,\ldots,j_k\}, 2 \leq k \leq \lvert P \lvert$ a $j_i \in P, 1 \leq i \leq k$.
 \item Dokým je $\lvert T \rvert \ne 1$ tak
 \begin{enumerate}
 \item Z množiny $T$ vyberieme dvoch jedincov $j_a$ a $j_b$. 
