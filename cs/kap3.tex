@@ -1,16 +1,127 @@
 \chapter{Genetická tvorba rozhodovacích stromov}
+V tejto kapitole popíšeme genetický algoritmus, ktorý sa dá použiť na tvorbu rozhodovacích stromov a ktorým je inšpirovaná implementácia v nástroji Weka. Popíšeme, ako musíme pozmeniť kódovanie jedincov tak, aby títo jedinci čo najlepšie popisovali rozhodovacie stromy. Zavedené operátory v predchádzajúcej kapitole rozšírime o definície nových operátorov. Ostatné súčasti genetického algoritmu iba pripomenieme a spojíme ich s pojmami z rozhodovacích stromov.
 
-\section{Základný popis}
+Najskôr v oddieli \ref{kap3:3.1:Intro} popíšeme úlohu tvorby stromov s genetickými algoritmami. Ďalej v oddieli \ref{kap3:3.2:Encoding} pripomenieme kódovanie jedincov pomocou stromov a ako sa dá toto kódovanie pozmeniť na reprezentovanie rozhodovacích stromov. V oddieli \ref{kap3:3.3:Fitness} uvedieme ako budú vyzerať fitness funkcie v takomto genetickom algoritme. Na konci v oddieli \ref{kap3:3.4:Operators} pripomenieme operátor kríženia stromov a zadefinujeme dve nové mutácie stromov.
+\section{Základný popis}\label{kap3:3.1:Intro}
+V tomto oddieli popíšeme genetický algoritmus, ktorý sa dá použiť na vytvorenie rozhodovacích stromov. Dve najznámejšie techniky tvorby rozhodovacích stromov pomocou genetických algoritmov sú
+\begin{itemize}
+\item vytváranie stromov úplne od počiatku,
+\item optimalizovanie už vytvorených stromov a zlepšenie ich prediktívnych schopností.
+\end{itemize}
+V tejto práci sa skorej zameriame na optimalizovanie vytvorených stromov. Vytvorené stromy nebudú náhodné, ale do určitej miery kvalitné. Kvalitu stromu vynútime použitím nejakého vhodného indukčného algoritmu (spomínaných v časti \ref{kap1:2.6:DTEvaluation}).
 
-\subsection{Popis algoritmu}
+Celým procesom optimalizácie stromov sa snažíme čo najviac vylepšiť generalizačnú chybu. Z časti \ref{kap1:2.6:2.6.1:Generalize} vieme že generalizačnú chybu môžeme aproximovať rozdelením dátovej množiny $D$ na trénovaciu $T$ a validačnú $V$ podmnožinu. Na najlepšiu aproximáciu generalizačnej chyby musíme použiť $n$-násobnú krížovú validáciu. Obidva prístupy pomáhajú pri ohodnotení kvality vytvorených stromov. Algoritmus by mal kvôli tomu poskytovať nejakú formu aproximácie generalizačnej chyby.
 
+Počiatočné rozhodovacie stromy, ktoré budeme optimalizovať teda budú vybudované z trénovacej množiny $T$. Operátory slúžia na prehľadávanie priestoru riešení a vyhľadanie nových rozhodovacích stromov. Typy operátorov sú zvolené tak, aby čo najviac diverzifikovali populáciu. Na vyberanie jedincov je vhodné použiť elitizmus (kvôli udržaniu najlepšieho riešenia) a turnajovú selekciu hlavne kvôli jej spomínaným výhodám v časti \ref{kap2:2.4:2.4.2:Tournament}. Genetickým algoritmom vytvárame nové stromy, ktorých kvalitu určíme podľa zvolených kritérií. Výpočet fitness z jedného alebo viacerých kritérií je spomínaná v časti \ref{kap2:2.3:Fitnesses}. Validačná množina $V$ bude slúžiť na otestovanie modelu a na zistenie generalizačnej chyby.
 
-\section{Kódovanie jedincov}
+Pri tomto genetickom algoritme zavedieme nový krok, ktorý sa nazýva selekcia prostredia. Tá má za úlohu vyberať jedincov do ďalšej generácie z doposiaľ vytvorených jedincov. Selekcia prostredia je vykonaná po aplikovaní operátorov a slúži na vyfiltrovanie úplne nevhodných jedincov. Typy selekcie prostredia sú rovnaké ako v prípade obyčajnej selekcie, no najvhodnejšie je znova zvoliť turnajovú selekciu.
 
-\section{Kvalita jedincov}
+\subsection{Popis algoritmu}\label{kap3:3.1:3.1.1:AlgoInfo}
+V časti \ref{kap2:2.1:2.1.2:AboutGeneticAlgo}, konkrétne na obrázku \ref{fig:GAdiagram}, sme zaviedli diagram genetického algoritmu. Podľa tohoto diagramu sa riadi aj chovanie genetického algoritmu na optimalizovanie stromov.
+V algoritme \ref{fig:DTGeneticAlgo} uvádzame pseudo kód tohoto genetického optimalizovania stromov a popisujeme jeho jednotlivé súčasti.
+Pseudokód je dokonca veľmi podobný tomu spomenutému v časti \ref{kap2:2.1:2.1.3:SimpleGeneticAlgo} v algoritme \ref{fig:geneticAlgoritm}.
 
-\section{Operátory na tvorbu rozhodovacích stromov}
+\begin{algorithm}
+\floatname{algorithm}{Algoritmus}
+\caption{Kroky genetického algoritmu, ktorý optimalizuje rozhodovacie stromy vytvorené indukčným algoritmom.}\label{fig:DTGeneticAlgo}
+$A$ - aktuálna populácia rozhodovacích stromov \\
+$O$ - potomkovia \\
+$e$ - hodnota elitizmu, $e \in [0,1]$ \\
+$s$ - zvolená metóda selekcie (turnaj, ruleta) \\
+$sp$ - zvolená metóda selekcie prostredia (turnaj, ruleta).
+$f_1,\ldots,f_p$ - $p$ kritérií na vyhodnotenie rozhodovacích stromov pre problém $P$\\
+$k_{1},\ldots,k_{q}$ - pravdepodobnosti $q$ operátorov kríženia\\
+$m_{1},\ldots,m_{r}$ - pravdepodobnosti $r$ operátorov mutácie\\
+$max\_gen$ - maximálny počet generácií \\
+$max\_pop$ - maximálny počet jedincov v populácií \\
+\bigskip
+\begin{algorithmic}[1]
+\State \parbox[t]{400pt}{$A \gets $ populácia $max\_pop$ stromov, vytvorených nejakým indukčným algoritmom.}
+\For{$i = 1$ \textbf{to} $max\_gen$} 
+	\State \textsc{Krok()}
+\EndFor
+\\
+\Procedure{Krok}{\mbox{}}
+	\State $O \gets \{\}$
+	\State \textsc{VyhodnoťPopuláciu()}
+	\While{$\lvert O \rvert < max\_pop$}
+		\State \parbox[t]{350pt}{$J_1,J_2 \gets $ \textsc{VyberJedincov()}}
+		\State \parbox[t]{350pt}{$K_1,K_2 \gets $ \textsc{Kríženie($J_1$,$J_2$)}}
+		\State \parbox[t]{350pt}{$O_1 \gets $ \textsc{Mutácia($K_1$)}}
+		\State \parbox[t]{350pt}{$O_2 \gets $ \textsc{Mutácia($K_2$)}}		
+		\State $O \gets \{O_1,O_2\} \cup O$.
+	\EndWhile
+	\State $E \gets$ \textsc{Elitizmus($A$)}.
+	\State $A \gets  E$ $\cup$ \textsc{VyberJedincovProstredia($O$)} 
+\EndProcedure
+\\
+\Procedure{VyhodnoťPopuláciu}{\mbox{}}
+\State \parbox[t]{350pt}{každý rozhodovací strom $x$ z aktuálnej populácie $A$ ohodnoť kritériami $f_i, 1 \leq i \leq p$.}
+\EndProcedure
+\\
+\Function{VyberJedincov}{\mbox{}}
+\State \Return \parbox[t]{300pt}{$O_1$,$O_2$ vybraných metódou selekcie $s$.}
+\EndFunction
+\\
+\Function{Kríženie}{$J_1$,$J_2$}
+\State $K_1, K_2 \gets J_1, J_2$
+\For{$i = 1$ \textbf{to} $q$} 
+\State $r \gets [0,1]$
+\If{$r < k_i$}
+	\State \parbox[t]{300pt}{kríženie $i$ aplikuj na stromy $K_1, K_2$.}
+\EndIf
+\State \Return $K_1$,$K_2$
+\EndFor 
+\EndFunction
+\algstore{myalg}
+\end{algorithmic}
+\end{algorithm}
 
-\subsection{Kríženia}
-\subsection{Mutácie}
+\begin{algorithm}
+\ContinuedFloat
+\caption{pokračovanie...}
+\begin{algorithmic}[1]
+\algrestore{myalg}
+\Function{Mutácia}{$K$}
+\State $M \gets K$
+\For{$i = 1$ \textbf{to} $r$} 
+\State $r \gets [0,1]$
+\If{$r < m_i$}
+	\State \parbox[t]{300pt}{mutáciu $i$ aplikuj na strom $M$.}
+\EndIf
+\State \Return $M$
+\EndFor 
+\EndFunction
+\\
+\Function{Elitizmus}{$A$}
+\State \Return \parbox[t]{300pt}{použitie elitizmu o hodnote $e$, ktorý je zadefinovaný v časti \ref{kap2:2.4:2.4.3:Elitism}.}
+\EndFunction
+\\
+\Function{VyberJedincovProstredia}{$O$}
+\State \Return \parbox[t]{300pt}{rozhodovacie stromy vybrané z $O$ selekciou prostredia $sp$. Počet vybraných stromov bude rovný $(1-e)max\_pop$.}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\section{Kódovanie jedincov}\label{kap3:3.2:Encoding}
+Jedinci v tomto genetickom algoritme sú rozhodovacie stromy. Z časti \ref{kap1:2.3:2.3.2:DT} vieme, že rozhodovací strom ma štruktúru stromu. Najrozumnejším kódovaním je preto kódovanie pomocou stromov, ktoré bolo spomínané v predchádzajúcej kapitole, v časti \ref{kap2:2.2:2.2.3:Tree}. Toto kódovanie je ale nutné upraviť tak, aby bralo do úvahy zbytok definície rozhodovacieho stromu spolu s kritériami delenia zadefinovanými v oddieli \ref{kap1:2.5:DTSplitCriterias}.
+
+Vnútorný uzol $u$ rozhodovacieho stromu je kódovaný trojicou $(a,z,h)$, kde $a$ predstavuje atribút delenia, $z$ znamienko použité pri delení a $v$ hodnotu, v ktorej delíme dátovú množinu. Vieme, že typ atribútu môže byť numerický alebo kategoriálny. Podľa typu atribútu $a$ v trojici $(a,z,h)$ sú $z$ a $h$ definované takto:
+\begin{itemize}
+\item v prípade numerického atribútu $a$ je $z$  porovnávacie znamienko a $h$ reálna hodnota.
+\item v prípade kategoriálneho atribútu $a$ je $z$ a $h$ nedefinované, keďže každá hrana vychádzajúca z vrcholu predstavuje jedno rozhodnutie.
+\end{itemize}
+Počet hrán vychádzajúcich z vrcholu $u$ sa riadi typom atribútu $a$.
+\begin{itemize}
+\item V prípade numerického atribútu sú hrany dve.
+\item V prípade kategoriálneho atribútu je počet hrán rovný veľkosti definičného oboru atribútu $a$ (každá hrana predstavuje rozhodnutie).
+\end{itemize}
+Listový uzol $l$ rozhodovacieho stromu obsahuje iba hodnotu $c$, ktorá predstavuje klasifikáciu.
+Takto kódovaný rozhodovací strom je na obrázku \ref{fig:DTEncode}.
+\section{Kvalita jedincov}\label{kap3:3.3:Fitness}
+
+\section{Operátory na tvorbu rozhodovacích stromov}\label{kap3:3.4:Operators}
+
+\subsection{Kríženia}\label{kap3:3.4:3.4.1:Crossover}
+\subsection{Mutácie}\label{kap3:3.4:3.4.2:Mutation}
 

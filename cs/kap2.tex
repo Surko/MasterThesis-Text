@@ -73,9 +73,9 @@ $p_{k}$ - pravdepodobnosť kríženia \\
 $p_{m}$ - pravdepodobnosť mutácie \\
 $max\_gen$ - maximálny počet generácií \\
 $max\_pop$ - maximálny počet jedincov v populácií \\
-\begin{algorithmic}
+\begin{algorithmic}[1]
 
-\State \parbox[t]{400pt}{$A \gets $ vygeneruj náhodnú populáciu $n$ jedincov (každý z nich dĺžky $k$).}
+\State \parbox[t]{400pt}{$A \gets $ vygeneruj náhodnú populáciu $max\_pop$ jedincov (každý z nich dĺžky $k$).}
 
 \For{$i = 1$ \textbf{to} $max\_gen$} 
 	\State \textsc{Krok()}
@@ -87,7 +87,8 @@ $max\_pop$ - maximálny počet jedincov v populácií \\
 	\While{$\lvert O \rvert < max\_pop$}
 		\State \parbox[t]{350pt}{$J_1,J_2 \gets $ \textsc{VyberJedincov()}}
 		\State \parbox[t]{350pt}{$K_1,K_2 \gets $ \textsc{Kríženie($J_1$,$J_2$)}}
-		\State \parbox[t]{350pt}{$O_1,O_2 \gets $ \textsc{Mutácia($K_1$,$K_2$)}}
+		\State \parbox[t]{350pt}{$O_1 \gets $ \textsc{Mutácia($K_1$)}}
+		\State \parbox[t]{350pt}{$O_2 \gets $ \textsc{Mutácia($K_2$)}}
 		\State $O \gets \{O_1,O_2\} \cup O$.
 	\EndWhile
 	\State $A \gets O$.
@@ -98,24 +99,24 @@ $max\_pop$ - maximálny počet jedincov v populácií \\
 \EndProcedure
 \\
 \Function{VyberJedincov}{\mbox{}}
-\State \Return \parbox[t]{300pt}{$O_1$,$O_2$, ktorí boli vybraný z aktuálnej populácie $A$ podľa ich kvality. Kvalita je daná kritériom $f$.}
+\State \Return \parbox[t]{300pt}{$O_1$,$O_2$ vybraných ruletovou selekciou, ktorú uvádzame v časti \ref{kap2:2.4:2.4.1:RoulletteWheel}.}
 \EndFunction
 \\
 \Function{Kríženie}{$J_1$,$J_2$}
 \State $r \gets [0,1]$
 \If{$r < p_k$}
-	\State \Return \parbox[t]{300pt}{$K_1$,$K_2$, ktorí vznikli prekrížením jedincov $J_1$,$J_2$ v ľubovoľnom mieste reťazca.}
+	\State \Return \parbox[t]{300pt}{$K_1$,$K_2$, ktorí vznikli aplikovaním jednoduchého jednobodového kríženia na jedincov $J_1$,$J_2$ zadefinovaného v časti \ref{kap2:2.5:2.5.1:Crossover} }
 	\Else 
 	\State \Return $J_1$,$J_2$
 \EndIf 
 \EndFunction
 \\
-\Function{Mutácia}{$K_1$,$K_2$}
+\Function{Mutácia}{$K$}
 \State $r \gets [0,1]$
 \If{$r < p_m$}
-	\State \Return \parbox[t]{300pt}{$O_1$,$O_2$, ktorí vznikli mutáciou jedincov $K_1$,$K_2$ v jednotlivých bodoch reťazca.}
+	\State \Return \parbox[t]{300pt}{$O$, ktorí vznikol aplikovaním mutácie z časti \ref{kap2:2.5:2.5.2:Mutation} na jedinca $K$ v jednotlivých bodoch reťazca.}
 	\Else 
-	\State \Return $K_1$,$K_2$
+	\State \Return $K$
 \EndIf 
 \EndFunction
 \end{algorithmic}
@@ -240,17 +241,27 @@ p_i = \dfrac{f_i}{\sum_{j=1}^{n}f_i}, 1 \leq i \leq n \nonumber
 \end{enumerate}
 Na vytvorenie $n$ jedincov otáčame touto ``ruletou'' $n$-krát. Vybraný jedinec je zaradený do novej populácie potomkov, na ktorú sú potom použité ďalšie genetické operátory.
 \subsection{Turnajová selekcia}\label{kap2:2.4:2.4.2:Tournament}
-Turnajová selekcia je výpočtovo efektívnejšia a lepšie paralelizovateľná metóda výberu jedincov. Oproti ruletovej selekcii je efektívnejšia v tom, že nemusí dva razy prechádzať populáciou a výber jednotlivcov je celkovo zjednodušený. Turnajová selekcia nad populáciou $P$ s parametrom $p \in [0,1]$ napodobuje priebeh skutočného $k$-turnaja a funguje následovne
+Turnajová selekcia je výpočtovo efektívnejšia a lepšie paralelizovateľná metóda výberu jedincov. Oproti ruletovej selekcii je efektívnejšia v tom, že nemusí dva razy prechádzať populáciou a výber jednotlivcov je celkovo zjednodušený. Turnajová selekcia veľkosti $k$, nad populáciou $P$ s parametrom $p \in [0,1]$ napodobuje priebeh skutočného turnaja. Parameter $k$ je pevne daná konštanta $2 \leq k \leq \lvert P \lvert$. Výber jedincov vyzerá následovne:
 \begin{enumerate}
-\item Vytvoríme množinu jedincov $T = \{j_1,\ldots,j_k\}, 2 \leq k \leq \lvert P \lvert$ a $j_i \in P, 1 \leq i \leq k$.
-\item Dokým je $\lvert T \rvert \ne 1$ tak
+\item Náhodne zvolíme $k$ jedincov z populácie $P$, čím vytvoríme množinu jedincov $T$, ktorí sa zúčastnia turnaja.
+\begin{equation}
+T = \{j_1,\ldots,j_k\}, j_i \in P, 1 \leq i \leq k.\nonumber
+\end{equation}
+\item Nech $f$ je fitness funkcia, ktorou určujeme kvalitu jedincov. Množinu $T$ usporiadame zostupne podľa $f$ a vytvoríme množinu $U$,
+\begin{equation}
+U = \{u_1,\ldots,u_k\}, u_i \in T, f(u_m) \geq f(u_n), 1 \leq m < n \leq k.\nonumber
+\end{equation}
+\item Dokým $\lvert U \rvert \ne 1$ tak
 \begin{enumerate}
-\item Z množiny $T$ vyberieme dvoch jedincov $j_a$ a $j_b$. 
-\item Zvolíme náhodné číslo $r$,$0 < r < 1$
-\item Nech $f$ je fitness funkcia, ktorou určujeme kvalitu jedincov. Keď $f(j_a) < f(j_b)$  a $r < p$, tak vyberieme jedinca $j_b$. V opačnom prípade odstránime jedinca $j_b$ z $T$.
+\item Z množiny $U$ vyberieme prvých dvoch jedincov $u_a$ a $u_b$ ($f(u_a) \geq f(u_b)$).
+\item Zvolíme náhodné číslo $r$,$0 \leq r \leq 1$
+\item  Keď $r < p$, tak vyberieme jedinca $u_a$. V opačnom prípade odstránime jedinca $u_a$ z $U$.
 \end{enumerate}
-\item Vyberieme jediného jedinca v množiny $T$. 
-\end{enumerate} 
+\item V množine $U$ zostal jediný jedinec, ktorý je výstupom tejto selekcie.
+\end{enumerate}
+
+Variácie turnajovej selekcie vychádzajú z rôzne nastavených parametrov $k$ a $p$. Keď je $p=1$ tak hovoríme o deterministickej turnajovej selekcii. V prípade $k=1$ je turnajová selekcia iba náhodný výber jedincov z populácie $P$. Najčastejším nastavením veľkosti turnaja $k$ je $k=2$ (pri genetických algoritmoch) a $k=7$ (pri genetickom programovaní).
+ 
 Turnajová selekcia má aj ďalšie výhody.
 Túto selekciu je možné použiť i tam, kde fitness není explicitne daná. Neexistuje tu predpoklad, že hodnota fitness musí byť nezáporná.
 
@@ -281,7 +292,7 @@ U jedincov kódovaných pomocou stromov musíme použiť trochu iné techniky kr
 \caption{Príklad kríženia stromových jedincov, ktoré vymieňa náhodné zvolené podstromy medzi dvoma rodičovskými jedincami. Zvolené podstromy v rodičovských jedincoch sú na obrázku označené prerušovanou čiarou. Vytvorení potomkovia sú v spodnej časti obrázka.}\label{fig:TreeCrossover}
 \end{figure}
 
-\subsection{Mutácia}\label{kap2:2.5:2.5.1:Mutation}
+\subsection{Mutácia}\label{kap2:2.5:2.5.2:Mutation}
 Mutácia je popri kríženiu ďalším obľúbeným operátorom. Jeho úlohou je umožniť malé a väčšinou nové zmeny (za určitej pravdepodobnosti), ktoré nie sú možné dosiahnuť pomocou kríženia. Napriek tomu, že kríženie býva považované za primárny operátor je mutácia dôležitou súčasťou GA. Niektoré evolučné metódy dokonca využívajú iba operátor mutácie a neuvažujú kríženie (evolučné stratégie,\ldots). V niektorých článkoch je zase kríženie zadefinované ako makro mutácia. V súčasnosti existuje mnoho štúdií, ktoré sa venujú mutácií. To zahŕňa skúmanie existujúcich mutácií ale aj snaha o vytvorenie úplne nových. 
 
 Tak isto, ako pri krížení, je operátor mutácie závislý na kódovaní jedincov. Delenie mutácií je oproti kríženiu trochu komplikovanejšie. V niektorých prípadoch je ešte nutné rozlišovať medzi zaťaženou a nezaťaženou mutáciou. 
