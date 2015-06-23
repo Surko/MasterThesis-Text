@@ -16,10 +16,9 @@ Počiatočné rozhodovacie stromy, ktoré budeme optimalizovať teda budú vybud
 
 Pri tomto genetickom algoritme zavedieme nový krok, ktorý sa nazýva selekcia prostredia. Tá má za úlohu vyberať jedincov do ďalšej generácie z doposiaľ vytvorených jedincov. Selekcia prostredia je vykonaná po aplikovaní operátorov a slúži na vyfiltrovanie úplne nevhodných jedincov. Typy selekcie prostredia sú rovnaké ako v prípade obyčajnej selekcie, no najvhodnejšie je znova zvoliť turnajovú selekciu.
 
-\subsection{Popis algoritmu}\label{kap3:3.1:3.1.1:AlgoInfo}
 V časti \ref{kap2:2.1:2.1.2:AboutGeneticAlgo}, konkrétne na obrázku \ref{fig:GAdiagram}, sme zaviedli diagram genetického algoritmu. Podľa tohoto diagramu sa riadi aj chovanie genetického algoritmu na optimalizovanie stromov.
 V algoritme \ref{fig:DTGeneticAlgo} uvádzame pseudo kód tohoto genetického optimalizovania stromov a popisujeme jeho jednotlivé súčasti.
-Pseudokód je dokonca veľmi podobný tomu spomenutému v časti \ref{kap2:2.1:2.1.3:SimpleGeneticAlgo} v algoritme \ref{fig:geneticAlgoritm}.
+Pseudokód je veľmi podobný tomu spomenutému v časti \ref{kap2:2.1:2.1.3:SimpleGeneticAlgo} v algoritme \ref{fig:geneticAlgoritm}.
 
 \begin{algorithm}
 \floatname{algorithm}{Algoritmus}
@@ -36,7 +35,7 @@ $max\_gen$ - maximálny počet generácií \\
 $max\_pop$ - maximálny počet jedincov v populácií \\
 \bigskip
 \begin{algorithmic}[1]
-\State \parbox[t]{400pt}{$A \gets $ populácia $max\_pop$ stromov, vytvorených nejakým indukčným algoritmom.}
+\State \parbox[t]{375pt}{$A \gets $ populácia $max\_pop$ stromov, vytvorených nejakým indukčným algoritmom.}
 \For{$i = 1$ \textbf{to} $max\_gen$} 
 	\State \textsc{Krok()}
 \EndFor
@@ -118,8 +117,26 @@ Počet hrán vychádzajúcich z vrcholu $u$ sa riadi typom atribútu $a$.
 \end{itemize}
 Listový uzol $l$ rozhodovacieho stromu obsahuje iba hodnotu $c$, ktorá predstavuje klasifikáciu.
 Takto kódovaný rozhodovací strom je na obrázku \ref{fig:DTEncode}.
-\section{Kvalita jedincov}\label{kap3:3.3:Fitness}
 
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics{../img/kap3/dtgen.pdf}}}
+\caption{Príklad kódovania rozhodovacieho stromu v genetickom algoritme na tvorbu rozhodovacích stromov. Nech hodnoty výstupného atribútu sú z množiny $C=\{c_0,c_1\}$. Na obrázku sú tri vnútorné uzly s atribútami $x,y,z$. Atribúty $x$ a $y$ sú numerické a $z$ je kategoriálny. Hrany predstavujú rozhodnutia a počet hrán závisí na type atribútu uzlu. Listové vrcholy obsahujú hodnoty z množiny $C$ (klasifikáciu).}\label{fig:DTEncode}
+\end{figure}
+
+\section{Fitness funkcie}\label{kap3:3.3:Fitness}
+Fitness funkcie v genetickom algoritme určujú, ako často budú jedinci vyberaní k reprodukcii. Tieto funkcie volíme podľa toho, čo chceme v rozhodovacom strome optimalizovať. Voľba vhodnej fitness funkcie v genetickom algoritme ovplyvňuje
+\begin{itemize}
+\item prediktívne vlastnosti stromu, kam zaraďujeme trénovaciu, testovaciu a generalizačnú chybu. 
+\item zložitosť stromu, do ktorého zaraďujeme napríklad výšku stromu, počet listov, počet vrcholov.
+\end{itemize} 
+
+Na optimalizovanie prediktívnych vlastností stromu musíme voliť také fitness funkcie, ktoré s predikciou súvisia. Tieto fitness funkcie väčšinou počítajú určitú metriku z matice chybovosti. Na zlepšenie prediktívnych vlastností nie je každá metrika vhodná. Kvôli tomu je lepšie sa zamerať iba na niektoré z nich.
+V časti \ref{kap1:2.6:2.6.2:Alternatives} sme definovali alternatívne metriky založené na matici chybovosti, ktoré môžeme použiť pri ohodnocovaní rozhodovacích stromov. Spomínané kríteriá citlivosti, precíznosti, špecificity a f-metriky sú vhodnými kandidátmi fitness funkcií. Na zlepšenie generalizačnej chyby by mal byť výpočet metrík prevedený na validačnej množine.
+
+Z časti \ref{kap2:2.2:2.2.3:Tree} vieme, že stromy v genetických algoritmoch majú tendenciu narastať a že je ich nutné limitovať. To sa dá dosiahnuť voľbou fitness funkcií, ktoré ovplyvňujú zložitosť stromu. Tieto fitness funkcie využívajú metriky zadefinované v časti \ref{kap1:2.6:2.6.3:TreeLook}.
+
+Voľba správnych fitness funkcií je obtiažnou úlohou. Optimálne by mali zvolené funkcie zmenšovať generalizačnú chybu a zbytočne nekomplikovať stromy. Tým sa úloha stáva multi-kriteriálny problém a výpočet kvality jedinca je vykonaná jednou z metód spomínaných v časti \ref{kap2:2.3:Fitnesses}.
 \section{Operátory na tvorbu rozhodovacích stromov}\label{kap3:3.4:Operators}
 
 \subsection{Kríženia}\label{kap3:3.4:3.4.1:Crossover}
