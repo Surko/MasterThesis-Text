@@ -274,7 +274,7 @@ Pre úspešnú aplikáciu genetických algoritmov je kľúčovým krokom voľba 
 Historicky sú najviac preskúmané operátory kríženia a mutácie. Konkrétnejšie sú to tie, ktoré pracujú s binárne kódovanými jedincami. To je dôsledok toho, že originálny genetický algoritmus pracoval s týmto kódovaním. Operátory kríženia a mutácie nie sú ale jediné existujúce operátory. Pomimo nich existujú ďalšie ako je operátor inverzie a iné.
 Existuje veľké množstvo článkov a výskumov, ktoré sa venujú tomu, ako správne zvoliť operátory pre danú úlohu. Výber vhodného operátora ale nie je ľahkou úlohou a doposiaľ neexistuje jednoduchý návod.
 
-V tomto oddieli predstavíme dva najznámejšie typy operátorov. V časti \ref{kap2:2.5:2.5.1:Crossover} zadefinujeme operátor kríženia. V druhej časti \ref{kap2:2.5:2.5.1:Mutation} predvedieme operátor mutácie. Uvedieme rôzne druhy kríženia a mutácií pre odlišné kódovania jedincov. Špeciálne sa zameriame na kódovania reprezentované reťazcami a kódovanie pomocou stromov.
+V tomto oddieli predstavíme dva najznámejšie typy operátorov. V časti \ref{kap2:2.5:2.5.1:Crossover} zadefinujeme operátor kríženia. V druhej časti \ref{kap2:2.5:2.5.2:Mutation} predvedieme operátor mutácie. Uvedieme rôzne druhy kríženia a mutácií pre odlišné kódovania jedincov. Špeciálne sa zameriame na kódovania reprezentované reťazcami a kódovanie pomocou stromov.
 \subsection{Kríženie}
 Kríženie je jeden z najznámejších operátorov. V originálnom GA je kríženie hlavným operátorom, ktorý je zodpovedný za variabilitu a inováciu jedincov. Hlavnou úlohou je skombinovať vlastnosti rodičov (za určitej pravdepodobnosti), ktorí boli vybraní niektorou z metód selekcie. Pri tomto kombinovaní dúfame v to, že povedie ku kvalitnejším jedincom.
 
@@ -298,7 +298,7 @@ Mutácia je popri kríženiu ďalším obľúbeným operátorom. Jeho úlohou je
 Tak isto, ako pri krížení, je operátor mutácie závislý na kódovaní jedincov. Delenie mutácií je oproti kríženiu trochu komplikovanejšie. V niektorých prípadoch je ešte nutné rozlišovať medzi zaťaženou a nezaťaženou mutáciou. 
 \begin{itemize}
 \item V prípade binárnych jedincov je najznámejšou mutáciou invertovanie jedného bitu.
-\item Mutácie u jedincov, ktorí sú kódovaní pomocou konečnej množiny symbolov, ďalej delíme na:
+\item Mutácie u jedincov, ktorí sú kódovaní pomocou konečnej množiny symbolov $D_x$, ďalej delíme na:
 \begin{itemize}
 \item nezaťažené, ktoré zmenia hodnotu prvku $x \in D_x$ reťazca na novú hodnotu $x'$ vybranú rovnomerne náhodne z množiny $D_x$. Toto funguje aj pre množiny s nedefinovaným usporiadaním.
 \item zaťažené, ktoré zmenia aktuálnu hodnotu prvku $x \in D_x, D_x = [l_x,u_x]$ reťazca na novú hodnotu $x' = x \pm \delta, \delta \in [l_x - x, u_x - x]$. Toto nie je možné, keď $D_x$ nemá definované usporiadanie. Hodnota parametra $\delta$ je väčšinou na začiatku algoritmu väčšia a postupne sa blíži k nule.
@@ -309,7 +309,7 @@ V prípade jedincov kódovaných pomocou stromov sú typickými metódami:
 \item zmena náhodného vnútorného uzlu na list (obrázok \ref{fig:TreeMutation}),
 \item zmena ľubovoľného listu na vnútorný uzol,
 \item zmena hodnoty uzlu stromu, ktorá môže mať znova zaťaženú alebo nezaťaženú variantu,
-\item priradenie nového podstromu (napríklad z predom definovanej množiny podstromov) do vrcholu stromu,
+\item priradenie nového podstromu (napríklad z predom definovanej množiny podstromov) do uzlu stromu,
 \item rotácie inšpirované AVL-stromami,
 \item a mnoho ďalších.
 \end{itemize}

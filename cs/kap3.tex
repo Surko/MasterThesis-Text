@@ -108,7 +108,7 @@ Jedinci v tomto genetickom algoritme sú rozhodovacie stromy. Z časti \ref{kap1
 Vnútorný uzol $u$ rozhodovacieho stromu je kódovaný trojicou $(a,z,h)$, kde $a$ predstavuje atribút delenia, $z$ znamienko použité pri delení a $v$ hodnotu, v ktorej delíme dátovú množinu. Vieme, že typ atribútu môže byť numerický alebo kategoriálny. Podľa typu atribútu $a$ v trojici $(a,z,h)$ sú $z$ a $h$ definované takto:
 \begin{itemize}
 \item v prípade numerického atribútu $a$ je $z$  porovnávacie znamienko a $h$ reálna hodnota.
-\item v prípade kategoriálneho atribútu $a$ je $z$ a $h$ nedefinované, keďže každá hrana vychádzajúca z vrcholu predstavuje jedno rozhodnutie.
+\item v prípade kategoriálneho atribútu $a$ je $z$ a $h$ nedefinované. Každá hrana vychádzajúca z vrcholu predstavuje jedno rozhodnutie.
 \end{itemize}
 Počet hrán vychádzajúcich z vrcholu $u$ sa riadi typom atribútu $a$.
 \begin{itemize}
@@ -138,7 +138,38 @@ Z časti \ref{kap2:2.2:2.2.3:Tree} vieme, že stromy v genetických algoritmoch 
 
 Voľba správnych fitness funkcií je obtiažnou úlohou. Optimálne by mali zvolené funkcie zmenšovať generalizačnú chybu a zbytočne nekomplikovať stromy. Tým sa úloha stáva multi-kriteriálny problém a výpočet kvality jedinca je vykonaná jednou z metód spomínaných v časti \ref{kap2:2.3:Fitnesses}.
 \section{Operátory na tvorbu rozhodovacích stromov}\label{kap3:3.4:Operators}
+V oddieli \ref{kap2:2.5:Operators} sme zadefinovali operátory a uviedli ich dôležitosť v genetických algoritmoch. V prípade genetickej tvorby rozhodovacích stromov sú operátory zodpovedné za vytváranie nových rozhodovacích stromov. Tieto operátory by mali pracovať v súlade s dátovými množinami. To znamená nevykonávať náhodné zmeny, ale iba také, ktoré nejako súvisia s dátami.
+
+Z predchádzajúcich častí vieme, že v genetických algoritmoch najprv vykonávame kríženie a potom mutáciu. Taktiež vieme, že každý operátor aplikujeme iba za určitej pravdepodobnosti a že toto nastavenie je neľahkou úlohou. Jednou z možností je inšpirovať sa oddielom \ref{kap2:2.6:Parameters}.
+
+V časti \ref{kap3:3.4:3.4.1:Crossover} pripomenieme kríženie podstromov. Potom v časti \ref{kap3:3.4:3.4.2:Mutation} predvedieme dva nové druhy mutácií.
 
 \subsection{Kríženia}\label{kap3:3.4:3.4.1:Crossover}
-\subsection{Mutácie}\label{kap3:3.4:3.4.2:Mutation}
+V časti \ref{kap2:2.5:2.5.1:Crossover} sme definovali operátor kríženia podstromov. V prípade stromov je toto jediné kríženie, ktoré dáva zmysel a preto ho budeme používať aj pri genetickej tvorbe rozhodovacích stromov. 
 
+\subsection{Mutácie}\label{kap3:3.4:3.4.2:Mutation}
+V časti \ref{kap2:2.5:2.5.2:Mutation} sme uviedli rôzne druhy mutácií jedincov kódovaných stromami. Po menších úpravách sa dajú tieto mutácie použiť v genetickom algoritme na tvorbu rozhodovacích stromov. Mutácie je väčšinou nutné upraviť tak, aby brali do úvahy kódovanie uvedené v časti \ref{kap3:3.2:Encoding}. Jednotlivé mutácie by tiež mali vykonávať zmeny, ktoré sú v súlade s danou dátovou množinou $D$ (zabránenie náhodných zmien).
+
+Jednou zo spomínaných mutácií, ktorú použijeme v genetickom algoritme, je zmena náhodného vnútorného uzlu na list. Nech $(a,z,h)$ je zakódovaný vnútorný uzol rozhodovacieho stromu $S$. Ďalej nech $D'$ je podmnožina množiny $D$ získaná delením $D$ podľa vrcholov (konkrétne atribútov a hodnôt vo vrchole) na ceste z koreňa do vrcholu $(a,z,h)$. Táto mutácia odstráni všetky odchádzajúce hrany z tohoto vrcholu a zmení $(a,z,h)$ na $c$. Hodnota $c$ je maximálna trieda výstupného atribútu v množine $D'$. Chovanie mutácie je na obrázku \ref{fig:mutnodetoleaf}.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap3/mutnodetoleaf.pdf}}}
+\caption{}\label{fig:mutnodetoleaf}
+\end{figure}
+
+Druhou spomínanou mutácia je priradenie nového podstromu do nejakého uzlu stromu. Podstromy budú generované z množiny $D$ a uložené v predom definovanej množine podstromov. Nové podstromy na priradenie by nemali byť náhodné a ani zbytočne veľké. Mutácia preto používa rozhodovacie korene (definícia \ref{kap1:2.3:2.3.2:stumpDT}). 
+
+Nech $K$ je množina podstromov (rozhodovacích koreňov) a $K_i$ je $i$-tý podstrom. Ďalej nech $S$ je strom, na ktorom vykonávame mutáciu, $S_j$ je $j$-tý listový uzol a $\lvert S \rvert_{l}$ je počet listov stromu $S$. Potom jednotlivé kroky mutácie sú 
+\begin{enumerate}
+\item $r \gets [1,\ldots,\lvert K \rvert]$
+\item $u \gets [1,\ldots,\lvert S \rvert_{v}]$
+\item $S_u \gets K_r$
+\end{enumerate}
+Chovanie mutácie je na obrázku \ref{fig:mutdecisionstump}.
+
+\begin{figure}
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap3/mutdecisionstump.pdf}}}
+\caption{}\label{fig:mutdecisionstump}
+\end{figure}

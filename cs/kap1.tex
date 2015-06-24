@@ -320,6 +320,16 @@ Rozhodovacie stromy teda obsahujú vrcholy, ktoré reprezentujú rozhodnutia zod
 Binárny rozhodovací strom je rozhodovací strom, pre ktorý platí, že počet potomkov každého vrcholu tohoto stromu je rovný 2 alebo 0 (len v prípade listov).
 \end{def-sk}
 
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=350pt]{../img/kap1/DT-stump.pdf}}}
+\caption{Príklady rozhodovacích koreňov. Vo vnútorných uzloch sú atribúty podľa ktorých sa rozhodujeme. V listoch sú klasifikované triedy. V prípade a) je atribút $z$ kategoriálny. V prípade b) je atribút $x$ numerický.}\label{fig:DT-stump}
+\end{figure}
+
+\begin{def-sk}[Rozhodovací koreň]\label{kap1:2.3:2.3.2:stumpDT}
+Rozhodovací koreň je rozhodovací strom, ktorý obsahuje koreň a jeho nasledovníci sú iba listy. 
+\end{def-sk}
+
 Na obrázku \ref{fig:decisionPlaneDatab} sú nakreslené 4 množiny bodov zo štyroch tried spolu s deliacimi nadrovinami. Rozhodovací strom, v konečnom dôsledku, svojou vnútornou stavbou pokladá tieto deliace čiary.
 
 \section{Typy rozhodovacích stromov}\label{kap1:2.4:DTTypes}
@@ -346,7 +356,7 @@ Y(I) \geq 3.5 \wedge X(I) \leq 2 &\Rightarrow c_{1} \nonumber
 \end{figure}
 Na tvorbu klasifikačných stromov sa využíva mnoho rôznych techník. 
 Prvý publikovaný algoritmus sa nazýva THeta Automatic Interaction Detection (THAID). Neskôr vznikli vylepšené techniky ako Iterative Dichotomiser 3 (ID3), C4.5 (zlepšený ID3), CHi-squared Automatic Interaction Detection (CHAID) a Classification And Regression Tree (CART), ktorý sa dá použiť pri tvorbe klasifikačných aj regresných stromov. Každý z nich používa iný typ hľadania deliacich bodov. Medzi ďalšie, menej známe techniky môžeme uviesť CRUISE, GUIDE, QUEST, o ktorých si je možné prečítať v článkoch \cite{kap1-DecisionTreesUnused1,kap1-DecisionTreesUnused2,kap1-DecisionTreesUnused3}.
-Konkrétnejšie budú niektoré z nich popísané v oddieli \ref{kap1:2.5:DTTechniques}. 
+Konkrétnejšie budú niektoré z nich popísané v oddieli \ref{kap1:2.7:DTTechniques}. 
 
 \subsection{Regresný strom}\label{kap1:2.4:2.4.1:DTRegression}
 Regresný strom je variantou rozhodovacieho stromu navrhnutý na aproximáciu reálnych funkcií na rozdiel od klasifikácie. Strom je veľmi podobný tomu klasifikačnému. Jediným rozdielom je výstupný atribút, ktorého doména je v tomto prípade nekonečná množina ($\mathbb{R},\mathbb{N},\ldots$).
