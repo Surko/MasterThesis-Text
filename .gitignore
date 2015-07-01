@@ -1,4 +1,4 @@
 **
 !.gitignore
 !cs
-!cs\*.tex
+!cs/*.tex
