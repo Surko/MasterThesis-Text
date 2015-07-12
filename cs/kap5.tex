@@ -1,3 +1,237 @@
-\chapter{Súhrnné testy}
+\chapter{Testovanie a vyhodnotenie výsledkov}
+V tejto kapitole zhrnieme výsledky testov, ktoré sme vykonali aplikáciou \verb|GenDTLib| z nástroja Weka. Zároveň porovnávame tieto výsledky s existujúcou metódou C4.5\footnote{V nástroji Weka je táto metóda implementovaná pod názvom J48.}, ktorá je obľúbená kvôli tomu, že vytvára kvalitné indukčné stromy (viď. \ref{kap1:2.7:2.7.4:C4.5}). V oddieli \ref{kap5:Methodology} uvedieme metodológiu testovania. Potom v oddieli \ref{kap5:Results} zhrnieme a vyhodnotíme výsledky vykonaných testov.
+\section{Metodika testovania}\label{kap5:Methodology}
+Pri testovaní budeme porovnávať náš genetický algoritmus na vytváranie stromov s indukčným algoritmom C4.5. Z predchádzajúcich kapitol vieme, že genetický algoritmus obsahuje množinu parametrov na nastavenie. Problémom je, že dve rôzne nastavenia parametrov môžu viesť k vytvoreniu dvoch úplne odlišných modelov.
+Zvolenie vhodných parametrov na otestovanie je teda obtiažnou úlohou.
 
-\section{Metodika testovania}
+Testovanie vykonávame pomocou nástroja Weka, ktorý obsahuje veľa vstavaných testovacích nástrojov. Cieľom testovania a aj našej práce bolo, aby boli výsledky reprodukovateľné na všetkých systémoch. Tento nástroj umožňuje ukladať vykonávané testy a teda je ich možné zopakovať, prípadne zvoliť lepšie parametre, ktoré by vylepšili kvalitu algoritmov. Parametre genetického algoritmu je teda možné v budúcnosti prispôsobiť tak, aby pre určitú dátovú množinu dávali lepšie výsledky.
+
+\subsection{Postup}
+Pri testovaní sme sa zamerali na dve vlastnosti rozhodovacích stromov:
+\begin{enumerate}
+\item prediktívne schopnosti a
+\item zložitosť vytvorených stromov -- tým myslíme veľkosť stromov
+\end{enumerate}
+
+Testovanie vykonávame pre každý vstupný súbor. Modely vytvárame vo všetkých prípadoch na celej trénovacej množine. Najprv vytvoríme a vyhodnotíme model vytvorený algoritmom C4.5. Parametre tohoto algoritmu ponecháme bez zmeny. Následne použijeme genetický algoritmus na vytváranie stromov, pričom budeme alternovať medzi rôznymi nastaveniami. Ostatné súčasti genetického algoritmu (mutácie, kríženia, selekcie) sú rovnaké ako tie čo sme definovali v kapitole \ref{kap3:GA}. Fitness funkcie sme volili tak aby zodpovedali vlastnostiam rozhodovacích stromov, na ktoré sme sa zamerali. Niektoré parametre ale zostávajú fixné. Ich hodnoty sme volili také, ktoré dávali pri podobných prácach a pri úlohách genetického programovanie dobré výsledky. Po vytvorení budeme sledovať spomínané dve vlastnosti. Pri konečnom výbere modelu s najvhodnejšími parametrami vyberáme vždy zo skupiny modelov podobnej veľkosti (napr. skupina modelov vytváraná v okolí zložitosti štyri). K tomu zohľadníme spomínané vlastnosti a budeme preferovať tie modely, ktoré nie sú významne horšie. Pre každú dátovú množinu zvolíme viacero vhodných metód, ktoré ponúkajú rozumný kompromis medzi týmito vlastnosťami.
+
+Nástroj Weka má v sebe zabudovaný experimentálny nástroj, ktorý použijeme pri testovaní modelov medzi sebou. Keďže sú genetické algoritmy nedeterministické tak kvalitu algoritmov otestujeme pomocou 10-násobnej krížovej validácie, pričom každá validácia je zopakovaná ďalších desať krát (sto krát spúšťame algoritmus ). V prácach je tento postup porovnania modelov používaný najčastejšie. Vďaka tomu budú výsledky našej práce porovnateľné aj s týmito prácami.
+
+\subsection{Zobrazenie výsledkov}
+Porovnanie výsledkov pre obidve vlastnosti budú, pre rôzne vytvorené modely, zhrnuté vo forme tabuliek.
+
+Tabuľka \ref{fig:tab1} popisuje, ako budú zobrazené presnosti vytvorených modelov. Riadky tejto tabuľky predstavujú jednotlivé použité dátové množiny, pričom stĺpce popisujú presnosť daných modelov. Prvý stĺpec bude vždy predstavovať presnosť modelu vytvoreného algoritmom J48. Ostatné stĺpce budú predstavovať presnosť modelov vytvorených genetickými algoritmami na vytváranie stromov, ktorých parametre sú v každej inštancii pozmenené. V každej bunke popri presnosti uvádzame  aj smerodajnú odchýlku tohoto výsledku.
+
+Tabuľka \ref{fig:tab2} je príkladom tabuľky, ktorá zobrazuje ako sú jednotlivé vytvorené modely zložité. Stavba tabuľky je rovnaká ako v prípade presnosti modelov. Jediná zmena je v stĺpcoch, ktoré predstavujú veľkosti vytvorených stromov pre daný model.
+
+\renewcommand{\figurename}{Tabuľka}
+\begin{figure}[h]
+% Because czech 
+\catcode`\-=12
+\centering 
+\newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
+\begin{tabular}{|l||c|c|c|c||}
+\hline \multirow{2}{*}{Dátová množina} & \multicolumn{4}{|c||}{Presnosť modelu} \\ 
+\cline{2-5} & J48 & GA1 & GA2 & GA3 \\
+\hline
+\hline \multirow{2}{*}{colic} & 82.1\% & 81.2\% & 80.5\% & 83.7\% \T\\[-1.5ex]
+& \tiny (1.2\%) & \tiny (0.9\%) & \tiny (1.1\%) & \tiny (0.7\%)\B\\
+\hline \multirow{2}{*}{credi-a} & 73.5\% & 72.1\% & 71.2\% & 72.3\% \T\\[-1.5ex]
+& \tiny (0.9\%) & \tiny (1.1\%) & \tiny (1.2\%) & \tiny (0.8\%)\B\\
+\hline \multirow{2}{*}{credit-g} & 69.6\% & 71.9\% & 72.2\% & 72.6\% \T\\[-1.5ex]
+& \tiny (1.5\%) & \tiny (1.6\%) & \tiny (2.2\%) & \tiny (0.8\%)\B\\
+\hline
+\end{tabular}
+\caption{Príklad tabuľky, ktorú budeme používať pre znázornenie presnosti modelov. Jednotlivé bunky predstavujú presnosť modelu udávanú v percentách. Hodnota v zátvorke udáva smerodajnú odchýlku tejto presnosti.}\label{fig:tab1}
+\end{figure}
+
+
+\begin{figure}[h]
+% Because czech 
+\catcode`\-=12
+\centering 
+\newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
+\begin{tabular}{|l||c|c|c|c||}
+\hline \multirow{2}{*}{Dátová množina} & \multicolumn{4}{|c||}{Zložitosť modelu} \\ 
+\cline{2-5} & J48 & GA1 & GA2 & GA3 \\
+\hline
+\hline \multirow{2}{*}{colic} & 17.5\% & 6.6\% & 6.7\% & 5.0\% \T\\[-1.5ex]
+& \tiny (6.5\%) & \tiny (0.0\%) & \tiny (0.2\%) & \tiny (0.7\%)\B\\
+\hline \multirow{2}{*}{credi-a} & 23.5\% & 12.1\% & 13.5\% & 10.5\% \T\\[-1.5ex]
+& \tiny (0.9\%) & \tiny (1.1\%) & \tiny (1.2\%) & \tiny (0.8\%)\B\\
+\hline \multirow{2}{*}{credit-g} & 110.5\% & 6.0\% & 8.0\% & 14.0\% \T\\[-1.5ex]
+& \tiny (0.1\%) & \tiny (0.2\%) & \tiny (0.0\%) & \tiny (0.8\%)\B\\
+\hline
+\end{tabular}
+\caption{Príklad tabuľky, ktorú budeme používať pre znázornenie zložitosti modelov (veľkosti stromov). Jednotlivé bunky predstavujú zložitosť modelu. Hodnota v zátvorke udáva smerodajnú odchýlku tejto hodnoty.}\label{fig:tab2}
+\end{figure}
+
+Posledná tabuľka \ref{fig:tab3} uvádza významnosť získaných výsledkov pomocou párového t-testu. V tabuľke porovnávame genetické algoritmy na vytváranie stromov s algoritmom J48. Jednotlivé riadky predstavujú genetické algoritmy s rôznymi nastaveniami. Stĺpce určujú, ktorý výsledok je významne lepší alebo horší od algoritmu J48. Každá bunka tabuľky obsahuje riadok znakov, ktorých poradie zodpovedá poradiu testovaných dátových množín.
+
+\begin{figure}[h]
+% Because czech 
+\catcode`\-=12
+\centering 
+\newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
+\begin{tabular}{|c||c|c||}
+\hline
+\hline \multirow{2}{*}{Metóda} & \multicolumn{2}{|c||}{Signifikantne lepšie} 
+\\
+\cline{2-3} & Presnosť & Zložitosť \\
+\hline
+\hline
+GA1 & - - - & \textbf{v} - \textbf{v} \\ \hline
+GA2 & - \textbf{x} - & - \textbf{v} - \\ \hline
+GA3 & - - - & \textbf{v} \textbf{v} \textbf{v} \\ \hline
+\end{tabular}
+\caption{Príklad tabuľky, ktorú budeme používať pre znázornenie štatisticky významného zlepšenia alebo zhoršenia (podľa párového t-testu) genetického algoritmu od algoritmu J48. Symbol \textbf{v} na mieste $i$ znamená, že daná metóda je výrazne lepšia (v určitej vlastnosti modelu) než J48 na $i$-tej dátovej množine. Opačne, symbol \textbf{x} znamená, že daná metóda je výrazne horšia než J48.}\label{fig:tab3}
+\end{figure}
+
+\subsection{Vstupné dáta}
+Na testovanie sme použili zopár známych klasifikačných problémov, ktoré sme získali z databáze na stránke UCI pre strojové učenie \cite{online-uci}. Výber sme uskutočnili podľa toho ako známe a obľúbené sú tieto dátové množiny (možná porovnateľnosť s inými prácami). Pri výbere dátových množín sme taktiež požadovali, aby bol počet inštancií pre rôzne dátové množiny iný, aby mali rôzne typy atribútov (numerické, kategoriálne) a aby bol výstupný atribút kategoriálny. Vybrali sme nasledujúce množiny:
+\begin{itemize}
+\item \verb|Colic| je dátová množina, ktorá určuje či je nájdená lézia u koňa operovateľná bez negatívnych následkov,
+\item \verb|Credit-a| je dátová množina (angl. Australian Credit Approval), ktorá určuje schválenie úveru pre žiadateľov z Austrálie,
+\item \verb|Credit-g| je dátová množina (angl. German Credit data), ktorá klasifikuje Nemcov podľa toho, či predstavujú riziko pri schválení úveru,
+\item \verb|Hepatitis| dátová množina, ktorá klasifikuje úmrtie pacienta z obsahu jeho krvi,
+\item \verb|Iris| je veľmi známa dátová množina používaná pri testovaní algoritmov na rozpoznávanie vzorov. Z charakteristík určuje o aký typ kvetiny sa jedná,
+\item \verb|Labor| dátová množina, ktorá určuje kvalitu zamestnanca z jeho pracovitosti a platu,
+\item \verb|Lymph| dátová množina, ktorá klasifikuje typ nájdených lymfómov,
+\item \verb|Breast Cancer| je dátová množina, ktorá klasifikuje či sa žene navráti rakovina prsníkov po jej prekonaní.
+\end{itemize}
+
+Ďalšie informácie o počte inštancií, type atribútov a chýbajúcich hodnotách
+sú zhrnuté v tabuľke \ref{fig:testdata}.
+
+\begin{figure}[h]
+% Because czech 
+\centering
+\begin{tabular}{|c c c c c c|}
+\hline 
+Dátová & \multirow{2}{*}{\#inštancií} & chýbajúce & \multirow{2}{*}{\#num.} & \multirow{2}{*}{\#kat.}  & \multirow{2}{*}{\#tried} \\
+množina & & hodnoty & & & \\
+\hline
+Colic & 368 & áno & 7 & 15 & 2 \\
+\hline
+Credit-a & 690 & áno & 6 & 9 & 2 \\
+\hline
+Credit-g & 1000 & áno & 7 & 14 & 2 \\
+\hline
+Hepatitis & 155 & áno & 6 & 13 & 2 \\
+\hline
+Iris & 150 & nie & 4 & 0 & 3 \\
+\hline
+Labor & 57 & nie & 7 & 9 & 2 \\
+\hline
+Lymph & 148 & nie & 0 & 18 & 4 \\
+\hline
+Breast cancer & 286 & áno & 0 & 9 & 2 \\
+\hline
+\end{tabular}
+\caption{Príklad tabuľky, ktorá zhŕňa informácie použitých dátových množín.}\label{fig:testdata}
+\end{figure}
+\subsection{Nastavenie parametrov genetického algoritmu}
+V kapitole \ref{kap3:GA} sme definovali komponenty, ktoré používame v genetickom algoritme. Fitness funkcie algoritmu ale volíme tak, aby vyhodnocovali prediktívne schopnosti (presnosť stromu) a zložitosť stromov (veľkosť stromu). Fitness funkcie vyhodnocujeme na jednu hodnotu pomocou agregácie fitness zadefinovanej \ref{kap2:2.3:2.3.1:Weighted}. Pri testovaní sme skúšali rôzne nastavenia parametrov týchto komponent. Z týchto nastavení sme vybrali iba niektoré. V tabuľke \ref{fig:configs} uvádzame parametre, ktoré budeme medzi sebou kombinovať a používať pri testovaní.
+
+\begin{figure}[h]
+% Because czech 
+\centering
+\begin{tabular}{|c c|}
+\hline 
+Parameter algoritmu & hodnota \\
+\hline
+veľkosť populácie & 100 \\
+\hline
+max. počet generácií & 200 \\
+\hline
+váhy pre veľkosť & \multirow{2}{*}{0.5,1} \\
+a presnosť stromu & \\
+\hline
+turnajová selekcia & 80\% \\
+\hline
+pravdepodobnosť kríženia & 0\%,80\%,90\%\\
+\hline
+pravdepodobnosť mutácie & 4\%,40\%\\
+\hline
+elitizmus & 0.05\\
+\hline
+optimalizovanie & \multirow{3}{*}{4,6,10,15}\\
+v okolí stromov & \\
+o veľkosti & \\
+\hline
+\end{tabular}
+\caption{Príklad tabuľky, ktorá popisuje ako budú nastavené parametre genetického algoritmu na vytváranie rozhodovacích stromov.}\label{fig:configs}
+\end{figure}
+
+Z tabuľky môžeme vidieť, že operátor kríženia môže mať v niektorých prípadoch nulovú pravdepodobnosť. V tomto prípade skúšame či nedosiahneme lepších výsledkov použitím makro mutácií.
+Taktiež uvádzame parameter, ktorý popisuje veľkosť stromov v okolí ktorých budeme optimalizovať. Tento parameter zároveň slúži ako prostriedok, ktorý zabraňuje preučeniu stromov.
+
+\section{Výsledky testov}\label{kap5:Results}
+V tabuľke \ref{fig:acc} uvádzame presnosť modelov, ktoré sme dosiahli otestovaním spomínaných metód. Z vykonaných testov vyberáme vždy tú najlepšiu metódu pre každú veľkosť stromu na optimalizovanie (veľkosti 4,6,10,15). Podľa tabuľky sú dosiahnuté výsledky o niečo lepšie, ale ani v jednom prípade nie sú výrazne lepšie od výsledkov získaných algoritmom J48. Napriek tomu sa nám v tých najlepších prípadoch podarilo zmenšiť smerodajnú odchýlku týchto výsledkov v porovnaní s algoritmom J48.
+
+V tabuľke \ref{fig:size} uvádzame veľkosti vytvorených stromov. Genetický algoritmus s nastaveným optimalizovaním stromov na menšie veľkosti sa oplatilo. V prípade optimalizovania veľkosti stromov k veľkosti 6 dosahujeme na všetkých množinách okrem \verb|iris| výrazne menšie veľkosti stromov. U optimalizovania k veľkosti 4 sú vytvorené stromy vo všetkých prípadoch výrazne menšie od tých vytvorených algortimom J48.
+
+\begin{figure}[h]
+% Because czech 
+\catcode`\-=12
+\centering 
+\newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
+\begin{tabular}{|l||c|c|c|c|c||}
+\hline \multirow{2}{*}{Dátová množina} & \multicolumn{5}{|c||}{Presnosť modelu} \\ 
+\cline{2-6} & J48 & GA4 & GA10 & GA15 & GA4 \\
+\hline
+\hline \multirow{2}{*}{colic} & 85.16\% & 85.86\% & 85.51\% & 84.83\% & 82.93\% \T\\[-1.5ex]
+& \tiny (5.91\%) & \tiny (5.59\%) & \tiny (5.95\%) & \tiny (5.87\%) & \tiny (5.8\%)\B\\
+\hline \multirow{2}{*}{credit-a} & 85.57\% & 85.39\% & 84.99\% & 85.77\% & 85.51\% \T\\[-1.5ex]
+& \tiny (3.96\%) & \tiny (3.81\%) & \tiny (4.24\%) & \tiny (3.89\%) & \tiny (3.96\%)\B\\
+\hline \multirow{2}{*}{credit-g} & 71.25\% & 71.70\% & 70.79\% & 71.14\% & 70.0\%\T\\[-1.5ex]
+& \tiny (3.17\%) & \tiny (2.12\%) & \tiny (3.14\%) & \tiny (3.11\%) & \tiny (0.0\%)\B\\
+\hline \multirow{2}{*}{hepatitis} & 79.22\% & 80.18\% & 78.78\% & 79.82\% & 80.76\% \T\\[-1.5ex]
+& \tiny (9.57\%) & \tiny (8.28\%) & \tiny (9.05\%) & \tiny (9.74\%) & \tiny (8.15\%)\B\\
+\hline \multirow{2}{*}{iris} & 94.73\% & 95.80\% & 95.0\% & 94.53\% & 93.73\% \T\\[-1.5ex]
+& \tiny (5.30\%) & \tiny (4.41\%) & \tiny (5.14\%) & \tiny (5.47\%) & \tiny (5.9\%)\B\\
+\hline \multirow{2}{*}{labor} & 78.60\% & 84.13\% & 84.7\% & 84.7\% & 89.43\% \T\\[-1.5ex]
+& \tiny (16.58\%) & \tiny (15.68\%) & \tiny (15.8\%) & \tiny (15.12\%) & \tiny (13.63\%)\B\\
+\hline \multirow{2}{*}{lymph} & 75.84\% & 72.70\% & 76.61\% & 77.36\% & 69.7\% \T\\[-1.5ex]
+& \tiny (11.05\%) & \tiny (9.9\%) & \tiny (9.07\%) & \tiny (10.37\%) & \tiny (12.59\%)\B\\
+\hline \multirow{2}{*}{breast-cancer} & 74.28\% & 75.02\% & 73.24\% & 72.96\% & 71.45\% \T\\[-1.5ex]
+& \tiny (6.05\%) & \tiny (5.22\%) & \tiny (6.07\%) & \tiny (5.95\%) & \tiny (7.00\%)\B\\
+\hline
+\end{tabular}
+\caption{Presnosť modelov vytvorených indukčným algoritmom C4.5 a genetickými algoritmami na tvorbu stromov s rôznymi nastaveniami. }\label{fig:acc}
+\end{figure}
+
+\begin{figure}[h]
+% Because czech 
+\catcode`\-=12
+\centering 
+\newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
+\begin{tabular}{|l||c|c|c|c|c||}
+\hline \multirow{2}{*}{Dátová množina} & \multicolumn{5}{|c||}{Zložitosť modelu} \\ 
+\cline{2-6} & J48 & GA4 & GA10 & GA15 & GA4 \\
+\hline
+\hline \multirow{2}{*}{colic} & 8.8 & 6.0 & 10.0 & 15.0 & 5.17 \T\\[-1.5ex]
+& \tiny (2.69) & \tiny (0.0) & \tiny (0.0) & \tiny (0.0) & \tiny (0.73)\B\\
+\hline \multirow{2}{*}{credit-a} & 32.82 & 6.0 & 10.07 & 15.01 & 3.98 \T\\[-1.5ex]
+& \tiny (9.9) & \tiny (0.0) & \tiny (0.29) & \tiny (0.1) & \tiny (1.0)\B\\
+\hline \multirow{2}{*}{credit-g} & 126.85 & 6.0 & 10.0 & 15.0 & 4.0\T\\[-1.5ex]
+& \tiny (20.66) & \tiny (0.0) & \tiny (0.0) & \tiny (0.0) & \tiny (0.0)\B\\
+\hline \multirow{2}{*}{hepatitis} & 17.66 & 6.82 & 10.94 & 15.0 & 4.98 \T\\[-1.5ex]
+& \tiny (4.75) & \tiny (0.58) & \tiny (0.34) & \tiny (0.0) & \tiny (0.2)\B\\
+\hline \multirow{2}{*}{iris} & 8.28 & 7.0 & 9.98 & 15.0 & 5.0 \T\\[-1.5ex]
+& \tiny (1.19) & \tiny (0.0) & \tiny (1.0) & \tiny (0.0) & \tiny (0.0)\B\\
+\hline \multirow{2}{*}{labor} & 6.92 & 6.84 & 10.02 & 15.0 & 5.0 \T\\[-1.5ex]
+& \tiny (2.53) & \tiny (0.53) & \tiny (0.2) & \tiny (0.0) & \tiny (0.0)\B\\
+\hline \multirow{2}{*}{lymph} & 28.0 & 6.73 & 10.0 & 15.0 & 4.94 \T\\[-1.5ex]
+& \tiny (4.56) & \tiny (0.45) & \tiny (0.0) & \tiny (0.0) & \tiny (0.21)\B\\
+\hline \multirow{2}{*}{breast-cancer} & 12.78 & 6.0 & 10.0 & 15.0 & 4.0 \T\\[-1.5ex]
+& \tiny (9.37) & \tiny (0.0) & \tiny (0.0) & \tiny (0.0) & \tiny (0.0)\B\\
+\hline
+\end{tabular}
+\caption{Zložitosť modelov a teda veľkosť stromov vytvorených indukčným algoritmom C4.5 a genetickými algoritmami na tvorbu stromov s rôznymi nastaveniami.}\label{fig:size}
+\end{figure}

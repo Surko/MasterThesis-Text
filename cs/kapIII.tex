@@ -1,0 +1,9 @@
+\chapter{Rozšíriteľnosť aplikácie}
+V tejto kapitole popíšeme možnosti rozšírenia aplikácie o nové komponenty (operátory, selekcie, fitness funkcie, populácie) a využitie aplikácie aj bez nástroja Weka.
+
+\section{Rozšíriteľnosť}\label{kap4:4.4:Plugin}
+Na rozšírenie aplikácie \verb|GenDTLib| môžeme použiť existujúce rozhrania z balíčku \verb|genlib.plugins|. Rozhrania môžu byť určené buď na definovanie nových komponent genetického algoritmu, alebo na definovanie nových klasifikátorov a deliacich kritérií. Toto je možné kvôli zvolenej abstrakcii genetického algoritmu.
+\subsection{Nové komponenty}
+Existujúce komponenty môžeme rozšíriť pridaním nových knižníc do predom určených zložiek. Knižnice musia dediť od niektorého rozhrania z \verb|genlib.plugins|. Typ knižnice závisí od tohoto rozhrania. Definované typy knižníc sú uvádzané v dodatku XX.
+
+\subsection{Použitie bez Weky}

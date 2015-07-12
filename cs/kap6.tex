@@ -1,0 +1,17 @@
+\chapter{Podobné práce}\label{kap6:SimilarWorks}
+V tejto kapitole popíšeme zopár prác, ktoré sa zaoberajú vytváraním rozhodovacích stromov pomocou genetických algoritmov. Ani jedna z týchto prác neposkytuje program, ktorý by sa dal otestovať a porovnať s mojim riešením.
+
+\section{LEGAL-Tree: A Lexicographic Multi-objective Genetic Algorithm for Decision Tree Induction}\label{kap6: 6.1:Legal}
+Cieľom práce a jej autorov \cite{kap6-legal} bolo vytvoriť taký genetický algoritmus na tvorbu rozhodovacích stromov, ktorý by dokázal nahradiť existujúce indukčné algoritmy -- vytvorené modely by nekonvergovali k lokálnemu optimu, ako to je pri indukčných algoritmoch. 
+
+Genetický algoritmus vytvára jedincov z rozhodovacích koreňov (viď. \ref{kap1:2.3:2.3.2:stumpDT}. Mutácie a kríženia sú v algoritme rovnaké ako v našej implementácií, pričom na porovnávanie jedincov používa tzv. lexikografické multi-kriteriálne funkcie, ktoré fungujú podobne ako prioritná fitness z časti \ref{kap2:2.3:2.3.2:Priority}.
+
+Vytvorené modely testovali na známych dátových množinách a porovnávali s indukčným algoritmom C4.5. Pri testovaní dostali stromy, ktoré pri porovnaní s C4.5 neboli presnosťou signifikantne lepšie, ale tieto stromy boli v niektorých prípadoch jednoduchšie.
+
+\section{A new genetic programming algorithm for Building decision tree}\label{kap6:6.2:Hybrid}
+Cieľom autorov \cite{kap6-group} tejto práce bolo vytvárať rozhodovacie stromy genetickými algoritmami, pričom sa snažili zabrániť tomu, aby boli pri reprodukcii použité také stromy, ktorých rozdiel veľkostí je príliš veľký. 
+
+Algoritmus uvažuje populácie stromov, ktoré rozdeľuje do skupín, pričom v každej skupine sú iba stromy rovnakých veľkostí. Kríženia a mutácia sú vykonané iba na jedincoch v rámci jednej skupiny. V práci uvádzajú, že takýto prístup dokáže vhodnejšie prehľadávať priestor riešení a vývoj kvality nájdených riešení nie je až tak skokový, ako v prípade obyčajných genetických algoritmov.
+
+Vytvorené modely znova testovali na známych dátových množinách, porovnávali s indukčným algoritmom C4.5 a obyčajným genetickým algoritmom na vytváranie stromov. Autori uvádzajú presnosti modelov, ktoré sú vo veľa prípadoch signifikantne lepšie. Rýchlosť implementácie je v porovnaní s normálnym genetickým algoritmom menšia a stabilnejšia (pomalšie stúpa so zvyšujúcou sa veľkosťou dát).
+

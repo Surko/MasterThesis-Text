@@ -1,14 +1,14 @@
 \chapter{Implementácia}
-V tejto kapitole popíšeme implementáciu a technické detaily aplikácie \verb|GenDTLib|, ktorá vytvára rozhodovacie stromy pomocou genetických algoritmov tak, ako sme uviedli v predchádzajúcej kapitole. Táto aplikácia zároveň slúži ako zásuvný modul do nástroja Weka. Najskôr v časti \ref{kap4:4.1:Info} popíšeme základné technické informácie o aplikácii \verb|GenDTLib|. Ďalej v časti \ref{kap4:4.2:About} uvedieme štruktúru aplikácie z pohľadu kódu. Ďalšími časťami sa zameriame na jednotlivé súčasti genetického algoritmu z predchádzajúcej kapitoly. V časti \ref{kap4:4.3:Implementation} predvedieme implementáciu genetického algoritmu použitého v aplikácii. V časti \ref{kap4:4.4:Components} sa budeme zaoberať implementáciou jednotlivých komponent genetického algoritmu. V poslednej časti \ref{kap4:4.5:Plugin} popíšeme možnosti rozšírenia aplikácie o nové komponenty a využitie aplikácie aj bez nástroja Weka.
+V tejto kapitole popíšeme implementáciu a technické detaily aplikácie \verb|GenDTLib|, ktorá vytvára rozhodovacie stromy pomocou genetických algoritmov tak, ako sme uviedli v predchádzajúcej kapitole. Táto aplikácia zároveň slúži ako zásuvný modul do nástroja Weka. Najskôr v časti \ref{kap4:4.1:Info} popíšeme základné technické informácie o aplikácii \verb|GenDTLib|. Ďalej v časti \ref{kap4:4.2:About} uvedieme štruktúru aplikácie z pohľadu kódu. Ďalšími časťami sa zameriame na jednotlivé súčasti genetického algoritmu z predchádzajúcej kapitoly. V časti \ref{kap4:4.3:Implementation} predvedieme implementáciu klasifikátora s genetickým algoritmom použitým v aplikácii.
 \section{Technický popis}\label{kap4:4.1:Info}
-V jednotlivých častiach popíšeme základné technické detaily aplikácie. Najprv v časti \ref{kap4:4.1:4.1.1:Requirements} zadefinujeme tieto požiadavky. Ďalej v časti \ref{kap4:4.1:4.1.2:Environment} uvedieme platformu aplikácie. V časti \ref{kap4:4.1:4.1.3:SystemRequirements} uvedieme systémové požiadavky na spustenie aplikácie. Nakoniec v časti \ref{kap4:4.1:4.1.4:Libs} predstavíme knižnice, ktoré boli použité v implementácií aplikácie GenLib.
+V jednotlivých častiach popíšeme základné technické detaily aplikácie. Najprv v časti \ref{kap4:4.1:4.1.1:Requirements} zadefinujeme tieto požiadavky. Ďalej v časti \ref{kap4:4.1:4.1.2:Environment} uvedieme platformu aplikácie. V časti \ref{kap4:4.1:4.1.3:SystemRequirements} uvedieme systémové požiadavky na spustenie aplikácie. Nakoniec v časti \ref{kap4:4.1:4.1.4:Libs} predstavíme knižnice, ktoré boli použité v implementácií aplikácie \verb|GenDTLib|.
 
 \subsection{Požiadavky na aplikáciu}\label{kap4:4.1:4.1.1:Requirements}
 Pri návrhu aplikácie sme kládli určité nároky na funkcionalitu aplikácie. Tie najzákladnejšie z nich sú:
 \begin{itemize}
 \item viacplatformovosť, t.j. schopnosť spustiť aplikáciu na viacerých operačných systémoch, čo je pre každú aplikáciu len pozitívom,
 \item jednoduché užívateľské prostredie aplikácie, čím myslíme priamočiare ovládanie aplikácie a jednoduché nastavenie parametrov.
-\item jednoduchá konfigurácia použitých komponent (viď. \ref{kap4:4.4:Components}) v genetickom algoritme, t.j. nefixujeme sa na pevne zadané operátory, fitness funkcie, selektory ale ponechávame možnosť ľubovoľne kombinovať tieto komponenty.
+\item jednoduchá konfigurácia použitých komponent v genetickom algoritme, t.j. nefixujeme sa na pevne zadané operátory, fitness funkcie, selekcie ale ponechávame možnosť ľubovoľne nastaviť a kombinovať tieto komponenty.
 \item jednoduchá rozšíriteľnosť o nové komponenty genetického algoritmu, t.j. do aplikácie sa dajú doimplementovať nové druhy komponent, na ktoré sme prípadne v našej implementácií zabudli. 
 \item aplikácia zároveň slúži aj ako zásuvný modul klasifikácie do nástroja Weka, t.j. aplikáciu budeme môcť použiť z vnútra nástroja Weka, ako jeden z klasifikátorov. 
 \end{itemize}
@@ -46,7 +46,7 @@ V aplikácii vykonávame pri jednej inštancii behu algoritmu tri základné kro
 \item klasifikovanie inštancií, prípadne porovnanie modelov medzi sebou.
 \end{enumerate}
 
-Priebeh algoritmu a vytváranie počiatočnej populácie sú ovládané pomocou konfiguračného súboru, ktorý obsahuje definície komponent (viz \ref{kap4:4.4:Components}). Komponenty ďalej obsahujú parametre, ktoré riadia ich chovanie. Tieto komponenty sú základné stavebné bloky algoritmu a nastavenie ich parametrov je závislé na type riešenej úlohy. Existujúce parametre sú jednoduché (nastavenie nejakej množiny hodnôt) aj zložené (kombinácia parametru s hodnotou). Pri niektorých komponentách je dôležité aj poradie parametrov. Návod na nastavenie komponent bude bližšie popísaný v časti xx.
+Priebeh algoritmu a vytváranie počiatočnej populácie sú ovládané pomocou konfiguračného súboru, ktorý obsahuje definície komponent (viz \ref{kap4:4.4:Components}). Komponenty ďalej obsahujú parametre, ktoré riadia ich chovanie. Tieto komponenty sú základné stavebné bloky algoritmu a nastavenie ich parametrov je závislé na type riešenej úlohy. Existujúce parametre sú jednoduché (nastavenie nejakej množiny hodnôt) aj zložené (kombinácia parametru s hodnotou). Pri niektorých komponentách je dôležité aj poradie parametrov. Návod na nastavenie komponent bude bližšie popísaný v dodatku \ref{kapII}.
 
 V konfiguračnom súbore môžeme, na zrýchlenie aplikácie, definovať počet vlákien použitých pri počítaní fitness funkcií a generovaní počiatočnej generácie.
 
@@ -69,21 +69,75 @@ Interakcie v kóde medzi nástrojom Weka a aplikáciou GenLib sú popísané v n
 \pagebreak
 
 \subsection{Organizácia kódu}\label{kap4:4.2:4.2.2:CodeOrganization}
-Kód je v aplikácií GenLib delení do dvoch významných častí:
+Zdrojový kód je v aplikácií, podľa jeho pôvodu a funkcií, delení do štyroch častí takto:
+\begin{enumerate}
+\item kód pochádzajúci z nástroja Weka, ktorý nazývame WekaAPI,
+\item časť kódu s implementovaným klasifikátorom a jeho vonkajším rozhraním,
+\item kód hlavného genetického algoritmu na tvorbu stromov a
+\item kód, ktorý definuje rozhrania budúcich nových knižníc
+\end{enumerate}
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=415pt]{../img/kap4/sourcecodeorganization.pdf}}}
+\caption{Štruktúra kódu z pohľadu balíčkov. Balíčky z nástroja Weka sú ohraničené čiarkovaným obdĺžnikom. Šípky medzi balíčkami predstavujú ich vzájomné interakcie.}\label{fig:GenLibPackage}
+\end{figure}
+
+Ako už bolo spomínané, pri vytváraní aplikácie sme pracovali s nástrojom Weka, ktorý ma svoje definované WekaAPI. Toto WekaAPI obsahuje veľké množstvo rozhraní a pokrýva rôzne funkcie nástroja Weka. My sa v práci obmedzíme iba na minimálnu podmnožinu rozhraní, ktoré nám poskytnú tie najdôležitejšie funkcie:
 \begin{itemize}
-\item hlavný genetický algoritmus na tvorbu stromov a
-\item prepojenie genetického algoritmu s nástrojom Weka.
+\item spustenie klasifikátora z nástroja Weka,
+\item možnosť nastaviť parametre algoritmu z nástroja Weka,
+\item poskytnúť informácie o klasifikátore,
+\item vhodne vykresliť klasifikátor
 \end{itemize}
+Každá funkcia zodpovedá minimálne jednému rozhraniu z WekaAPI. Na registrovanie a spustenie klasifikátoru z nástroja Weka je nutné implementovať rozhranie \verb|Classifier| z balíčku \verb|weka.classifier|. Z tohoto rozhrania pochádzajú dôležité funkcie na vytvorenie modelu a klasifikovanie nových inštancií. Ostatné rozhrania nám poskytujú dodatočné funkcie, bez ktorých by sa klasifikátor zaobišiel. Rozhraním \verb|OptionHandler| umožňujeme nastaviť parametre algoritmu z nástroja Weka. Rozhrania \verb|TechnicalHandler| a \verb|Randomizable| poskytujú informácie o klasifikátore. Nakoniec rozhranie \verb|Drawable| poskytuje funkcie, ktorými nástroj Weka vykresľuje klasifikátor. WekaAPI pravdaže ponúka mnoho ďalších tried (napr. na vizualizáciu modelov), ktoré ale nebudeme v našej aplikácii používať.
 
+Hlavný algoritmus s nástrojom Weka integruje balíček \verb|genlib.classifier|. Na vytvorenie fungujúceho klasifikátora slúži trieda \verb|Classifier|, ktorá je odlišná od tej z nástroja Weka. Dôvodom bolo, aby sa dala aplikácia rozšíriť o nové klasifikátory bez použitia iných knižníc. To o aký klasifikátor pôjde závisí na \verb|WekaExtension| a \verb|GenLibExtension|. Rozhraním \verb|WekaExtension| definujeme, že klasifikátor je spustiteľný z nástroja Weka a rozhraním \verb|GenLibExtension| zase, že je spustiteľný bez neho. Kombinovaním obidvoch rozhraní dosiahneme, že klasifikátor je použiteľný s nástrojom Weka aj bez neho. Grafické aj konzolové rozhrania používajú triedy z tohoto balíčku.
 
+Balíček \verb|genlib.initializators| obsahuje rozhrania a implementácie týchto rozhraní pre vytvorenie počiatočnej generácie jedincov. Každá trieda používa generátor z balíčka \verb|genlib.generators| na generovanie nových jedincov a tie môže ďalej spracovávať (napr. kombinovať medzi sebou). Základným rozhraním je \verb|PopulationInitializator|. Rozhranie  \verb|TreePopulationInitializator| rozširuje \verb|PopulationInitializator|, tak aby dokázalo pracovať so stromov kódovanými jedincami.
 
-Prehľad tých najdôležitejších balíčkov a rozhraní (v našom vytvorenom API aj vo WekaAPI) je zobrazený v uml diagrame na Obrázku \ref{fig:GenLibPackage}. Interakcie medzi balíčkami sú znázornené šípkami.
-\section{Implementácia genetického algoritmu}\label{kap4:4.3:Implementation}
-\section{Popis komponent aplikácie}\label{kap4:4.4:Components}
-\subsection{Generovanie počiatočnej generácie}
-\subsection{Selekcie}
-\subsection{Fitness funkcie}
-\subsection{Operátory}
-\section{Rozšíriteľnosť}\label{kap4:4.5:Plugin}
-\subsection{Nové komponenty}
-\subsection{Použitie bez Weky}
+Ďalej v balíčku \verb|genlib.generators| definujeme rozhranie  \verb|Generator| na generovanie jednotlivých jedincov. Rozhranie \verb|TreeGenerator| rozširuje \verb|Generator| a dokáže vytvárať a pracovať so stromovými jedincami. Generátory môžu používať existujúce klasifikátory z nástroja Weka a vytvárať jedincov z nich.
+
+V balíčku \verb|genlib.structures| sa nachádzajú dôležité štruktúry, s ktorými pracujú generátory ale aj samotný genetický algoritmus. Významnou triedou je \verb|Data|, ktorej inštancia zaobaľuje dátovú množinu (prípadne trénovaciu a validačnú množinu). Rozhranie \verb|Node| je štruktúra uzlu používaná v stromových jedincoch. Jej implementácia \verb|MultiWayNode| špecifikuje uzly s variabilným počtom jedincov. Rozhrania \verb|SizeExtension| a \verb|HeightExtension| rozlišujú typy uzlov, ktoré dokážu efektívne dopočítať veľkosť a výšku uzlu v strome.
+
+Balíček \verb|genlib.evolution| obsahuje triedu \verb|EvolutionAlgorithm|, ktorá predstavuje genetický algoritmus pre vytváranie rozhodovacích stromov. Ďalšie triedy a rozhrania týchto tried predstavujú komponenty genetického algoritmu. \verb|Operator| predstavuje rozhranie pre mutácie a kríženia. Ďalej obsahuje rozhranie \verb|FitnessF|- \verb|unction|, ktoré definuje funkcie použité v genetickom algoritme a \verb|FitnessCompar|- \verb|ator|, ktoré popisuje metódy na usporiadanie jedincov v populácií (tak ako sú popísané v časti \ref{kap2:2.3:Fitnesses}). \verb|Selector| je rozhranie používané na implementovanie metód selekcie.
+
+Balíček \verb|genlib.plugins| obsahuje rozhrania na vytváranie nových komponent genetického algoritmu, ako aj nové klasifikátory používajúce genetické algoritmy. Každé z nich definuje jednu komponentu (operátory, fitness funkcie, selektory). Podrobnejší popis možností rozšírenia sú v časti \ref{kap4:4.5:Plugin}.
+
+Prehľad tých najdôležitejších balíčkov a rozhraní (v našom vytvorenom API aj vo WekaAPI) je zobrazený v diagrame na Obrázku \ref{fig:GenLibPackage}. Interakcie medzi balíčkami sú znázornené šípkami.
+\section{Implementácia klasifikátoru}\label{kap4:4.3:Implementation}
+V časti \ref{kap4:4.2:4.2.2:CodeOrganization} sme ukázali, ako vyzerá vnútorná štruktúra aplikácie a z predchádzajúcich kapitol sme sa dozvedeli, ako funguje genetický algoritmus. V tomto oddieli popíšeme implementáciu nového klasifikátora a ako tento klasifikátor integruje ostatné časti aplikácie (hlavne genetický algoritmus).
+
+Pri návrhu implementácie sme požadovali:
+\begin{enumerate}
+\item Nový klasifikátor budeme môcť použiť z nástroja Weka, keďže aplikácia má fungovať ako zásuvný modul,
+\item genetický algoritmus bude rozšíriteľný o nové komponenty, keďže chceme aby bola aplikácia čo najviac rozšíriteľná a
+\item bude možné kombinovať rôzne komponenty tohoto algoritmu, pretože chceme aby bol algoritmus, čo najviac upraviteľný.
+\end{enumerate}
+
+Implementácia obsahuje jeden klasifikátor pre nástroj Weka. Trieda tohoto nového klasifikátora je potomkom \verb|Classifier| a \verb|WekaExtension| z balíčku \verb|genlib.clas|- \verb|sifier|. Týmto je trieda použiteľná z nástroja Weka ako plnohodnotný klasifikátor. Metóda \verb|void buildClassifier(Instances)| je základnou metódou na vytvorenie modelu, ktorá spracuje dáta, vytvorí počiatočnú populáciu a zavolá hlavný genetický algoritmus na vytvorenie rozhodovacích stromov. 
+
+Vytvorenie počiatočnej generácie používa triedy, ktoré implementujú rozhrania z balíčku \verb|genlib.initializators|. Populácie sú vytvárané generátormi jedincov, ktoré vytvárajú konkrétnych jedincov. Diagram, ktorý popisuje štruktúru a vzájomne interakcie medzi generátormi populácie a generátormi jedincov sú zobrazené na Obrázku \ref{fig:popuml}. Výhodou takto zvolenej štruktúry je, že implementácie existujúcich aj nových generátorov sú nezávisle na zvolenom type jedinca. Zároveň ale musia byť v rámci jedného generátora používaní jedinci jedného typu. Takýmto rozhodnutím môžeme predchádzať budúcim možným chybám s nekonzistentnými jedincami\footnote{Konkrétny jeden generátor by mohol vytvárať rôzne typy jedincov, ktoré sú medzi sebou nekonzistentné (napríklad jedinec kódovaný reťazcom a jedinec kódovaný stromom)}
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap4/popuml.pdf}}}
+\caption{Diagram s rozhraniami a triedami na generovanie počiatočnej populácie. Čiarkované šípky predstavujú použitie jedného objektu druhým. Prázdne šípky určujú, že trieda dedí od inej. Čiarkované obdĺžniky popisujú konkrétne implementácie nejakého rozhrania.}\label{fig:popuml}
+\end{figure}
+
+V predchádzajúcej časti sme uviedli, že trieda \verb|EvolutionAlgorithm| v balíčku \verb|genlib.evolution| definuje genetický algoritmus. Táto trieda je jadro samotného genetického algoritmu a implementuje chovanie predstavené v Algoritme \ref{fig:DTGeneticAlgo}. Štruktúra kódu je na Obrázku \ref{fig:geneticuml}. Aby bolo možné rozšíriť genetický algoritmus o nové komponenty využívame abstrakciu jednotlivých komponent, ktoré sú na obrázku vo forme rozhraní. Algoritmus využíva metódy týchto rozhraní, aj keď nevie o akú konkrétnu implementáciu komponenty sa jedná.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap4/geneticuml.pdf}}}
+\caption{Štruktúra genetického algoritmu popísaná diagramom. Čiarkované šípky predstavujú použitie jedného objektu druhým. Prázdne šípky určujú, ktorá trieda dedí od ktorej. Čiarkované obdĺžniky popisujú konkrétne implementácie nejakého rozhrania.}\label{fig:geneticuml}
+\end{figure}
+
+Pre predstavu, ako funguje klasifikátor v rámci aplikácie \verb|GenDTLib|, uvádzame 
+diagram na Obrázku \ref{fig:clasuml}. Klient vyberie klasifikátor, buď z grafického rozhrania nástroja Weka alebo z konzolového rozhrania (1). Klasifikátor volá metódu na vytvorenie počiatočnej populácie (2). Tento generátor počiatočnej populácie vytvára jedincov pomocou predom zvoleného generátoru jedincov (3). Títo generovaní jedinci môžu byť dodatočné spracovávaní (napríklad kombinovaní medzi sebou). Po vytvorení počiatočnej populácie nastavíme parametre a komponenty genetického algoritmu (4). Po úspešnom nastavení môžeme genetický algoritmus spustiť (6). Po skončení vyberieme poslednú generáciu, ktorú usporiadame podľa fitness funkcií. Nakoniec zobrazíme najlepšieho jedinca klientovi (7). V nástroji Weka je zobrazenie jedincov podporované rozhraním \verb|Drawable|, v ktorom je nutné implementovať metódu na vykreslenie stromu.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap4/algouml.pdf}}}
+\caption{Sekvenčný diagram, ktorý popisuje spôsob práce s klasifikátorom, ktorý generuje a vylepšuje jedincov genetickým algoritmom.}\label{fig:clasuml}
+\end{figure}
