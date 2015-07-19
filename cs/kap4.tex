@@ -1,4 +1,4 @@
-\chapter{Implementácia}
+\chapter{Implementácia}\label{kap4:Implementation}
 V tejto kapitole popíšeme implementáciu a technické detaily aplikácie \verb|GenDTLib|, ktorá vytvára rozhodovacie stromy pomocou genetických algoritmov tak, ako sme uviedli v predchádzajúcej kapitole. Táto aplikácia zároveň slúži ako zásuvný modul do nástroja Weka. Najskôr v časti \ref{kap4:4.1:Info} popíšeme základné technické informácie o aplikácii \verb|GenDTLib|. Ďalej v časti \ref{kap4:4.2:About} uvedieme štruktúru aplikácie z pohľadu kódu. Ďalšími časťami sa zameriame na jednotlivé súčasti genetického algoritmu z predchádzajúcej kapitoly. V časti \ref{kap4:4.3:Implementation} predvedieme implementáciu klasifikátora s genetickým algoritmom použitým v aplikácii.
 \section{Technický popis}\label{kap4:4.1:Info}
 V jednotlivých častiach popíšeme základné technické detaily aplikácie. Najprv v časti \ref{kap4:4.1:4.1.1:Requirements} zadefinujeme tieto požiadavky. Ďalej v časti \ref{kap4:4.1:4.1.2:Environment} uvedieme platformu aplikácie. V časti \ref{kap4:4.1:4.1.3:SystemRequirements} uvedieme systémové požiadavky na spustenie aplikácie. Nakoniec v časti \ref{kap4:4.1:4.1.4:Libs} predstavíme knižnice, ktoré boli použité v implementácií aplikácie \verb|GenDTLib|.
@@ -102,7 +102,7 @@ V balíčku \verb|genlib.structures| sa nachádzajú dôležité štruktúry, s 
 
 Balíček \verb|genlib.evolution| obsahuje triedu \verb|EvolutionAlgorithm|, ktorá predstavuje genetický algoritmus pre vytváranie rozhodovacích stromov. Ďalšie triedy a rozhrania týchto tried predstavujú komponenty genetického algoritmu. \verb|Operator| predstavuje rozhranie pre mutácie a kríženia. Ďalej obsahuje rozhranie \verb|FitnessF|- \verb|unction|, ktoré definuje funkcie použité v genetickom algoritme a \verb|FitnessCompar|- \verb|ator|, ktoré popisuje metódy na usporiadanie jedincov v populácií (tak ako sú popísané v časti \ref{kap2:2.3:Fitnesses}). \verb|Selector| je rozhranie používané na implementovanie metód selekcie.
 
-Balíček \verb|genlib.plugins| obsahuje rozhrania na vytváranie nových komponent genetického algoritmu, ako aj nové klasifikátory používajúce genetické algoritmy. Každé z nich definuje jednu komponentu (operátory, fitness funkcie, selektory). Podrobnejší popis možností rozšírenia sú v časti \ref{kap4:4.5:Plugin}.
+Balíček \verb|genlib.plugins| obsahuje rozhrania na vytváranie nových komponent genetického algoritmu, ako aj nové klasifikátory používajúce genetické algoritmy. Každé z nich definuje jednu komponentu (operátory, fitness funkcie, selektory). Podrobnejší popis možností rozšírenia sú spomenuté v dodatku \ref{kapIII}.
 
 Prehľad tých najdôležitejších balíčkov a rozhraní (v našom vytvorenom API aj vo WekaAPI) je zobrazený v diagrame na Obrázku \ref{fig:GenLibPackage}. Interakcie medzi balíčkami sú znázornené šípkami.
 \section{Implementácia klasifikátoru}\label{kap4:4.3:Implementation}

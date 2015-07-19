@@ -1,4 +1,4 @@
-\chapter{Genetická tvorba rozhodovacích stromov}\label{kap3:GA}
+\chapter{Genetická tvorba rozhodovacích stromov}\label{kap3:DTGA}
 V časti \ref{kap1:2.7:DTTechniques} sme popísali vytváranie rozhodovacích stromov pomocou indukčných algoritmov. Vieme, že stromy vytvorený týmito algoritmami bývajú kvalitné, ale neoptimálne. To je kvôli tomu, že tieto algoritmy zaraďujeme medzi hladné techniky. Ďalším spôsobom vytvárania stromov je použiť techniku, ktorá prehľadáva priestor riešení (prehľadávaciu heuristiku). Pri použití niektorej z týchto techník môžeme dostať neoptimálne riešenie, ktoré môže byť dokonca horšie, než to vytvorené indukčným algoritmom. Vhodne zvolená a nastavená prehľadávacia heuristika ale môže nájsť riešenie, ktoré je významne lepšie než to vytvorené indukčným algoritmom. V kapitole \ref{kap2:GA} sme predviedli jednu z prehľadávacích heuristík nazývanú genetické algoritmy.
 
 V tejto kapitole teda popíšeme genetický algoritmus, ktorý sa dá použiť na tvorbu rozhodovacích stromov a ktorý sme implementovali v nástroji Weka. Popíšeme, ako kódovať jedincov v populácií genetického algoritmu tak, aby títo jedinci čo najlepšie popisovali rozhodovacie stromy. Zavedené operátory v predchádzajúcej kapitole rozšírime o definície nových operátorov. Ostatné súčasti genetického algoritmu iba pripomenieme a spojíme ich s pojmami z rozhodovacích stromov.
@@ -156,7 +156,13 @@ Fitness funkcie v genetickom algoritme určujú, ako často budú jedinci vybera
 Na optimalizovanie prediktívnych vlastností stromu musíme voliť také fitness funkcie, ktoré s predikciou súvisia. Tieto fitness funkcie väčšinou počítajú určitú metriku z matice chybovosti. Na zlepšenie prediktívnych vlastností nie je každá metrika vhodná. Kvôli tomu je lepšie sa zamerať iba na niektoré z nich.
 V časti \ref{kap1:2.6:2.6.2:Alternatives} sme definovali alternatívne metriky založené na matici chybovosti, ktoré môžeme použiť pri ohodnocovaní rozhodovacích stromov. Spomínané kríteriá citlivosti, precíznosti, špecificity a f-metriky sú vhodnými kandidátmi fitness funkcií. Na zlepšenie generalizačnej chyby by mal byť výpočet metrík vykonaný na validačnej množine.
 
-Z časti \ref{kap2:2.2:2.2.3:Tree} vieme, že stromy v genetických algoritmoch majú tendenciu narastať a je nutné ich veľkosť obmedziť. To sa dá dosiahnuť voľbou fitness funkcií, ktoré ovplyvňujú zložitosť stromu. Tieto fitness funkcie využívajú metriky zadefinované v časti \ref{kap1:2.6:2.6.3:TreeLook}.
+Z časti \ref{kap2:2.2:2.2.3:Tree} vieme, že stromy v genetických algoritmoch majú tendenciu narastať a je nutné ich veľkosť obmedziť. To sa dá dosiahnuť voľbou fitness funkcií, ktoré ohodnocujú zložitosť stromu. Takéto fitness funkcie využívajú metriky zadefinované v časti \ref{kap1:2.6:2.6.3:TreeLook}. K existujúcim funkciám môžeme definovať nové fitness funkcie, ktoré budeme nazývať \emph{relatívne}. Takéto funkcie sú počítané vzhľadom k nejakej hodnote \emph{x}, v ktorej zároveň dosahujú maximum. Na Obrázku \ref{fig:normalvsrelative} uvádzame grafy dvoch fitness funkcií (normálnej a relatívnej) pre veľkosť stromov.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=400pt]{../img/kap3/normvsrel.pdf}}}
+\caption{Príklad grafov normálnej a relatívnej fitness funkcie hodnotiace veľkosť stromov. Na ľavo je normálna fitness funkcia, ktorá dosahuje maximum pre najmenšiu veľkosť stromu a na pravo je relatívna fitness funkcia s maximom v hodnote \emph{x}.}\label{fig:normalvsrelative}
+\end{figure}
 
 Voľba správnych fitness funkcií je obtiažnou úlohou. Optimálne by mali zvolené funkcie zmenšovať generalizačnú chybu a zbytočne nekomplikovať stromy. Tým sa úloha stáva multi-kriteriálnym problémom a výpočet kvality jedinca sa robí jednou z metód spomínaných v časti \ref{kap2:2.3:Fitnesses}.
 \section{Operátory na tvorbu rozhodovacích stromov}\label{kap3:3.4:Operators}
