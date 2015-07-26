@@ -1,1 +1,289 @@
 \chapter{Užívateľská príručka}\label{kapII}
+\renewcommand{\figurename}{Obrázok}
+\section{Grafické rozhranie aplikácie}
+Nástroj Weka má implementované grafické rozhranie.
+Tým, že sme vytvorili zásuvný modul do nástroja Weka je možné spustiť klasifikátor z grafického rozhrania. 
+
+Uvítacia obrazovka, vykreslená na Obrázku \ref{fig:gui1}, umožňuje vytvárať modely kliknutímm na tlačítko \emph{Explorer} a testovať klasifikátory kliknutím na tlačítko \emph{Experimenter}. 
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=200pt]{../img/kapII/weka1.pdf}}}
+\caption{Uvítacia obrazovka nástroja Weka.}\label{fig:gui1}
+\end{figure}
+
+\subsection*{Vytváranie modelov}
+Po stlačení tlačítka \emph{Explorer} sa otvorí obrazovka z Obrázku \ref{fig:gui2}. V nej môžeme načítať (tlačítko \emph{Open file}) alebo vygenerovať (tlačítko Generate) dátovú množinu a tú ďalej predspracovať. Obrazovka obsahuje informácie o dátovej množine, ako je napríklad rozdelenie hodnôt pre atribúty. Predspracovanie dát môžeme vykonať pomocou tlačítka \emph{Edit}. Taktiež je možné vybrať iba určité atribúty, ktoré chceme použiť na klasifikáciu.
+
+\begin{figure}[h]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/weka2.pdf}}}
+\caption{Obrazovka, v ktorej načítame dáta a ďalej ich spracovávame.}\label{fig:gui2}
+\end{figure}
+
+Pre vytvorenie modelu pokračujeme zvolením záložky \emph{Classify}. Obrazovka na vytvorenie modelu vyzerá ako na Obrázku \ref{fig:gui3}. Tu môžeme zvoliť 
+\begin{itemize}
+\item typ klasifikátoru, ktorý chceme použiť. Výber klasifikátoru prevedieme kliknutím na tlačítko \emph{Choose}, ktoré otvorí sťahovacie menu rovnaké tomu na Obrázku \ref{fig:gui4},
+\item akým spôsobom vytvárame a testujeme kvalitu vytvoreného modelu a akú dátovú množinu pritom použijeme. Medzi možnosti patrí:
+\begin{itemize}
+\item použiť trénovaciu množinu na vytvorenie modelu aj jeho otestovanie alebo
+\item použiť trénovaciu množinu na vytvorenie modelu a dodatočne zadanú testovaciu množinu na jeho otestovanie, alebo
+\item použiť $n$-násobnú krížovú validáciu, alebo
+\item rozdeliť dátovú množinu na trénovaciu a testovaciu podmnožinu.
+\end{itemize}
+\item ktorý atribút bude výstupný.
+\end{itemize}  
+
+\begin{figure}[h!]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/weka3.pdf}}}
+\caption{Obrazovka pre vytvorenie modelu, v ktorej volíme klasifikátor, ktorú množinu použijeme na otestovanie a ktorý atribút je výstupný.}\label{fig:gui3}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/weka4.pdf}}}
+\caption{Obrazovka s rozbaľovacím menu, v ktorej vyberáme klasifikátor.}\label{fig:gui4}
+\end{figure}
+
+Po zvolení algoritmu na vytvorenie modelu môžeme nastaviť jeho parametre. Po kliknutí na zvolený klasifikátor, vedľa tlačítka \emph{Choose}, sa objaví nová obrazovká rovnaká tej na Obrázku \ref{fig:gui5}. Nastavenie parametrov je bližšie spomenutý v oddieli \ref{kapII:config}.
+
+Pre vytvorenie modelu stlačíme tlačítko \emph{Start}.
+
+\begin{figure}[h!]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/weka5.pdf}}}
+\caption{Príklad obrazovky, v ktorej nastavujeme parametre klasifikátoru -- a teda aj genetického algoritmu}\label{fig:gui5}
+\end{figure}
+
+\pagebreak
+
+\subsection*{Testovanie modelov}
+Po stlačení tlačítka \emph{Experimenter} dostaneme obrazovku z Obrázku \ref{fig:guie1}. Táto obrazovka je určená na testovanie modelov a ich porovnávanie. Na obrazovke môžeme zvoliť jednoduchý alebo pokročilý mód\footnote{Pokročilý mód poskytuje množstvo ďalších nastavení, ako napríklad rozloženie práce medzi viaceré počítače}. 
+Pre vykonanie experimentu môžeme voliť z dvoch možností:
+\begin{enumerate}
+\item vytvoriť nový experiment (tlačítko \emph{New}) alebo
+\item načítať existujúci experiment (tlačítko \emph{Open})
+\end{enumerate} 
+
+Podobne ako pri vytváraní modelov musíme
+\begin{enumerate}
+\item zvoliť algoritmy, ktoré budú použité na vytvorenie modelov (tlačítko \emph{Add new} v časti \emph{Algorithms}) a
+\item načítať dátové množiny (tlačítko \emph{Add new} v časti \emph{Datasets}), na ktorých chceme vytvorené modely otestovať 
+\end{enumerate}
+
+Ďalej môžeme nastaviť typ experimentu, koľko krát bude experiment zopakovaný a akým spôsobom bude vykonaný (najprv množiny alebo najprv algoritmy). Medzi povolené typy experimentu patrí
+\begin{enumerate}
+\item $n$-násobná krížová validácia,
+\item náhodné rozdelenie na trénovaciu a testovaciu množinu,
+\item rozdelenie na trénovaciu a testovaciu množiny s rovnakým poradím
+\end{enumerate}
+
+\begin{figure}[h!]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/wekae1.pdf}}}
+\caption{Obrazovka, ktorá slúži na testovanie algoritmov medzi sebou.}\label{fig:guie1}
+\end{figure}
+
+Príklad správne nastaveného experimentu je zobrazený na Obrázku \ref{fig:guie2}. Experiment vykoná 10-násobnú krížovú validáciu, pričom každá z nich je zopakovaná 10-krát. V experimente testujeme dva algoritmy (\verb|J48| a \verb|WekaEvolutionTreeClassifier|) na jednej dátovej množine (\verb|breast-cancer.arff|).
+
+\begin{figure}[h!]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/wekae2.pdf}}}
+\caption{Príklad obrazovky s nastavenými algoritmami a dátovou množinou na otestovanie.}\label{fig:guie2}
+\end{figure}
+
+Po nastavení experimentu stlačíme záložku \emph{Run}, ktorá zobrazí obrazovku, na ktorej spustíme experiment tlačítkom \emph{Start}. Po dokončení experimentu bez nejakých chýb dostaneme obrazovka, ktorá vyzerá ako na Obrázku \ref{fig:guie3}.
+
+\begin{figure}[h!]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/wekae3.pdf}}}
+\caption{Obrazovka, ktorá slúži na spustenia alebo zastavenie experimentu.}\label{fig:guie3}
+\end{figure}
+
+Nakoniec stlačíme záložku \emph{Analyse}, ktorá otvorí obrazovku, na ktorej môžeme zanalyzovať výsledky experimentu. Najprv je ale nutné načítať výsledky stlačením tlačítka \emph{Experiment}. Následne môžeme nastaviť, ktorú vlastnosť by sme chceli otestovať (napr. presnosť, veľkosť stromov), typ testu, jeho hladinu významnosti a iné. Výsledok zobrazíme pomocou tlačítka \emph{Perform test}. Typická obrazovka s vykonaným testom vyzerá ako na Obrázku \ref{fig:guie4}.
+
+\begin{figure}[h!]
+\centering
+\centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/wekae4.pdf}}}
+\caption{Príklad obrazovky s vykonaným testom, ktorý porovnáva presnosť modelov, pričom na testovanie používame opravený párový t-test s hladinou významnosti 0.05.}\label{fig:guie4}
+\end{figure}
+
+\pagebreak
+
+\section{Konzolové rozhranie aplikácie}
+\begin{observation}
+Povinné príkazy budeme v nasledujúcich častiach uvádzať bez zmeny. Nepovinné súčasti príkazu budeme uvádzať v hranatých zátvorkách.
+\end{observation}
+
+Nástroj Weka je možné spustiť s našou aplikáciou \verb|GenDTLib| z príkazového riadku pomocou príkazu
+
+\begin{figure}[h!]
+\centering
+\begin{tabular}{|l|}
+\hline
+\texttt{java [parametre JVM] -cp "weka.jar;GenLib.jar"}  \\
+\texttt{klasifikátor [parametre klasifikátoru]} \\
+\texttt{[-t *.arff] [-T *.arff] [-h]} \\
+\hline
+\end{tabular}
+\caption{}
+\end{figure}
+
+Nastavenie parametrov JVM nie je povinné a vo väčšine prípadov stačí to štandardné. V prípade, keď program skončí s výnimkou OutOfMemoryError, je potrebné zväčšiť hodnoty minimálnej a maximálnej hodnoty pamäte (parametre \verb|-Xms| a \verb|-Xmx|).
+
+Povolené hodnoty argumentu \emph{klasifikátor} závisia od množiny klasifikátorov, ktoré sú registrované v nástroji Weka (súbor \verb|GenericPropertiesCreator.props|). Hodnoty na nastavenie majú štruktúru balíčkov z jazyka Java. Na spustenie nášho genetického algoritmu na tvorbu stromov volíme hodnotu klasifikátora ako \verb|genlib.classifier.weka.WekaEvolutionTreeClassifier|.
+
+Parametre klasifikátoru je možné zobraziť pomocou argumentu \verb|-h|. Nastavenie parametrov uvádzame bližšie v oddieli \ref{kapII:config}. Tieto parametre sú ale nepovinné, pretože štandardne sa berú hodnoty zo súboru \verb|config.properties|.
+
+Argumentom \verb|-t| definujeme akú trénovaciu množinu použijeme. Parametre tohoto argumentu sú relatívne cesty k súborom (s príponou \verb|arff|) s dátovými množinami.
+
+Argumentom \verb|-T| definujeme akú testovaciu množinu použijeme. Parametre tohoto argumentu sú relatívne cesty k súborom (s príponou \verb|arff|) s dátovými množinami.
+
+\section{Nastavenie argumentov genetického algoritmu}\label{kapII:config}
+\begin{observation}
+Pri nastavení argumentov genetického algoritmu budú hodnoty na vyplnenie v zložených zátvorkách.
+\end{observation}
+
+V implementačnej časti sme zaviedli požiadavky, ktoré si na aplikáciu kladieme. Jednou z nich bola možnosť nastaviť argumenty (parametre) genetického algoritmu. V tejto kapitole popíšeme argumenty algoritmu a aké hodnoty sú pre ne povolené. Názvy argumentov budú zodpovedať grafickému rozhraniu, no pre každý parameter uvedieme aj jeho ekvivalent v konzolovom rozhraní.
+
+Nastavenie argumentov genetického algoritmu môžeme rozdeliť do  4 skupín:
+\begin{enumerate}
+\item Nastavenie číselného argumentu algoritmu (napr. počet generácii, veľkosť populácie)
+\begin{center}
+\texttt{\{argument\_algoritmu\}=\{číslo\}}
+\end{center} 
+\item Nastavenie objektového argumentu algoritmu (dátová množina)
+\begin{center}
+\texttt{\{argumentmeter\_algoritmu\}=\{parametre\}}
+\end{center} 
+\item Nastavenie argumentu, ktorý pracuje s komponentami
+\begin{center}
+\texttt{\{argument\_algoritmu\}=\{komponenta\} \{parametre\}}
+\end{center}
+\item Nastavenie argumentu, ktorý podporuje viac než jednu komponentu
+\begin{center}
+\texttt{\{argument\_algoritmu\}=\{komponenta1\} \{parametre1\}};
+\texttt{\{komponenta2\} \{parametre2\};...}
+\end{center}
+\end{enumerate}
+pričom \texttt{\{parametre\}} nazývame aj vnútorné parametre a definujeme ich ako
+\begin{center}
+\texttt{parametre := \{parameter1\},\{hodnota\_parametru1\},
+\{parameter2\},\{hodnota\_parametru2\},...}
+\end{center}
+
+Medzi argumenty, ktoré zaraďujeme do skupiny 1 patria:
+\begin{enumerate}
+\item
+\item
+\end{enumerate}
+Komplikovanejšie argumenty popíšeme v nasledujúcich oddieloch.
+
+\subsection*{Dátová množina}
+Argument s názvom \verb|data| (skupina 2.), ktorým definujeme ako bude rozdelená dátová množina na trénovaciu a testovaciu podmnožinu. 
+Dovolené hodnoty parametrov sú:
+\begin{itemize}
+\item \verb|TRAINRATIO|, ktorého hodnota je číslo z intervalu [0,1],
+\item \verb|RESAMPLE|, ktorého hodnota je typu boolean.
+\end{itemize}
+
+\subsection*{Fitness funkcie}
+Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Dovolené hodnoty pre komponenty sú 
+\begin{itemize}
+\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
+\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
+\item \verb|tHeight| -- výška rozhodovacieho stromu,
+\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
+\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
+\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
+\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
+\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
+\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
+\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
+\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
+\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
+\end{itemize}
+
+Dovolené hodnoty parametrov sú:
+
+\subsection*{Kríženia a mutácie}
+Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Dovolené hodnoty pre komponenty sú 
+\begin{itemize}
+\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
+\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
+\item \verb|tHeight| -- výška rozhodovacieho stromu,
+\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
+\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
+\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
+\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
+\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
+\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
+\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
+\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
+\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
+\end{itemize}
+
+Dovolené hodnoty parametrov sú:
+
+\subsection*{Selekcie}
+Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Dovolené hodnoty pre komponenty sú 
+\begin{itemize}
+\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
+\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
+\item \verb|tHeight| -- výška rozhodovacieho stromu,
+\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
+\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
+\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
+\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
+\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
+\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
+\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
+\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
+\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
+\end{itemize}
+
+Dovolené hodnoty parametrov sú:
+
+\subsection*{Inicializácia populácie}
+Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Dovolené hodnoty pre komponenty sú 
+\begin{itemize}
+\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
+\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
+\item \verb|tHeight| -- výška rozhodovacieho stromu,
+\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
+\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
+\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
+\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
+\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
+\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
+\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
+\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
+\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
+\end{itemize}
+
+Dovolené hodnoty parametrov sú:
+
+\subsection*{Generátor jedincov}
+Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Dovolené hodnoty pre komponenty sú 
+\begin{itemize}
+\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
+\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
+\item \verb|tHeight| -- výška rozhodovacieho stromu,
+\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
+\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
+\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
+\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
+\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
+\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
+\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
+\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
+\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
+\end{itemize}
+
+Dovolené hodnoty parametrov sú:

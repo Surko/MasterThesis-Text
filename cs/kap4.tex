@@ -1,30 +1,30 @@
 \chapter{Implementácia}\label{kap4:Implementation}
-V tejto kapitole popíšeme implementáciu a technické detaily aplikácie \verb|GenDTLib|, ktorá vytvára rozhodovacie stromy pomocou genetických algoritmov tak, ako sme uviedli v predchádzajúcej kapitole. Táto aplikácia zároveň slúži ako zásuvný modul do nástroja Weka. Najskôr v časti \ref{kap4:4.1:Info} popíšeme základné technické informácie o aplikácii \verb|GenDTLib|. Ďalej v časti \ref{kap4:4.2:About} uvedieme štruktúru aplikácie z pohľadu kódu. Ďalšími časťami sa zameriame na jednotlivé súčasti genetického algoritmu z predchádzajúcej kapitoly. V časti \ref{kap4:4.3:Implementation} predvedieme implementáciu klasifikátora s genetickým algoritmom použitým v aplikácii.
+V tejto kapitole popíšeme implementáciu a technické detaily aplikácie \verb|GenDTLib|, ktorá vytvára rozhodovacie stromy pomocou genetických algoritmov tak, ako sme uviedli v predchádzajúcej kapitole. Táto aplikácia zároveň slúži ako zásuvný modul do nástroja \verb|Weka|. Najskôr v časti \ref{kap4:4.1:Info} popíšeme základné technické informácie o aplikácii \verb|GenDTLib|. Ďalej v časti \ref{kap4:4.2:About} uvedieme štruktúru aplikácie z pohľadu kódu. Ďalšími časťami sa zameriame na jednotlivé súčasti genetického algoritmu z predchádzajúcej kapitoly. V časti \ref{kap4:4.3:Implementation} predvedieme implementáciu klasifikátora s genetickým algoritmom použitým v aplikácii.
 \section{Technický popis}\label{kap4:4.1:Info}
-V jednotlivých častiach popíšeme základné technické detaily aplikácie. Najprv v časti \ref{kap4:4.1:4.1.1:Requirements} zadefinujeme tieto požiadavky. Ďalej v časti \ref{kap4:4.1:4.1.2:Environment} uvedieme platformu aplikácie. V časti \ref{kap4:4.1:4.1.3:SystemRequirements} uvedieme systémové požiadavky na spustenie aplikácie. Nakoniec v časti \ref{kap4:4.1:4.1.4:Libs} predstavíme knižnice, ktoré boli použité v implementácií aplikácie \verb|GenDTLib|.
+V jednotlivých častiach popíšeme základné technické detaily aplikácie. Najprv v časti \ref{kap4:4.1:4.1.1:Requirements} zadefinujeme požiadavky kladené na aplikáciu. Ďalej v časti \ref{kap4:4.1:4.1.2:Environment} uvedieme platformu aplikácie. V časti \ref{kap4:4.1:4.1.3:SystemRequirements} uvedieme systémové požiadavky na spustenie aplikácie. Nakoniec v časti \ref{kap4:4.1:4.1.4:Libs} predstavíme knižnice, ktoré boli použité v implementácií aplikácie \verb|GenDTLib|.
 
 \subsection{Požiadavky na aplikáciu}\label{kap4:4.1:4.1.1:Requirements}
 Pri návrhu aplikácie sme kládli určité nároky na funkcionalitu aplikácie. Tie najzákladnejšie z nich sú:
 \begin{itemize}
-\item viacplatformovosť, t.j. schopnosť spustiť aplikáciu na viacerých operačných systémoch, čo je pre každú aplikáciu len pozitívom,
-\item jednoduché užívateľské prostredie aplikácie, čím myslíme priamočiare ovládanie aplikácie a jednoduché nastavenie parametrov.
-\item jednoduchá konfigurácia použitých komponent v genetickom algoritme, t.j. nefixujeme sa na pevne zadané operátory, fitness funkcie, selekcie ale ponechávame možnosť ľubovoľne nastaviť a kombinovať tieto komponenty.
-\item jednoduchá rozšíriteľnosť o nové komponenty genetického algoritmu, t.j. do aplikácie sa dajú doimplementovať nové druhy komponent, na ktoré sme prípadne v našej implementácií zabudli. 
-\item aplikácia zároveň slúži aj ako zásuvný modul klasifikácie do nástroja Weka, t.j. aplikáciu budeme môcť použiť z vnútra nástroja Weka, ako jeden z klasifikátorov. 
+\item viacplatformovosť, t.j. schopnosť spustiť aplikáciu na viacerých operačných systémoch, čo je pre každú aplikáciu len výhodou;
+\item jednoduché užívateľské prostredie aplikácie, čím myslíme priamočiare ovládanie aplikácie a jednoduché nastavenie parametrov;
+\item jednoduchá konfigurácia použitých komponent v genetickom algoritme, t.j. nefixujeme sa na pevne zadané operátory, fitness funkcie, selekcie ale ponechávame možnosť tieto komponenty ľubovolne nastaviť a kombinovať;
+\item jednoduchá rozšíriteľnosť o nové komponenty genetického algoritmu, t.j. do aplikácie sa dajú doimplementovať nové druhy komponent, ktoré sme do našej implementácie nezahrnuli;
+\item aplikácia zároveň slúži ako zásuvný modul klasifikácie do nástroja \verb|Weka|, t.j. aplikáciu budeme môcť použiť z vnútra nástroja \verb|Weka|, ako jeden z klasifikátorov. Aplikácia ale nebude na tomto nástroji závislá, čo do budúcna umožní použiť aplikáciu aj z iného nástroja.
 \end{itemize}
 
-Dôvody, prečo sme vybrali akúrát týchto 5 kritérií sú jednoduché.
-Genetické algoritmy majú množstvo parametrov, ktoré treba nastaviť a zbytočne zložité užívateľské prostredie by komplikovalo prácu s aplikáciou. Jednoduchá konfigurácia komponent v genetickom algoritme zabezpečí, že bude stačiť jedna verzia aplikácie, ktorej chovanie je závislé na zmene jedného súboru. Možnosť rozšíriť aplikáciu o nové komponenty sme vybrali preto, aby sme minimalizovali počet zásahov do zdrojového kódu aplikácie, ktoré by mohli viesť k jej poškodeniu. Výhodou je, že užívateľ nepotrebuje vedieť to, ako celá aplikácia funguje z vnútra. Voľba vytvoriť zásuvný modul nám uľahčila prácu pri implementovaní tejto aplikácie kvôli tomu, že nástroj Weka poskytuje množstvo jestvujúcich a kvalitných funkcií na použitie (nie je ich potreba vytvárať na novo).
+Dôvody, prečo sme vybrali práve týchto 5 kritérií sú jednoduché.
+Genetické algoritmy majú množstvo parametrov, ktoré je treba nastaviť, a zbytočne zložité užívateľské prostredie by komplikovalo prácu s aplikáciou. Jednoduchá konfigurácia komponent v genetickom algoritme zabezpečí, že bude stačiť jedna verzia aplikácie, ktorej chovanie je závislé na zmene jedného súboru. Možnosť rozšíriť aplikáciu o nové komponenty sme vybrali preto, aby sme umožnili jej ďalšie vylepšovanie a pritom minimalizovali počet zásahov do zdrojového kódu aplikácie, ktoré by mohli viesť k jej poškodeniu. Výhodou je, že užívateľ nepotrebuje vedieť to, ako celá aplikácia funguje z vnútra. Voľba vytvoriť zásuvný modul nám uľahčila prácu pri implementovaní tejto aplikácie kvôli tomu, že nástroj \verb|Weka| poskytuje množstvo jestvujúcich a kvalitných funkcií na použitie (nie je ich potreba vytvárať na novo). Naviac takýto modul je možné ľubovolne kombinovať s inými modulmi z Weky pri tvorbe aplikácií so strojovým učením.
 
-Na dosiahnutie viacplatformovosti je najľahšou možnosťou zvoliť taký programovací jazyk, ktorý je nezávislý na platforme.  Najrozumnejšou voľbou je jazyk Java, keďže chceme, aby aplikácia zároveň slúžila aj ako zásuvný model do nástroja Weka (ktorý je napísaný v jazyku Java). Užívateľské rozhranie aplikácie je grafické, no umožňuje aj ovládanie z príkazového riadku vhodné napríklad pre hromadné spracovávanie.
+Na dosiahnutie viacplatformovosti je najľahšou možnosťou zvoliť taký programovací jazyk, ktorý je nezávislý na platforme.  Najrozumnejšou voľbou je jazyk Java, keďže chceme, aby aplikácia zároveň slúžila aj ako zásuvný model do nástroja \verb|Weka| (ktorý je napísaný v jazyku Java). Užívateľské rozhranie aplikácie je grafické, no umožňuje aj ovládanie z príkazového riadku vhodné napríklad pre hromadné spracovávanie.
 
 Na dosiahnutie ľubovoľnej konfigurovateľnosti sme navrhli programové rozhranie (API) tak, aby podporovalo aj budúce nové knižnice rozšírené o nové komponenty genetického algoritmu.
 
 \subsection{Platforma aplikácie}\label{kap4:4.1:4.1.2:Environment}
-Z časti \ref{kap1:2.2:2.2.5:Tools} vieme, že nástroj Weka je napísaný v jazyku Java.
-Aplikáciu GenLib sme teda vyvíjali na platforme Java SE v jazyku Java, pre ktorý sme sa rozhodli kvôli požiadavke viacplatformovosti a požiadavke vytvorenia zásuvného modulu do nástroja Weka.
+Z časti \ref{kap1:2.2:2.2.5:Tools} vieme, že nástroj \verb|Weka| je napísaný v jazyku Java.
+Aplikáciu GenLib sme teda vyvíjali na platforme Java SE v jazyku Java, pre ktorý sme sa rozhodli kvôli požiadavke viacplatformovosti a požiadavke vytvorenia zásuvného modulu do nástroja \verb|Weka|.
 \subsection{Systémové požiadavky}\label{kap4:4.1:4.1.3:SystemRequirements}
-Verzia behového prostredia Javy (Java Runtime Environment -- JRE) je závislá od verzie nástroja Weka. Najnovšia verzia nástroja Weka (v. >3.7.0) vyžaduje JRE verzie 6 alebo vyššej.
+Verzia behového prostredia Javy (Java Runtime Environment -- JRE) je závislá od verzie nástroja \verb|Weka|. Najnovšia verzia nástroja \verb|Weka| (v. >3.7.0) vyžaduje JRE verzie 6 alebo vyššej.
 
 Na spustenie aplikácie GenLib vyžadujeme o verziu novšie JRE (JRE 7), a to kvôli jeho zmenám uvedených v \cite{online-java}, ktoré zjednodušili prácu pri programovaní. Nainštalovaná verzia Javy musí byť teda minimálne vo verzii 1.7. 
 
@@ -32,71 +32,69 @@ JRE 7 vyžaduje minimálne 128 MB pamäte RAM, no aplikácia sama o sebe vyžadu
 
 Rýchlosť procesoru je pri tejto aplikácii veľmi dôležitá. Za to môžu hlavne vyššie výpočtové požiadavky genetického algoritmu, ktorý pracuje s veľkým množstvom rozhodovacích stromov. Minimálna rýchlosť procesoru je Pentium 2 266 MHz, ktorá je uvedená v požiadavkách na používanie JRE 7.
 \subsection{Použité knižnice}\label{kap4:4.1:4.1.4:Libs}
-Aplikácia má slúžiť ako zásuvný modul do nástroja Weka, takže jedinou použitou knižnicou bude práve nástroj Weka. Weka uľahčuje veľké množstvo úloh, ktoré by sme inak museli implementovať sami. Všetky funkcie Weky, ako je klasifikácia dát, testovanie a porovnávanie modelov získame jej použitím automaticky. V aplikácii ďalej využívame iba základné balíčky z jazyka Java. 
+Aplikácia má slúžiť ako zásuvný modul do nástroja \verb|Weka|, takže jedinou použitou knižnicou bude práve nástroj \verb|Weka|. \verb|Weka| uľahčuje veľké množstvo úloh, ktoré by sme inak museli implementovať sami. Všetky funkcie Weky, ako je klasifikácia dát, testovanie a porovnávanie modelov získame jej použitím automaticky. Naviac využijeme indukčné algoritmy tvorby rozhodovacích stromov, ktoré sú v nástroji \verb|Weka| implementované, na tvorbu počiatočnej populácie rozhodovacích stromov. V aplikácii ďalej využívame iba základné balíčky z jazyka Java. 
 
-Veľkou výhodou, pri použití knižnice Weka, je jednoduchá migrácia aplikácie GenLib do ďalšieho, spomínaného klasifikačného nástroja, RapidMiner (viz. \ref{kap1:2.2:2.2.5:Tools}).
+Ďalšou výhodou, pri použití knižnice \verb|Weka|, je jednoduchá migrácia aplikácie \verb|GenDTLib| do ďalšieho spomínaného nástroja na dobývanie znalostí -- RapidMiner (viz. \ref{kap1:2.2:2.2.5:Tools}).
 
 \section{Popis aplikácie}\label{kap4:4.2:About}
-Úlohou aplikácie \verb|GenDTLib| je vytvárať rozhodovacie stromy pomocou genetických algoritmov, tak ako sme toto vytváranie popísali v predchádzajúcej kapitole a umožniť ich použitie na klasifikáciu. Snahou bolo vytvoriť také rozhodovacie stromy, ktorých generalizačné schopnosti by boli lepšie než v prípade rozhodovacích stromov vytvorených indukčnými algoritmami. Popri tom sme kládli určité požiadavky na aplikáciu, aby bola z pohľadu užívateľa aj programátora jednoduchá na použitie.
+Úlohou aplikácie \verb|GenDTLib| je vytvárať rozhodovacie stromy pomocou genetických algoritmov, tak ako sme toto vytváranie popísali v predchádzajúcej kapitole, a umožniť ich použitie na klasifikáciu. Snahou bolo vytvoriť také rozhodovacie stromy, ktorých generalizačné schopnosti by boli lepšie než v prípade rozhodovacích stromov vytvorených indukčnými algoritmami. Popri tom sme kládli určité požiadavky na aplikáciu, aby bola z pohľadu užívateľa aj programátora jednoduchá na použitie.
 
 V aplikácii vykonávame pri jednej inštancii behu algoritmu tri základné kroky:
 \begin{enumerate}
-\item vytváranie počiatočnej populácie podľa nejakého indukčného algoritmu z nástroja Weka,
+\item vytváranie počiatočnej populácie podľa nejakého indukčného algoritmu z nástroja \verb|Weka|,
 \item použitie genetického algoritmu na vylepšenie modelu podľa daných kritérií a
 \item klasifikovanie inštancií, prípadne porovnanie modelov medzi sebou.
 \end{enumerate}
 
-Priebeh algoritmu a vytváranie počiatočnej populácie sú ovládané pomocou konfiguračného súboru, ktorý obsahuje definície komponent (viz \ref{kap4:4.4:Components}). Komponenty ďalej obsahujú parametre, ktoré riadia ich chovanie. Tieto komponenty sú základné stavebné bloky algoritmu a nastavenie ich parametrov je závislé na type riešenej úlohy. Existujúce parametre sú jednoduché (nastavenie nejakej množiny hodnôt) aj zložené (kombinácia parametru s hodnotou). Pri niektorých komponentách je dôležité aj poradie parametrov. Návod na nastavenie komponent bude bližšie popísaný v dodatku \ref{kapII}.
+Priebeh algoritmu a vytváranie počiatočnej populácie sú ovládané pomocou konfiguračného súboru, ktorý obsahuje definície komponent (viz \ref{kapII:config}). Komponenty ďalej obsahujú parametre, ktoré riadia ich chovanie. Tieto komponenty sú základné stavebné bloky algoritmu a nastavenie ich parametrov je závislé na type riešenej úlohy. Existujúce parametre sú jednoduché (nastavenie nejakej množiny hodnôt) aj zložené (kombinácia parametru s hodnotou). Pri niektorých komponentách je dôležité aj poradie parametrov. Návod na nastavenie komponent bude bližšie popísaný v dodatku \ref{kapII}.
 
 V konfiguračnom súbore môžeme, na zrýchlenie aplikácie, definovať počet vlákien použitých pri počítaní fitness funkcií a generovaní počiatočnej generácie.
 
-Keďže aplikácia slúži ako zásuvný modul do nástroja Weka, tak klasifikovanie inštancií a porovnanie modelov môžeme vykonávať priamo z nástroja Weka. Vytvorený algoritmus musí kvôli tomu implementovať niektoré rozhrania z WekaAPI.
+Keďže aplikácia slúži ako zásuvný modul do nástroja \verb|Weka|, tak klasifikovanie inštancií a porovnanie modelov môžeme vykonávať priamo z nástroja \verb|Weka|. Vytvorený algoritmus musí kvôli tomu implementovať niektoré rozhrania z \verb|WekaAPI|.
 
 \subsection{Platforma Weka}\label{kap4:4.2:4.2.1:Weka}
-Z časti \ref{kap1:2.2:2.2.5:Tools} vieme, že Weka je široko uznávaný nástroj strojového učenia napísaný komunitou výskumníkov v Jave. Weka implementuje veľké množstvo nástrojov na klasifikáciu, štatistickú analýzu, testovania a porovnávanie modelov, ktoré sa dajú použiť ako z príkazovej riadky, tak i z grafického rozhrania. 
+Z časti \ref{kap1:2.2:2.2.5:Tools} vieme, že \verb|Weka| je široko uznávaný nástroj strojového učenia napísaný komunitou výskumníkov v Jave. \verb|Weka| implementuje veľké množstvo nástrojov na klasifikáciu, štatistickú analýzu, testovania a porovnávanie modelov, ktoré sa dajú použiť ako z príkazovej riadky, tak i z grafického rozhrania. 
 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics{../img/kap4/wekalibs.pdf}}}
-\caption{Pozmenený súbor, ktorý registruje existujúce a nové moduly v nástroji Weka. Na obrázku sú dve výrazné skupiny modulov: moduly na vyhodnotenie deliacich kritérií a klasifikačné moduly. Žlto označený riadok popisuje cestu ku novo vytvorenému klasifikátoru.}\label{fig:wekalibs}
+\caption{Pozmenený súbor, ktorý registruje existujúce a nové moduly v nástroji \texttt{Weka}. Na obrázku sú dve výrazné skupiny modulov: moduly na vyhodnotenie deliacich kritérií a klasifikačné moduly. Žlto označený riadok popisuje cestu k novo vytvorenému klasifikátoru.}\label{fig:wekalibs}
 \end{figure}
 
-Weka, od verzie 3.5.8, podporuje jednoduché vytváranie nových externých modulov (napr. klasifikačné a vizualizačné moduly). Na vloženie nového klasifikačného modulu do nástroja Weka stačí pozmeniť konfiguračný súbor (v balíčku weka.jar) a pridať nový riadok s cestou k nami vytvorenému klasifikátoru, ako na Obrázku \ref{fig:wekalibs}
+Weka, od verzie 3.5.8, podporuje jednoduché vytváranie nových externých modulov (napr. klasifikačné a vizualizačné moduly). Na vloženie nového klasifikačného modulu do nástroja \verb|Weka| stačí pozmeniť konfiguračný súbor (v balíčku weka.jar) a pridať nový riadok s cestou k nami vytvorenému klasifikátoru, ako na Obrázku \ref{fig:wekalibs}
 
-Nástroj Weka má svoje definované WekaAPI, ktoré uľahčuje tvorbu nových modulov. Každý modul má v ňom svoje definované rozhranie. Pri vytváraní nového modulu musíme implementovať toto rozhranie. Vytvorený modul môže potom zúžitkovať existujúce funkcie Weky. Na Obrázku \ref{fig:wekalibs} sú vypísané dve skupiny modulov, pričom jedna z nich popisuje klasifikátory (weka.classifiers.Classifier). Názvy týchto skupín zároveň určujú rozhranie modulu, ktoré musíme implementovať pri vytváraní nového modulu (nový klasifikátor musí implementovať weka.classifiers.Classifier).
-Interakcie v kóde medzi nástrojom Weka a aplikáciou GenLib sú popísané v nasledujúcej časti \ref{kap4:4.2:4.2.2:CodeOrganization}
-
-\pagebreak
+Nástroj \verb|Weka| má svoje definované rozhranie \verb|WekaAPI|, ktoré uľahčuje tvorbu nových modulov. Každý modul má v ňom svoje definované rozhranie. Pri vytváraní nového modulu musíme implementovať toto rozhranie. Vytvorený modul môže potom zúžitkovať existujúce funkcie Weky. Na Obrázku \ref{fig:wekalibs} sú vypísané dve skupiny modulov, pričom jedna z nich popisuje klasifikátory (weka.classifiers.Classifier). Názvy týchto skupín zároveň určujú rozhranie modulu, ktoré musíme implementovať pri vytváraní nového modulu (nový klasifikátor musí implementovať weka.classifiers.Classifier).
+Interakcie v kóde medzi nástrojom \verb|Weka| a aplikáciou \verb|GenDTLib| sú popísané v nasledujúcej časti \ref{kap4:4.2:4.2.2:CodeOrganization}
 
 \subsection{Organizácia kódu}\label{kap4:4.2:4.2.2:CodeOrganization}
 Zdrojový kód je v aplikácií, podľa jeho pôvodu a funkcií, delení do štyroch častí takto:
 \begin{enumerate}
-\item kód pochádzajúci z nástroja Weka, ktorý nazývame WekaAPI,
+\item kód pochádzajúci z nástroja \verb|Weka|, ktorý nazývame \verb|WekaAPI|,
 \item časť kódu s implementovaným klasifikátorom a jeho vonkajším rozhraním,
 \item kód hlavného genetického algoritmu na tvorbu stromov a
-\item kód, ktorý definuje rozhrania budúcich nových knižníc
+\item kód, ktorý definuje rozhrania budúcich nových knižníc.
 \end{enumerate}
 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics[width=415pt]{../img/kap4/sourcecodeorganization.pdf}}}
-\caption{Štruktúra kódu z pohľadu balíčkov. Balíčky z nástroja Weka sú ohraničené čiarkovaným obdĺžnikom. Šípky medzi balíčkami predstavujú ich vzájomné interakcie.}\label{fig:GenLibPackage}
+\caption{Štruktúra kódu z pohľadu balíčkov. Balíčky z nástroja \texttt{Weka} sú ohraničené čiarkovaným obdĺžnikom. Šípky medzi balíčkami predstavujú ich vzájomné interakcie.}\label{fig:GenLibPackage}
 \end{figure}
 
-Ako už bolo spomínané, pri vytváraní aplikácie sme pracovali s nástrojom Weka, ktorý ma svoje definované WekaAPI. Toto WekaAPI obsahuje veľké množstvo rozhraní a pokrýva rôzne funkcie nástroja Weka. My sa v práci obmedzíme iba na minimálnu podmnožinu rozhraní, ktoré nám poskytnú tie najdôležitejšie funkcie:
+Ako už bolo spomínané, pri vytváraní aplikácie sme pracovali s nástrojom \verb|Weka|, ktorý ma svoje definované rozhranie \verb|WekaAPI|. Toto \verb|WekaAPI| obsahuje veľké množstvo rozhraní pre rôzne funkcie nástroja \verb|Weka|. My sa v práci obmedzíme iba na minimálnu podmnožinu rozhraní, ktoré nám poskytnú tie najdôležitejšie funkcie:
 \begin{itemize}
-\item spustenie klasifikátora z nástroja Weka,
-\item možnosť nastaviť parametre algoritmu z nástroja Weka,
+\item spustenie klasifikátora z nástroja \texttt{Weka},
+\item možnosť nastaviť parametre algoritmu z nástroja \texttt{Weka},
 \item poskytnúť informácie o klasifikátore,
-\item vhodne vykresliť klasifikátor
+\item vhodne vykresliť klasifikátor.
 \end{itemize}
-Každá funkcia zodpovedá minimálne jednému rozhraniu z WekaAPI. Na registrovanie a spustenie klasifikátoru z nástroja Weka je nutné implementovať rozhranie \verb|Classifier| z balíčku \verb|weka.classifier|. Z tohoto rozhrania pochádzajú dôležité funkcie na vytvorenie modelu a klasifikovanie nových inštancií. Ostatné rozhrania nám poskytujú dodatočné funkcie, bez ktorých by sa klasifikátor zaobišiel. Rozhraním \verb|OptionHandler| umožňujeme nastaviť parametre algoritmu z nástroja Weka. Rozhrania \verb|TechnicalHandler| a \verb|Randomizable| poskytujú informácie o klasifikátore. Nakoniec rozhranie \verb|Drawable| poskytuje funkcie, ktorými nástroj Weka vykresľuje klasifikátor. WekaAPI pravdaže ponúka mnoho ďalších tried (napr. na vizualizáciu modelov), ktoré ale nebudeme v našej aplikácii používať.
+Každá funkcia zodpovedá minimálne jednému rozhraniu z \verb|WekaAPI|. Na registrovanie a spustenie klasifikátoru z nástroja \verb|Weka| je nutné implementovať rozhranie \verb|Classifier| z balíčku \verb|weka.classifier|. Z tohoto rozhrania pochádzajú dôležité funkcie na vytvorenie modelu a klasifikovanie nových inštancií. Ostatné rozhrania nám poskytujú dodatočné funkcie, bez ktorých by sa klasifikátor zaobišiel. Rozhraním \verb|OptionHandler| umožňujeme nastaviť parametre algoritmu z nástroja \verb|Weka|. Rozhrania \verb|TechnicalHandler| a \verb|Randomizable| poskytujú informácie o klasifikátore. Nakoniec rozhranie \verb|Drawable| poskytuje funkcie, ktorými nástroj \verb|Weka| vykresľuje klasifikátor. \verb|WekaAPI| pravdaže ponúka mnoho ďalších tried (napr. na vizualizáciu modelov), ktoré ale nebudeme v našej aplikácii používať.
 
-Hlavný algoritmus s nástrojom Weka integruje balíček \verb|genlib.classifier|. Na vytvorenie fungujúceho klasifikátora slúži trieda \verb|Classifier|, ktorá je odlišná od tej z nástroja Weka. Dôvodom bolo, aby sa dala aplikácia rozšíriť o nové klasifikátory bez použitia iných knižníc. To o aký klasifikátor pôjde závisí na \verb|WekaExtension| a \verb|GenLibExtension|. Rozhraním \verb|WekaExtension| definujeme, že klasifikátor je spustiteľný z nástroja Weka a rozhraním \verb|GenLibExtension| zase, že je spustiteľný bez neho. Kombinovaním obidvoch rozhraní dosiahneme, že klasifikátor je použiteľný s nástrojom Weka aj bez neho. Grafické aj konzolové rozhrania používajú triedy z tohoto balíčku.
+Hlavný algoritmus s nástrojom \verb|Weka| integruje balíček \verb|genlib.classifier|. Na vytvorenie fungujúceho klasifikátora slúži trieda \verb|Classifier|, ktorá je odlišná od tej z nástroja \verb|Weka|. Dôvodom bolo, aby sa dala aplikácia rozšíriť o nové klasifikátory bez použitia iných knižníc. To o aký klasifikátor pôjde závisí na \verb|WekaExtension| a \verb|GenLibExtension|. Rozhraním \verb|WekaExtension| definujeme, že klasifikátor je spustiteľný z nástroja \verb|Weka| a rozhraním \verb|GenLibExtension| zase, že je spustiteľný bez neho. Kombinovaním obidvoch rozhraní dosiahneme, že klasifikátor je použiteľný s nástrojom \verb|Weka| aj bez neho. Grafické aj konzolové rozhrania používajú triedy z tohoto balíčku.
 
 Balíček \verb|genlib.initializators| obsahuje rozhrania a implementácie týchto rozhraní pre vytvorenie počiatočnej generácie jedincov. Každá trieda používa generátor z balíčka \verb|genlib.generators| na generovanie nových jedincov a tie môže ďalej spracovávať (napr. kombinovať medzi sebou). Základným rozhraním je \verb|PopulationInitializator|. Rozhranie  \verb|TreePopulationInitializator| rozširuje \verb|PopulationInitializator|, tak aby dokázalo pracovať so stromov kódovanými jedincami.
 
-Ďalej v balíčku \verb|genlib.generators| definujeme rozhranie  \verb|Generator| na generovanie jednotlivých jedincov. Rozhranie \verb|TreeGenerator| rozširuje \verb|Generator| a dokáže vytvárať a pracovať so stromovými jedincami. Generátory môžu používať existujúce klasifikátory z nástroja Weka a vytvárať jedincov z nich.
+Ďalej v balíčku \verb|genlib.generators| definujeme rozhranie  \verb|Generator| na generovanie jednotlivých jedincov. Rozhranie \verb|TreeGenerator| rozširuje \verb|Generator| a dokáže vytvárať a pracovať so stromovými jedincami. Generátory môžu používať existujúce klasifikátory z nástroja \verb|Weka| a vytvárať jedincov z nich.
 
 V balíčku \verb|genlib.structures| sa nachádzajú dôležité štruktúry, s ktorými pracujú generátory ale aj samotný genetický algoritmus. Významnou triedou je \verb|Data|, ktorej inštancia zaobaľuje dátovú množinu (prípadne trénovaciu a validačnú množinu). Rozhranie \verb|Node| je štruktúra uzlu používaná v stromových jedincoch. Jej implementácia \verb|MultiWayNode| špecifikuje uzly s variabilným počtom jedincov. Rozhrania \verb|SizeExtension| a \verb|HeightExtension| rozlišujú typy uzlov, ktoré dokážu efektívne dopočítať veľkosť a výšku uzlu v strome.
 
@@ -104,18 +102,18 @@ Balíček \verb|genlib.evolution| obsahuje triedu \verb|EvolutionAlgorithm|, kto
 
 Balíček \verb|genlib.plugins| obsahuje rozhrania na vytváranie nových komponent genetického algoritmu, ako aj nové klasifikátory používajúce genetické algoritmy. Každé z nich definuje jednu komponentu (operátory, fitness funkcie, selektory). Podrobnejší popis možností rozšírenia sú spomenuté v dodatku \ref{kapIII}.
 
-Prehľad tých najdôležitejších balíčkov a rozhraní (v našom vytvorenom API aj vo WekaAPI) je zobrazený v diagrame na Obrázku \ref{fig:GenLibPackage}. Interakcie medzi balíčkami sú znázornené šípkami.
+Prehľad tých najdôležitejších balíčkov a rozhraní (v našom vytvorenom API aj vo \verb|WekaAPI|) je zobrazený v diagrame na Obrázku \ref{fig:GenLibPackage}. Interakcie medzi balíčkami sú znázornené šípkami.
 \section{Implementácia klasifikátoru}\label{kap4:4.3:Implementation}
-V časti \ref{kap4:4.2:4.2.2:CodeOrganization} sme ukázali, ako vyzerá vnútorná štruktúra aplikácie a z predchádzajúcich kapitol sme sa dozvedeli, ako funguje genetický algoritmus. V tomto oddieli popíšeme implementáciu nového klasifikátora a ako tento klasifikátor integruje ostatné časti aplikácie (hlavne genetický algoritmus).
+V časti \ref{kap4:4.2:4.2.2:CodeOrganization} sme ukázali, ako vyzerá vnútorná štruktúra aplikácie, a z predchádzajúcich kapitol sme sa dozvedeli, ako funguje genetický algoritmus. V tomto oddieli popíšeme implementáciu nového klasifikátora a ako tento klasifikátor integruje ostatné časti aplikácie (hlavne genetický algoritmus).
 
 Pri návrhu implementácie sme požadovali:
 \begin{enumerate}
-\item Nový klasifikátor budeme môcť použiť z nástroja Weka, keďže aplikácia má fungovať ako zásuvný modul,
+\item Nový klasifikátor budeme môcť použiť z nástroja \verb|Weka|, keďže aplikácia má fungovať ako zásuvný modul,
 \item genetický algoritmus bude rozšíriteľný o nové komponenty, keďže chceme aby bola aplikácia čo najviac rozšíriteľná a
 \item bude možné kombinovať rôzne komponenty tohoto algoritmu, pretože chceme aby bol algoritmus, čo najviac upraviteľný.
 \end{enumerate}
 
-Implementácia obsahuje jeden klasifikátor pre nástroj Weka. Trieda tohoto nového klasifikátora je potomkom \verb|Classifier| a \verb|WekaExtension| z balíčku \verb|genlib.clas|- \verb|sifier|. Týmto je trieda použiteľná z nástroja Weka ako plnohodnotný klasifikátor. Metóda \verb|void buildClassifier(Instances)| je základnou metódou na vytvorenie modelu, ktorá spracuje dáta, vytvorí počiatočnú populáciu a zavolá hlavný genetický algoritmus na vytvorenie rozhodovacích stromov. 
+Implementácia obsahuje jeden klasifikátor pre nástroj \verb|Weka|. Trieda tohoto nového klasifikátora je potomkom \verb|Classifier| a \verb|WekaExtension| z balíčku \verb|genlib.clas|- \verb|sifier|. Týmto je trieda použiteľná z nástroja \verb|Weka| ako plnohodnotný klasifikátor. Metóda \verb|void buildClassifier(Instances)| je základnou metódou na vytvorenie modelu, ktorá spracuje dáta, vytvorí počiatočnú populáciu a zavolá hlavný genetický algoritmus na vytvorenie rozhodovacích stromov. 
 
 Vytvorenie počiatočnej generácie používa triedy, ktoré implementujú rozhrania z balíčku \verb|genlib.initializators|. Populácie sú vytvárané generátormi jedincov, ktoré vytvárajú konkrétnych jedincov. Diagram, ktorý popisuje štruktúru a vzájomne interakcie medzi generátormi populácie a generátormi jedincov sú zobrazené na Obrázku \ref{fig:popuml}. Výhodou takto zvolenej štruktúry je, že implementácie existujúcich aj nových generátorov sú nezávisle na zvolenom type jedinca. Zároveň ale musia byť v rámci jedného generátora používaní jedinci jedného typu. Takýmto rozhodnutím môžeme predchádzať budúcim možným chybám s nekonzistentnými jedincami\footnote{Konkrétny jeden generátor by mohol vytvárať rôzne typy jedincov, ktoré sú medzi sebou nekonzistentné (napríklad jedinec kódovaný reťazcom a jedinec kódovaný stromom)}
 
@@ -134,10 +132,10 @@ V predchádzajúcej časti sme uviedli, že trieda \verb|EvolutionAlgorithm| v b
 \end{figure}
 
 Pre predstavu, ako funguje klasifikátor v rámci aplikácie \verb|GenDTLib|, uvádzame 
-diagram na Obrázku \ref{fig:clasuml}. Klient vyberie klasifikátor, buď z grafického rozhrania nástroja Weka alebo z konzolového rozhrania (1). Klasifikátor volá metódu na vytvorenie počiatočnej populácie (2). Tento generátor počiatočnej populácie vytvára jedincov pomocou predom zvoleného generátoru jedincov (3). Títo generovaní jedinci môžu byť dodatočné spracovávaní (napríklad kombinovaní medzi sebou). Po vytvorení počiatočnej populácie nastavíme parametre a komponenty genetického algoritmu (4). Po úspešnom nastavení môžeme genetický algoritmus spustiť (6). Po skončení vyberieme poslednú generáciu, ktorú usporiadame podľa fitness funkcií. Nakoniec zobrazíme najlepšieho jedinca klientovi (7). V nástroji Weka je zobrazenie jedincov podporované rozhraním \verb|Drawable|, v ktorom je nutné implementovať metódu na vykreslenie stromu.
+diagram na Obrázku \ref{fig:clasuml}. Klient vyberie klasifikátor, buď z grafického rozhrania nástroja \verb|Weka| alebo z konzolového rozhrania (1). Klasifikátor volá metódu na vytvorenie počiatočnej populácie (2). Tento generátor počiatočnej populácie vytvára jedincov pomocou predom zvoleného generátoru jedincov (3). Títo generovaní jedinci môžu byť dodatočné spracovávaní (napríklad kombinovaní medzi sebou). Po vytvorení počiatočnej populácie nastavíme parametre a komponenty genetického algoritmu (4). Po úspešnom nastavení môžeme genetický algoritmus spustiť (6). Po skončení vyberieme poslednú generáciu, ktorú usporiadame podľa fitness funkcií. Nakoniec zobrazíme najlepšieho jedinca klientovi (7). V nástroji \verb|Weka| je zobrazenie jedincov podporované rozhraním \verb|Drawable|, v ktorom je nutné implementovať metódu na vykreslenie stromu.
 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics[width=400pt]{../img/kap4/algouml.pdf}}}
-\caption{Sekvenčný diagram, ktorý popisuje spôsob práce s klasifikátorom, ktorý generuje a vylepšuje jedincov genetickým algoritmom.}\label{fig:clasuml}
+\caption{Sekvenčný diagram práce s klasifikátorom, ktorý generuje a vylepšuje jedincov genetickým algoritmom.}\label{fig:clasuml}
 \end{figure}

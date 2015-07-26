@@ -1,1 +1,81 @@
 \chapter{Popis priloženého média}\label{kapI}
+{\LARGE\verb|/|}
+
+\begin{itemize}
+\item \verb|praca.pdf| Text práce v elektronickej podobe
+\end{itemize}
+
+{\LARGE\verb|/GenDTLib/|}
+
+Adresár s celou aplikáciou a skriptom na jej rýchle spustenie. Taktiež obsahuje adresáre pre logy, zásuvné moduly, lokalizačné súbory a skripty na generovanie súborov \verb|GenericPropertiesCreator.props| a \verb|GenericObjectEd|- \verb|itor.props|.
+\begin{itemize}
+\item \verb|GenDTLib.bat| Spustiteľný skript pre operačný systém Windows
+\item \verb|GenDTLib.sh| Spustiteľný shell skript pre operačné systémy UNIXového typu
+\end{itemize}
+
+{\LARGE\verb|/GenDTLib/bin/|}
+
+Distribúcia aplikácie \verb|GenDTLib| a nástroja \verb|Weka|. V adresári sa nachádza minimálna množina súborov, ktoré sú potrebné na spustenie nástroja Weka s genetickým klasifikátorom.
+\begin{itemize}
+\item \verb|GenDTLib.jar| Nová aplikácia vo formáte jar, ktorá slúži ako zásuvný modul do nástroja Weka
+\item \verb|weka.jar| Distribúcia nástroja Weka
+\item \verb|config.properties| Konfiguračný súbor pre nastavenie genetického algoritmu na tvorbu rozhodovacích stromov
+\item \verb|GenericPropertiesCreator.props| Konfiguračný súbor vybraný z distribúcie programu Weka, ktorá sa používa na definovanie nových klasifikátorov a ďalších jej nástrojov
+\item \verb|GenericObjectEditor.props| Vygenerovaný súbor z konfiguračného súboru \verb|GenericPropertiesCreator.propr|. Táto konfigurácia nahradzuje tú, ktorá sa nachádza vo vnútri súboru \verb|weka.jar|
+\end{itemize}
+
+{\LARGE\verb|/GenDTLib/plugins/|}
+
+{
+Adresár, v ktorom sa musia nachádzať zásuvné moduly nových komponent genetického algoritmu. Každá komponenta je vo svojom špecifickom adresári.
+}
+
+{\LARGE\verb|/GenDTLib/_generate/|}
+
+{
+\begin{itemize}
+\item \verb|RefreshGPC.bat| Skript pre Windows, ktorý môžeme použiť na obnovenie konfiguračného súboru \verb|GenericPropertiesEditor.props| z distribúcie programu Weka
+\item \verb|GenerateGPC.bat| Skript pre Windows, ktorý slúži na pregenerovanie \verb|Gene|- \verb|ricObjectEditor.props| z pozmeneného konfiguračného súboru \verb|GenericP|- \verb|ropertiesEditor.props|
+\end{itemize}
+}
+
+{\LARGE\verb|/GenDTLib/_logs/|}
+
+{
+Adresár, v ktorom sa musia nachádzať zásuvné moduly nových komponent genetického algoritmu. Každá komponenta je vo svojom špecifickom adresári.
+}
+
+{\LARGE\verb|/src/|}
+
+{
+Zdrojový kód vytvorenej aplikácie. Adresár obsahuje taktiež kód JUnit testov.
+}
+
+{\LARGE\verb|/data/|} 
+
+{
+Adresár s voľne dostupnými dátovými súbormi (prebrané zo \cite{online-uci}), na ktorých sme vykonávali experimenty.
+}
+
+{\LARGE\verb|/tests/|}
+
+{
+Adresár so spúšťanými experimentami a ich výsledkami.
+\begin{itemize}
+\item \verb|*.exp| Experimenty, ktoré sme vykonali a spracovali v práci
+\item \verb|results/| Výsledky spúšťaných experimentov
+\end{itemize}
+}
+
+{\LARGE\verb|/javadoc/|}
+
+Adresár, ktorý obsahuje programátorskú dokumentáciu aplikácie a skript na jej vygenerovanie. 
+{
+\begin{itemize}
+\item \verb|GenJavaDoc.bat| Skript pre Windows, ktorým generujeme programátorskú dokumentáciu priamo z kódu.
+\item \verb|options| Nastavenie pre program \verb|javadoc| (z adresáru Java), ktorý definuje, ako sa generuje programátorská dokumentácia.
+\item \verb|doc/| Adresár s vygenerovanou dokumentáciou vo forme html stránky. Otvorením súboru \verb|index.html| ju zobrazíme.
+\end{itemize}
+}
+
+

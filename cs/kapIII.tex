@@ -1,9 +1,450 @@
 \chapter{Rozšíriteľnosť aplikácie}\label{kapIII}
-V tejto kapitole popíšeme možnosti rozšírenia aplikácie o nové komponenty (operátory, selekcie, fitness funkcie, populácie) a využitie aplikácie aj bez nástroja Weka.
+V tejto kapitole popíšeme možnosti rozšírenia aplikácie o nové komponenty (operátory, selekcie, fitness funkcie, populácie) a využitie aplikácie aj bez nástroja Weka. Kapitola je určená pre užívateľov, ktorý majú skúsenosti v programovaní na platforme Java.
 
 \section{Rozšíriteľnosť}\label{kap4:4.4:Plugin}
-Na rozšírenie aplikácie \verb|GenDTLib| môžeme použiť existujúce rozhrania z balíčku \verb|genlib.plugins|. Rozhrania môžu byť určené buď na definovanie nových komponent genetického algoritmu, alebo na definovanie nových klasifikátorov a deliacich kritérií. Toto je možné kvôli zvolenej abstrakcii genetického algoritmu.
+V časti \ref{kap4:4.2:4.2.2:CodeOrganization} sme predviedli ako je organizovaný kód v aplikácií \verb|GenDTLib|.
+Na rozšírenie tejto aplikácie môžeme použiť existujúce rozhrania z balíčku \verb|genlib.plugins|. Rozhrania môžu byť určené buď na definovanie nových komponent genetického algoritmu, alebo na definovanie nových klasifikátorov a deliacich kritérií. Toto je možné kvôli zvolenej abstrakcii genetického algoritmu.
 \subsection{Nové komponenty}
-Existujúce komponenty môžeme rozšíriť pridaním nových knižníc do predom určených zložiek. Knižnice musia dediť od niektorého rozhrania z \verb|genlib.plugins|. Typ knižnice závisí od tohoto rozhrania. Definované typy knižníc sú uvádzané v dodatku XX.
+Existujúce komponenty môžeme rozšíriť pridaním nových knižníc do predom určených zložiek. Knižnice musia dediť od niektorého rozhrania z \verb|genlib.plugins|. Typ knižnice závisí od tohoto rozhrania. V rámci knižnice potom môžeme  dodefinovať viacero nových komponent rovnakého typu. 
 
-\subsection{Použitie bez Weky}
+\subsubsection*{Fitness funkcie}
+Pri vytváraní nových funkcií je treba implementovať rozhranie \verb|FitnessPlugin|. Jednotlivé fitness funkcie v tejto knižnici potom musia implementovať rozhranie \verb|Fitnes|- \verb|sFunction|, ktoré je používané na ohodnotenie jedincov.
+Popis tohoto rozhrania je v uvedené v tabuľke \ref{fig:tabfit}. Celé rozhranie fitness funkcie je parametrizované typom jedinca, pre ktoré počítame fitness funkciu.
+
+Fitness funkcie sú ďalej spracované v tzv. \emph{komparátoroch}, ktoré vyhodnocujú a spracovávajú fitness funkcie.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{FitnessFunction<Individual>} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public double computeFitness(Individual)| & \multirow{4}{5cm}{Spočíta fitness funkciu pre určitého jedinca. Náš genetický algoritmus sa snaží maximalizovať fitness funkcie jedincov. To znamená, že aj nové fitness funkcie by mali vrátiť väčšie hodnoty, keď je jedinec kvalitnejší.} \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+\hline
+\verb|public Class<T> getIndividualClassType()| & \multirow{2}{5cm}{Vráti pre aký typ jedinca počítame fitness funkciu.} \\
+& \\
+\hline
+\verb|public Class<T> setData(Data)| & \multirow{3}{5cm}{Nastaví dátovú množinu, ktorú použijeme pri počítaní funkcie.} \\
+& \\
+& \\
+\hline
+\verb|public void setParam(String)| & \multirow{2}{5cm}{Nastaví parametre fitness funkcie.} \\
+& \\
+\hline
+\verb|public String objectInfo()| & \multirow{2}{5cm}{Vráti informácie o fitness funkcii.} \\
+& \\
+\hline
+\verb|public boolean canHandleNumeric()| & \multirow{3}{5cm}{Rozhoduje, či je fitness funkcia schopná pracovať s numerickými atribútmi.} \\
+& \\
+& \\
+\hline\hline
+\textbf{Verejné metódy} & \\
+\hline
+\verb|public int getIndex()| & \multirow{3}{5cm}{Index fitness funkcie, pod ktorým bude jej hodnota uložená v jedincovi.} \\
+& \\
+& \\
+\hline
+\end{tabular}
+\caption{Popis rozhrania pre Fitness funkcie}\label{fig:tabfit}
+\end{table}
+
+\subsubsection*{Operátory}
+Pri vytváraní nových operátorov je treba implementovať rozhranie \verb|OperatorPlugin|. Jednotlivé operátory (mutácie a kríženia) v tejto knižnici potom musia implementovať rozhranie \verb|Operator|. Popis tohoto rozhrania je predstavené v tabuľke \ref{fig:tabop}.
+Rozhranie operátoru je parametrizované typom jedinca.
+
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Operator<Individual>} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public void execute(Population, Population)| & \multirow{7}{5cm}{Metóda aplikuje operátor na jedincov z populácie (rodičia) za určitej pravdepodobnosti. Jedinci sú po aplikovaní operátora vložení do druhej populácie (potomkovia). } \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+\hline
+\verb|public double getOperatorProbability()| & \multirow{3}{5cm}{Vráti pravdepodobnosť pri ktorej aplikujeme operátor na jedincovi/jedincoch.} \\
+& \\
+& \\
+\hline
+\verb|public void setOperatorProbability(double)| & \multirow{4}{5cm}{Nastaví pravdepodobnosť pri ktorej aplikujeme operátor na jedincovi/jedincoch.} \\
+& \\
+& \\
+& \\
+\hline
+\verb|public Class<T> getIndividualClassType()| & \multirow{2}{5cm}{Metóda vráti pre aký typ jedinca aplikujeme operátor} \\
+& \\
+& \\
+\hline
+\verb|public void setData(Data)| & \multirow{4}{5cm}{Nastaví dátovú množinu, ktorú môžeme použiť pri práci s operátorom.} \\
+& \\
+& \\
+& \\
+\hline
+\verb|public void setParam(String)| & \multirow{3}{5cm}{Nastaví parametre tohoto operátora (napr. pravdepodobnosť).} \\
+& \\
+& \\
+\hline
+\verb|public String objectInfo()| & \multirow{2}{5cm}{Vráti informácie o operátore.} \\
+& \\ 
+\hline
+\end{tabular}
+\caption{Popis rozhrania pre Operátory (kríženie a mutáciu)}\label{fig:tabop}
+\end{table}
+
+\subsubsection*{Výber jedincov}
+Pri vytváraní nových selektorov je treba implementovať rozhranie \verb|SelectorPlugin|. Jednotlivé selektory v tejto knižnici potom musia implementovať rozhranie \verb|Selector|. Popis tohoto rozhrania je popísaný v tabuľke \ref{fig:tabsel}.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Selector} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public Population select(Population,int)| & \multirow{9}{5cm}{Vyberie určitý počet jedincov z populácie zadanej ako parameter. Vybraných jedincov vráti v novej populácii. K tejto metóde existuje podobná, ktorá vybraných jedincov vráti v populácii zadanej ako parameter.} \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+\hline
+\verb|public void setRandomGenerator(Random)| & \multirow{3}{5cm}{Nastaví pseudo-náhodný generátor, ktorý možno použiť pri výbere jedincov.} \\
+& \\
+& \\
+\hline
+\verb|public void setParam(String)| & \multirow{2}{5cm}{Nastaví parametre fitness funkcie.} \\
+& \\
+\hline
+\end{tabular}
+\caption{Popis rozhrania selektorov, použitých pri výbere jedincov.}\label{fig:tabsel}
+\end{table}
+
+\subsubsection*{Kontajner pre populáciu}
+Pri vytváraní nových kontajnerov pre populáciu je treba implementovať rozhranie \verb|PopulationPlugin|. Vytváranie takejto knižnice dáva zmysel iba vtedy, keď chceme zásadne zmeniť funkcie populácie. V ostatných prípadoch stačí existujúca trieda Population. Jednotlivé kontajnery v tejto knižnici potom musia implementovať rozhranie \verb|IPopulation|. Popis tohoto rozhrania je popísaný v tabuľke \ref{fig:tabpop}. Rozhranie je taktiež parametrizované typom jedinca.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{IPopulation<Individual>} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public void update()| & \multirow{8}{5cm}{Metóda, ktorá aktualizuje populáciu alebo nejaký parameter genetického algoritmu (napr. počet generácií). Metódou dokážeme simulovať vlastnosti dynamických populácií.}\\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+\hline
+\verb|public Individual getBestIndividual()| & \multirow{3}{5cm}{Vyberie najlepšieho jedinca (vyhodnoteného fitness funkciami).}\\
+& \\
+& \\
+\hline
+\verb|public void resample()| & \multirow{4}{5cm}{Z aktuálnej populácie vyberie jedincov pomocou výberu s opakovaním a vytvorí novú populáciu.} \\
+& \\
+& \\
+& \\
+\hline
+\verb|public void _phase()| &	
+\multirow{6}{5cm}{Vykoná určitú operáciu nad populáciou. Medzi tieto fázy zaraďujeme: výber jedincov, mutáciu, kríženie, elitizmus, environmentálna selekcia.} \\
+& \\
+& \\
+& \\
+& \\
+& \\
+\hline
+\verb|public void computeFitness(int, int)| & \multirow{7}{5cm}{Spočíta fitness funkcie pre jedincov v populácii. Na tomto počítaní sa môže zúčastniť viacero vlákien. Vlákna môžu počítať tieto fitness funkcie po blokoch jedincov určitej veľkosti.} \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+\hline
+\verb|public void add(Individual)| & \multirow{2}{5cm}{Pridá nového jedinca do populácie.} \\
+& \\
+\hline
+\verb|public IPopulation createNewInstance()| & \multirow{2}{5cm}{Vytvorí novú inštanciu aktuálnej populácie.} \\
+& \\
+\hline
+\verb|public IPopulation<S> makeNewInstance()| & \multirow{3}{5cm}{Vytvorí novú inštanciu populácie pre určitý typ jedinca (Java generika).} \\
+& \\
+& \\
+\hline
+\end{tabular}
+\caption{Popis rozhrania kontajnerov pre nové populácie.}\label{fig:tabpop}
+\end{table}
+
+\subsubsection*{Vytváranie počiatočnej populácie}
+Pri vytváraní nových knižníc, ktoré definujú inicializátory počiatočnej populácie, je treba implementovať rozhranie \verb|PopPlugin|. Jednotlivé inicializátory v tejto knižnici potom musia implementovať rozhranie \verb|PopulationInitializator|. Popis tohoto rozhrania je popísaný v tabuľke \ref{fig:tabpopinit}. Rozhranie je taktiež parametrizované typom jedinca.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{PopulationInitializator<Individual>} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public void initPopulation()| & \multirow{9}{5cm}{Vyberie určitý počet jedincov z populácie zadanej ako parameter. Vybraných jedincov vráti v novej populácii. K tejto metóde existuje podobná, ktorá vybraných jedincov vráti v populácii zadanej ako parameter.} \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+& \\
+\hline
+\verb|public Individual[] getPopulation()| & \multirow{2}{5cm}{Vráti počiatočnú populáciu.} \\
+& \\ 
+\hline
+\verb|public void setRandomGenerator(Random)| & \multirow{5}{5cm}{Nastaví pseudo-náhodný generátor, ktorý možno použiť pri inicializovaní jedincov a pri ich ďalšom spracovaní.} \\
+& \\
+& \\
+& \\
+& \\
+\hline
+\verb|public void setGenerator(Generator)| & \multirow{3}{5cm}{Nastaví generátor jedincov použitý na inicializovanie počiatočnej populácie.} \\
+& \\
+& \\
+\hline
+\verb|public void setParam(String)| & \multirow{2}{5cm}{Nastaví parametre inicializátora.} \\
+& \\
+\hline
+\verb|public void setData(Data)| & \multirow{4}{5cm}{Nastaví dátovú množinu, ktorú použijeme pri inicializovaní počiatočnej populácie.} \\
+& \\
+& \\
+& \\
+\hline
+\verb|public String objectInfo()| & \multirow{2}{5cm}{Vráti informácie o inicializátore.} \\
+& \\ 
+\hline
+\end{tabular}
+\caption{Popis rozhrania inicializátorov počiatočnej populácie.}\label{fig:tabpopinit}
+\end{table}
+
+\subsubsection*{Generátory jedincov}
+Nakoniec pri vytváraní nových knižníc s generátormi jedincov je treba implementovať rozhranie \verb|GenPlugin|. Jednotlivé generátory v tejto knižnici potom musia implementovať rozhranie \verb|Generator|. Popis tohoto rozhrania je popísaný v tabuľke \ref{fig:tabgen}. Rozhranie je taktiež parametrizované typom jedinca.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Generator<Individual>} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public Individual[] createPopulation()| & \multirow{3}{5cm}{Vytvorí nových jedincov, ktorí sú kandidátmi do počiatočnej populácie.} \\
+& \\
+& \\
+\hline
+\verb|public Class<T> getIndividualClassType()| & \multirow{2}{5cm}{Vráti pre aký typ jedinca počítame fitness funkciu.} \\
+& \\
+\hline
+\verb|public Individual[] getIndividuals()| & \multirow{2}{5cm}{Vráti počiatočnú populáciu.} \\
+& \\ 
+\hline
+\verb|public void setGatherGen(Generator)| & \multirow{6}{5cm}{Generátor, ktorý slúži na dočasne uskladnenie vytvorených jedincov. Použitý pri multi-vláknovom generovaní.} \\
+& \\ 
+& \\ 
+& \\ 
+& \\ 
+& \\
+\hline
+\verb|public void setData(Data)| & \multirow{3}{5cm}{Nastaví dátovú množinu, podľa ktorej vytvárame jedincov.} \\
+& \\
+& \\
+\hline
+\verb|public void setParam(String)| & \multirow{2}{5cm}{Nastaví parametre generátora.} \\
+& \\
+\hline
+\verb|public String objectInfo()| & \multirow{2}{5cm}{Vráti informácie o generátore.} \\
+& \\ 
+\hline
+\end{tabular}
+\caption{Popis rozhrania pre generátory jedincov.}\label{fig:tabgen}
+\end{table}
+
+\subsection{Nové klasifikátory}
+Ďalšou možnosťou, ako rozšíriť aplikáciu je vytvoriť nový klasifikátor. Takto vytvorený klasifikátor môže zmeniť chovanie genetického algoritmu tak, že bude pracovať s rozhodovacími stromami v inej reprezentácií. Genetický algoritmus je v novom klasifikátore prípadne možné optimalizovať napr. na rýchlosť.
+
+Pri vytváraní novej knižnice, v ktorej môžeme definovať nové klasifikátory, je treba implementovať rozhranie \verb|ClassifierPlugin|. Jednotlivé klasifikátory v tejto knižnici potom musia implementovať rozhranie \verb|Classifier|. Na jeho sprístupnenie z nástroja Weka ešte musíme implementovať rozhranie \verb|WekaClassifierExten|- \verb|sion|. Naopak, keď chceme, aby bol klasifikátor použiteľný s našimi definovanými štruktúrami (\verb|GenLibInstances|), tak musíme implementovať rozhranie \verb|GenLibCl|- \verb|assifierExtension|. Klasifikátor môže kombinovať obidve tieto rozhrania ľubovoľne. Spomínané rozhrania a ich popis sú predstavené v tabuľke \ref{fig:tabclass}.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Classifier} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public void buildClassifier(Data)| & \multirow{2}{5cm}{Vytvorí klasifikátor pomocou dátovej množiny.} \\
+& \\
+\hline
+\verb|public void setOptions(String[])| & \multirow{4}{5cm}{Nastavenie parametrov daného klasifikátora napríklad z príkazovej riadky.} \\
+& \\
+& \\ 
+& \\ 
+\hline
+\verb|public double[] classifyData(Data)| & \multirow{3}{5cm}{Klasifikuje jednotlivé inštancie z dátovej množiny.} \\
+& \\ 
+& \\ 
+\hline
+\verb|public Data makeDataFromFile(String)| & \multirow{7}{5cm}{Vytvorenie dátovej množiny zo súboru. Cesta k nemu je zadaná parametrom. V nástroji Weka existujú pomocné metódy, ktoré dokážu vytvoriť objekty pre dáta.} \\
+& \\ 
+& \\ 
+& \\ 
+& \\ 
+& \\
+& \\ 
+\hline
+\hline
+\textbf{WekaClassifierExtension} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public void buildClassifier(Instances)| & \multirow{8}{5cm}{Vytvorí klasifikátor za pomoci dát reprezentovaných Weka objektom Instances. Vo vnútri metódy je vykonaná hlavná logika programu (napr. predspracovanie dát, beh genetického algoritmu).} \\
+& \\
+& \\
+& \\ 
+& \\ 
+& \\ 
+& \\ 
+& \\  
+\hline
+\verb|public double classifyInstance(Instance)| & \multirow{3}{5cm}{Klasifikuje konkrétnu inštanciu z dátovej množiny.} \\
+& \\ 
+& \\ 
+\hline
+\hline
+\textbf{GenLibClassifierExtension} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public void buildClassifier(GenLibInstances)| & \multirow{8}{5cm}{Vytvorí klasifikátor za pomoci dát reprezentovaných objektom GenLibInstances. Vo vnútri metódy je vykonaná hlavná logika programu (napr. predspracovanie dát, beh genetického algoritmu).} \\
+& \\
+& \\
+& \\ 
+& \\ 
+& \\ 
+& \\ 
+& \\ 
+\hline
+\verb|public double classifyInstance(GenLibInstance)| & \multirow{3}{5cm}{Klasifikuje konkrétnu inštanciu z dátovej množiny.} \\
+& \\ 
+& \\ 
+\hline
+\hline
+\end{tabular}
+\caption{Popis rozhrania pre generátory jedincov.}\label{fig:tabclass}
+\end{table}
+\section{Použitie bez Weky}
+Genetický algoritmus, ktorý sme vytvorili v aplikácii je spolu s novými knižnicami použiteľný z nástroja Weka. Pri návrhu a implementovaní aplikácie \verb|GenDTLib| sme požadovali, aby slúžila ako zásuvný modul do nástroja Weka, no zároveň sme chceli, aby jednotlivé súčasti neboli na nej závislé. 
+
+Pre užívateľa, ktorý z nejakého dôvodu nechce použiť nástroj Weka, existujú doposiaľ neimplementované rozhrania. Kvôli tomu, že aplikácia je nezávislá na nástroji Weka, je počet rozhraní na implementovanie minimálny. Všetky rozhrania riešia, ako bude reprezentovaná dátová množina a patria sem:
+\begin{enumerate}
+\item \verb|GenLibAttribute|, ktoré predstavuje určitý atribút v dátovej množine,
+\item \verb|GenLibDistribution|, ktoré sa používa na rozdelenie hodnôt atribútu v dátovej množine. Napríklad je s ním možné určiť počet výskytov určitej triedy.
+\item \verb|GenLibInstances| slúži ako kontajner pre inštancie z dátovej množiny a
+\item \verb|GenLibInstance|, ktoré predstavuje jednu konkrétnu inštanciu z množiny inštancií dátovej množiny.
+\end{enumerate}
+Popis týchto rozhraní je uvedený v tabuľke \ref{fig:tabnonweka}. Podobné rozhrania obsahuje aj nástroj Weka, pričom by mali fungovať podobne.
+
+\begin{table}
+\centering
+\begin{tabular}{|l|c|}
+\hline
+\textbf{GenLibAttribute} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public int numOfValues()| & \multirow{2}{5cm}{Vráti počet hodnôt daného atribútu v dátovej množine.} \\
+& \\
+\hline
+\verb|public boolean isNumeric()| & \multirow{2}{5cm}{Rozhodne, či je atribút numerický.} \\
+& \\
+\hline
+\verb|public double[] isNominal(Data)| & \multirow{2}{5cm}{Rozhodne, či je atribút kategoriálny.} \\
+& \\  
+\hline
+\hline
+\textbf{GenLibDistribution} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public double[] getClassCounts()| & \multirow{2}{5cm}{Spočíta rozdelenie hodnôt pre výstupný atribút.} \\
+& \\
+\hline
+\verb|public double[] getAttrCounts(GenLibAttribute)| & \multirow{2}{5cm}{Spočíta rozdelenie hodnôt pre určitý atribút.} \\
+& \\ 
+\hline
+\verb|public void setData(Data)| & \multirow{3}{5cm}{Nastaví dátovú množinu, podľa ktorej počítame rozdelenia.} \\
+& \\ 
+& \\ 
+\hline
+\hline
+\textbf{GenLibInstances} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public int numInstances()| & \multirow{2}{5cm}{Spočíta počet inštancií dátovej množine.} \\
+& \\
+\hline
+\verb|public int numAttributes()| & \multirow{2}{5cm}{Vráti počet atribútov dátovej množine.} \\
+& \\ 
+\hline
+\verb|public int numClasses()| & \multirow{2}{5cm}{Vráti počet rôznych tried výstupného atribútu.} \\
+& \\ 
+\hline
+\verb|public void resample(Random)| & \multirow{5}{5cm}{Vytvorí novú dátovú množinu, ktorej inštancie sú vybrané (výber s opakovaním) z aktuálnej dátovej množiny.} \\
+& \\ 
+& \\ 
+& \\ 
+& \\ 
+\hline
+\hline
+\textbf{GenLibInstance} & \\
+\hline\hline
+\textbf{Abstraktné metódy} & \textbf{Popis} \\
+\hline
+\verb|public GenLibAttribute getAttribute(int)| & \multirow{2}{5cm}{Z dátovej množiny vyberie určitý atribút.} \\
+& \\
+\hline
+\verb|public double getValueOfAttribute(int)| & \multirow{2}{5cm}{Z dátovej množiny vyberie hodnotu určitého atribútu.} \\
+& \\ 
+\hline
+\verb|public GenLibAttribute getClassAttribute()| & \multirow{2}{5cm}{Vráti výstupný atribút.} \\
+& \\ 
+\hline
+\verb|public double getValueOfClass()| & \multirow{2}{5cm}{Vráti hodnotu výstupného atribútu.} \\
+& \\ 
+\hline
+\hline
+\end{tabular}
+\caption{Popis rozhrania pre generátory jedincov.}\label{fig:tabnonweka}
+\end{table}

@@ -271,6 +271,12 @@ Túto selekciu je možné použiť i tam, kde fitness není explicitne daná. Do
 \subsection{Elitizmus}\label{kap2:2.4:2.4.3:Elitism}
 Elitizmus o hodnote $k\in[0,1]$, ktorý bol po prvý krát predstavený pánom De Jongom, je špeciálnym typom výberu jedincov. Na vybraných jedincoch nie sú aplikované žiadne operátory. Namiesto toho ich priamo zaraďujeme do ďalšej generácie. V prípade populácie o veľkosti $n$ donútime genetický algoritmus, aby si ponechal $n*k$ najlepších jedincov. Touto metódou neriskujeme zbytočnú stratu (krížením alebo mutáciou) doposiaľ najlepších jedincov. Bolo ukázané, že použitie elitizmu o hodnote $k$ signifikantne zlepšuje efektivitu genetických algoritmov.
 
+\subsection{Selekcia prostredia}\label{kap2:2.4:2.4.4:EnvironmentalSelection}
+Selekcia prostredia (tiež aj selekcia prežitia) \cite{kap3-environmental} je ďalšou technikou na výber jedincov. Táto selekcia vyberá jedincov priamo do ďalšej generácie, pričom výber je uskutočnený z reprodukovaných jedincov. V genetických algoritmoch nie je až taká častá a používa sa hlavne vtedy, keď nechceme riskovať stratu najlepších jedincov a zároveň, keď chceme vyfiltrovať úplne nevhodných jedincov. V porovnaní s elitizmom o hodnote $k$ má tú výhodu, že nemusí vyberať iba $n*k$ najlepších jedincov. Ďalšia generácia jedincov teda zostane stále dostatočne diverzifikovaná.
+
+Selekciou prostredia sa snažíme vyberať jedincov do ďalšej generácie z doposiaľ vytvorených potomkov. Táto selekcia je v genetickom algoritme vykonaná po aplikovaní operátorov.
+Typy selekcie prostredia sú rovnaké, ako v prípade selekcie na výber jedincov k reprodukcii.
+
 \section{Genetické operátory}\label{kap2:2.5:Operators}
 Pre úspešnú aplikáciu genetických algoritmov je kľúčovým krokom voľba vhodných genetických operátorov, ktoré sa budú aplikovať v každom kroku. Úloha operátorov v genetických algoritmoch je dôležitá hlavne kvôli tomu, že by mali čo najlepšie udržať diverzitu vytvorených populácií. Voľba vhodného genetického operátora závisí hlavne na kódovaní jedincov (spomínanom v oddieli \ref{kap2:2.2:Coding}), s ktorým musí byť konzistentné.
 
