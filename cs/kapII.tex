@@ -167,50 +167,47 @@ Nastavenie argumentov genetického algoritmu môžeme rozdeliť do  4 skupín:
 \texttt{\{komponenta2\} \{parametre2\};...}
 \end{center}
 \end{enumerate}
-pričom \texttt{\{parametre\}} nazývame aj vnútorné parametre a definujeme ich ako
+
+Hodnota na vyplnenie \texttt{\{parametre\}} môže byť nastavená ako:
+\begin{itemize}
+\item n-tica dvojíc parameter,hodnota
 \begin{center}
 \texttt{parametre := \{parameter1\},\{hodnota\_parametru1\},
-\{parameter2\},\{hodnota\_parametru2\},...}
+\{parameter2\},\{hodnota\_parametru2\},...} 
 \end{center}
+\item n-tica hodnôt
+\begin{center}
+\texttt{parametre := \{hodnota1\},\{hodnota2\},...} 
+\end{center}
+\item bez parametru
+\begin{center}
+\texttt{parametre := x} 
+\end{center}
+\end{itemize}
 
-Medzi argumenty, ktoré zaraďujeme do skupiny 1 patria:
+\subsection{Argumenty}
+Argumenty môžeme deliť podľa skupín spomínaných vyššie. Do skupiny 1 patria tieto argumenty:
 \begin{enumerate}
-\item
-\item
+\item \texttt{number-of-generations} -- počet generácií,
+\item \texttt{pop-size} -- veľkosť populácie,
+\item \texttt{elitism} -- predstavuje hodnotu elitizmu,
+\item \texttt{fit-threads} -- počet vlákien použitých na počítanie fitness funkcií,
+\item \texttt{gen-threads} -- počet vlákien použitých na vytvorenie počiatočnej populácie,
+\item \texttt{classify} -- počet najlepších rozhodovacích stromov použitých na klasifikáciu. V tomto prípade bude genetický algoritmus fungovať podobne ako technika \emph{bagging}.
 \end{enumerate}
-Komplikovanejšie argumenty popíšeme v nasledujúcich oddieloch.
+Komplikovanejšie argumenty popíšeme v nasledujúcich úsekoch.
 
-\subsection*{Dátová množina}
-Argument s názvom \verb|data| (skupina 2.), ktorým definujeme ako bude rozdelená dátová množina na trénovaciu a testovaciu podmnožinu. 
-Dovolené hodnoty parametrov sú:
+\subsubsection*{Dátová množina}
+Argumentom \verb|data| (skupina 2.) definujeme ako bude rozdelená dátová množina na trénovaciu a validačnú podmnožinu. 
+Dovolené parametre sú:
 \begin{itemize}
-\item \verb|TRAINRATIO|, ktorého hodnota je číslo z intervalu [0,1],
-\item \verb|RESAMPLE|, ktorého hodnota je typu boolean.
+\item \verb|TRAINRATIO| Podiel trénovacej množiny v dátach. Jeho hodnota je číslo z intervalu [0,1],
+\item \verb|RESAMPLE| Podmnožiny sú vytvorené výberom s opakovaním. Jeho hodnota je typu boolean.
 \end{itemize}
 
-\subsection*{Fitness funkcie}
-Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
-Dovolené hodnoty pre komponenty sú 
-\begin{itemize}
-\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
-\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
-\item \verb|tHeight| -- výška rozhodovacieho stromu,
-\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
-\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
-\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
-\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
-\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
-\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
-\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
-\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
-\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
-\end{itemize}
-
-Dovolené hodnoty parametrov sú:
-
-\subsection*{Kríženia a mutácie}
-Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
-Dovolené hodnoty pre komponenty sú 
+\subsubsection*{Fitness funkcie}
+Argumentom \verb|fit-functions| (skupina 4.), definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Dovolené komponenty sú 
 \begin{itemize}
 \item \verb|tAcc| -- presnosť rozhodovacieho stromu,
 \item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
@@ -226,64 +223,79 @@ Dovolené hodnoty pre komponenty sú
 \item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
 \end{itemize}
 
-Dovolené hodnoty parametrov sú:
+Dovolené parametre sú:
+\begin{itemize}
+\item \verb|INDEX| -- index fitness funkcie v jedincovi,
+\item \verb|DATA| -- dátová množina použitá na výpočet fitness funkcie. Jeho hodnota je buď -1 (celá množina), 0 (trénovacia množina), 1 (validačná množina).
+\end{itemize}
+
+\subsubsection*{Vyhodnotenie fitness funkcií}
+Argumentom \verb|fit-comparator| (skupina 4.) definujeme to, ako budeme určovať kvalitu jedincov.
+Dovolené komponenty sú 
+\begin{itemize}
+\item \verb|SINGLE| Kvalitu jedincov určujeme pomocou jednej vybranej fitness funkcie,
+\item \verb|PRIORITY| Kvalitu jedincov určujeme fitness funkciami branými prioritne \ref{kap2:2.3:2.3.2:Priority},
+\item \verb|WEIGHT| Kvalitu jedincov určujeme pomocou váženej hodnoty fitness funkcií \ref{kap2:2.3:2.3.1:Weighted}.
+\end{itemize}
+
+Parameter komponenty pozostáva z $n$ hodnôt, pričom $n = po\v cet funkcií$.
+
+\subsubsection*{Kríženia a mutácie}
+Argumentom \verb|xover-operators| (skupina 4.) definujeme operátory kríženia.
+Dovolené komponenty (kríženia) sú: 
+\begin{itemize}
+\item \verb|dtX| -- žiadne kríženia (skopírovanie jedincov),
+\item \verb|subTreeX|  -- kríženie podstromov.
+\end{itemize}
+
+Argumentom \verb|mut-operators| (skupina 4.) definujeme operátory mutácie.
+Povolené komponenty (mutácie) sú:
+\begin{itemize}
+\item \verb|dtM| -- žiadna mutácia (skopírovanie jedincov),
+\item \verb|ntlNomM|  -- mutácia podstromu na list (výstupný atribút je kategoriálny),
+\item \verb|ntlNumM|  -- mutácia podstromu na list, (výstupný atribút je numerický),
+\item \verb|wekaDSM|  -- mutácia uzlu na rozhodovací koreň,
+\item \verb|valueMut| -- \textbf{POZOR!} experimentálna mutácia, ktorá náhodne zmení hodnotu klasifikácie v listu.
+\end{itemize}
+
+Dovolené parametre sú:
+\begin{itemize}
+\item \verb|PROB| Pravdepodobnosť operátora.
+\item \verb|DATA| Dátová množina použitá pri práci s operátorom. Jeho hodnota je buď -1 (celá množina), 0 (trénovacia množina), 1 (validačná množina).
+\end{itemize}
 
 \subsection*{Selekcie}
-Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
-Dovolené hodnoty pre komponenty sú 
+Argumentom \verb|selectors| (skupina 4.) definujeme selekcie \ref{kap2:2.4:Selection} a argumentom \verb|env-selectors| (skupina 4.) definujeme selekcie prostredia \ref{kap2:2.4:2.4.4:EnvironmentalSelection}.
+Dovolené komponenty sú 
 \begin{itemize}
-\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
-\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
-\item \verb|tHeight| -- výška rozhodovacieho stromu,
-\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
-\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
-\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
-\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
-\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
-\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
-\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
-\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
-\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
+\item \verb|random| \textbf{POZOR!} experimentálny výber jedincov, ktorá vyberá jedincov náhodne.
+\item \verb|Rw| Ruletová selekcia,
+\item \verb|Tmt|  Turnajová selekcia.
 \end{itemize}
 
-Dovolené hodnoty parametrov sú:
+Selekcie sú bez parametrov.
 
-\subsection*{Inicializácia populácie}
-Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
-Dovolené hodnoty pre komponenty sú 
+\subsubsection*{Inicializácia populácie}
+Argumentom \verb|pop-init| (skupina 3.), definujeme inicializátory počiatočnej populácie.
+Povolené komponenty sú 
 \begin{itemize}
-\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
-\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
-\item \verb|tHeight| -- výška rozhodovacieho stromu,
-\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
-\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
-\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
-\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
-\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
-\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
-\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
-\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
-\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
+\item \verb|wCompTree| Rozhodovacie stromy sú zaradené do počiatočnej populácie bez zmeny,
+\item \verb|wRanStump| Rozhodovacie korene sú medzi sebou spájané až dokým nedosiahnu určitú výšku.
 \end{itemize}
 
-Dovolené hodnoty parametrov sú:
-
-\subsection*{Generátor jedincov}
-Argument s názvom \verb|fit-functions| (skupina 4.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
-Dovolené hodnoty pre komponenty sú 
+Dovolené parametre sú:
 \begin{itemize}
-\item \verb|tAcc| -- presnosť rozhodovacieho stromu,
-\item \verb|tSize|  -- počet vrcholov rozhodovacieho stromu,
-\item \verb|tHeight| -- výška rozhodovacieho stromu,
-\item \verb|tFMsr| -- f-miera rozhodovacieho stromu,
-\item \verb|tTP| -- počet pravdivo pozitívnych inštancií,
-\item \verb|tTN| -- počet pravdivo negatívnych inštancií,
-\item \verb|tFP| -- počet nepravdivo pozitívnych inštancií,
-\item \verb|tFN| -- počet nepravdivo negatívnych inštancií,
-\item \verb|tPrecision| -- precíznosť rozhodovacieho stromu,
-\item \verb|tPreval| -- hodnota `'prevalence'' z matice chybovosti rozhodovacieho stromu,
-\item \verb|tRecall| -- citlivosť rozhodovacieho stromu,
-\item \verb|tSpecificity| -- špecificita rozhodovacieho stromu.
+\item \verb|RESAMPLE| Podmnožiny, ktoré sú použité na vytvorenie jedincov, sú vytvorené výberom s opakovaním. Jeho hodnota je typu boolean,
+\item \verb|AUTOHEIGHT| Na reprezentovanie rozhodovacích stromov sa použije trieda \verb|MultiWayDepthNode|. Jeho hodnota je typu boolean,
+\item \verb|DIVIDEPARAM| Podmnožiny, ktoré sú použité na vytvorenie jedincov, sú získané rozdelením dátovej množiny na $n$ kúskov. Hodnota parametru je číslo $n$.
+\item \verb|DATA| Dátová množina použitá pri práci s operátorom. Jeho hodnota je buď -1 (celá množina), 0 (trénovacia množina), 1 (validačná množina).
 \end{itemize}
 
-Dovolené hodnoty parametrov sú:
+\subsubsection*{Generátor jedincov}
+Argument s názvom \verb|ind-generator| (skupina 3.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Dovolené komponenty sú 
+\begin{itemize}
+\item \verb|wJ48Gen| Rozhodovacie stromy sú generované pomocou algoritmu J48 z nástroja \verb|Weka|.
+\end{itemize}
+
+Parametre sú rovnaké ako pre algoritmus J48.
