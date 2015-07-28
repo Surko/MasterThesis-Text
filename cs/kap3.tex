@@ -158,10 +158,17 @@ V časti \ref{kap1:2.6:2.6.2:Alternatives} sme definovali alternatívne metriky 
 
 Z časti \ref{kap2:2.2:2.2.3:Tree} vieme, že stromy v genetických algoritmoch majú tendenciu narastať a je nutné ich veľkosť obmedziť. To sa dá dosiahnuť voľbou fitness funkcií, ktoré ohodnocujú zložitosť stromu. Takéto fitness funkcie využívajú metriky zadefinované v časti \ref{kap1:2.6:2.6.3:TreeLook}. K existujúcim funkciám môžeme definovať nové fitness funkcie, ktoré budeme nazývať \emph{relatívne}. Takéto funkcie sú počítané vzhľadom k nejakej hodnote \emph{x}, v ktorej zároveň dosahujú maximum. Na Obrázku \ref{fig:normalvsrelative} uvádzame grafy dvoch fitness funkcií (normálnej a relatívnej) pre veľkosť stromov.
 
+Vzorec na výpočet relatívnej fitness funkcie musí pracovať s hodnotou $y$, od ktorej túto fitness funkciu chceme dopočítať. Nech $x$ je skutočná hodnota fitness funkcie. Relatívnu fitness funkciu môžeme definovať jedným zo vzorcov
+\begin{itemize}
+\item $\dfrac{1}{2^{|x-y|}}$ 
+\item $\dfrac{1}{2^{(x-y)^2}}$
+\item gausovskou funkciou $\mbox{exp}\left(-\dfrac{(x-y)^2}{2z^2}\right)$
+\end{itemize}
+
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics[width=400pt]{../img/kap3/normvsrel.pdf}}}
-\caption{Príklad grafov normálnej a relatívnej fitness funkcie hodnotiace veľkosť stromov. Na ľavo je normálna fitness funkcia, ktorá dosahuje maximum pre najmenšiu veľkosť stromu a vpravo je relatívna fitness funkcia s maximom v hodnote \emph{x}.}\label{fig:normalvsrelative}
+\caption{Príklad grafov normálnej a relatívnej fitness funkcie hodnotiace veľkosť stromov. Na ľavo je normálna fitness funkcia, ktorá dosahuje maximum pre najmenšiu veľkosť stromu a vpravo je relatívna fitness funkcia s maximom v hodnote \emph{x}. Vzorec ľavej fitness funkcie je $\left(\dfrac{1}{x}\right)$ a vzorec pravej fitness funkcie je $\left(\dfrac{1}{2^{x-y}}\right)$.}\label{fig:normalvsrelative}
 \end{figure}
 
 Voľba správnych fitness funkcií je obtiažnou úlohou. Optimálne by mali zvolené funkcie zmenšovať generalizačnú chybu a zbytočne nekomplikovať stromy. Tým sa úloha stáva multi-kriteriálnym problémom a výpočet kvality jedinca sa robí jednou z metód spomínaných v časti \ref{kap2:2.3:Fitnesses}.

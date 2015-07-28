@@ -2,7 +2,10 @@
 \renewcommand{\figurename}{Obrázok}
 Všetky ciele práce sa podarilo bezozvyšku splniť. Genetický algoritmus na vytváranie rozhodovacích stromov, ktorý sme navrhli a naprogramovali v tejto práci dokáže skonštruovať rozhodovacie stromy. Kvalitou sú tieto stromy porovnateľné so stromami vytvorenými algoritmom C4.5 a zároveň sú od nich výrazne menšie.
 
+Implementovaný algoritmus obsahuje značné množstvo nastaviteľných parametrov, ktoré je možné meniť pri každom spustení programu. Na druhú stranu sme sa v práci hlbšie nezaoberali hľadaním optimálneho nastavenia parametrov pre konkrétnu úlohu, pretože veľkosť priestoru parametrov je príliš veľký. Preskúmanie vhodných parametrov by vyžadovalo rozsiahle experimenty skúmajúce dopad rôznych nastavení na výsledné stromy.
 
+V práci sme porovnali nový genetický algoritmus tvorby rozhodovacích stromov s indukčným algoritmom C4.5 a dopadlo to dobre.
+Pretože sme od algoritmu vyžadovali, aby vytváral menšie stromy, tak sme ich získali za cenu nepatrného zhoršenia generalizačných schopností vytvorených stromov a pravdaže za cenu dlhšieho čakania na výsledky.
 
 Aplikácia \verb|GenDTLib| je spustiteľná a použiteľná z nástroja Weka. Implementácia je spoľahlivá a rýchlosť tvorby modelu je postačujúca, keď berieme do úvahy, že používame genetické algoritmy. Na implementovanie sme použili jazyk Java, ktorá poskytuje nezávislosť aplikácie od operačného systému. S aplikáciou sme navrhli aj aplikačné rozhranie, pri vytváraní ktorého sme sa snažili o to, aby bolo zrozumiteľné a v prípade ďalšieho rozšírenia sa sním pracovalo čo najľahšie. Zároveň sme museli zohľadniť to, že aplikácia má byť kompatibilná s nástrojom Weka. Parametre genetického algoritmu je možné nastaviť z konfiguračného súboru a existujúce komponenty je taktiež možné rozšíriť o nové pomocou zásuvných modulov.
 
