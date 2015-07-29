@@ -1,5 +1,5 @@
 \chapter{Rozšíriteľnosť aplikácie}\label{kapIII}
-V tejto kapitole popíšeme možnosti rozšírenia aplikácie o nové komponenty (operátory, selekcie, fitness funkcie, populácie) a využitie aplikácie aj bez nástroja Weka. Kapitola je určená pre užívateľov, ktorý majú skúsenosti v programovaní na platforme Java.
+V tejto kapitole popíšeme možnosti rozšírenia aplikácie o nové komponenty (operátory, selekcie, fitness funkcie, populácie) a využitie aplikácie aj bez nástroja Weka. Kapitola je určená pre užívateľov, ktorí majú skúsenosti v programovaní na platforme Java.
 
 \section{Rozšíriteľnosť}\label{kap4:4.4:Plugin}
 V časti \ref{kap4:4.2:4.2.2:CodeOrganization} sme predviedli ako je organizovaný kód v aplikácií \verb|GenDTLib|.
@@ -83,7 +83,7 @@ Rozhranie operátoru je parametrizované typom jedinca.
 & \\
 & \\
 \hline
-\verb|public void setOperatorProbability(double)| & \multirow{4}{5cm}{Nastaví pravdepodobnosť pri ktorej aplikujeme operátor na jedincovi/jedincoch.} \\
+\verb|public void setOperatorProbability(double)| & \multirow{4}{5cm}{Nastaví pravdepodobnosť, pri ktorej aplikujeme operátor na jedincovi/jedincoch.} \\
 & \\
 & \\
 & \\
@@ -373,7 +373,7 @@ Pre užívateľa, ktorý z nejakého dôvodu nechce použiť nástroj Weka, exis
 \item \verb|GenLibInstances| slúži ako kontajner pre inštancie z dátovej množiny a
 \item \verb|GenLibInstance|, ktoré predstavuje jednu konkrétnu inštanciu z množiny inštancií dátovej množiny.
 \end{enumerate}
-Popis týchto rozhraní je uvedený v tabuľke \ref{fig:tabnonweka}. Podobné rozhrania obsahuje aj nástroj Weka a bolo by vhodné keby fungovali podobne.
+Popis týchto rozhraní je uvedený v tabuľke \ref{fig:tabnonweka}. Podobné rozhrania obsahuje aj nástroj Weka, a bolo by vhodné keby fungovali podobne.
 
 \begin{table}
 \centering
@@ -386,10 +386,10 @@ Popis týchto rozhraní je uvedený v tabuľke \ref{fig:tabnonweka}. Podobné ro
 \verb|public int numOfValues()| & \multirow{2}{5cm}{Vráti počet hodnôt daného atribútu v dátovej množine.} \\
 & \\
 \hline
-\verb|public boolean isNumeric()| & \multirow{2}{5cm}{Rozhodne, či je atribút numerický.} \\
+\verb|public boolean isNumeric()| & \multirow{2}{5cm}{Rozhodne či je atribút numerický.} \\
 & \\
 \hline
-\verb|public double[] isNominal(Data)| & \multirow{2}{5cm}{Rozhodne, či je atribút kategoriálny.} \\
+\verb|public double[] isNominal(Data)| & \multirow{2}{5cm}{Rozhodne či je atribút kategoriálny.} \\
 & \\  
 \hline
 \hline

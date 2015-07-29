@@ -4,7 +4,7 @@
 Nástroj Weka má implementované grafické rozhranie.
 Tým, že sme vytvorili zásuvný modul do nástroja Weka je možné spustiť klasifikátor z grafického rozhrania. 
 
-Uvítacia obrazovka, vykreslená na Obrázku \ref{fig:gui1}, umožňuje vytvárať modely kliknutímm na tlačítko \emph{Explorer} a testovať klasifikátory kliknutím na tlačítko \emph{Experimenter}. 
+Uvítacia obrazovka, vykreslená na Obrázku \ref{fig:gui1}, umožňuje vytvárať modely kliknutím na tlačítko \emph{Explorer} a testovať klasifikátory kliknutím na tlačítko \emph{Experimenter}. 
 
 \begin{figure}[h]
 \centering
@@ -46,7 +46,7 @@ Pre vytvorenie modelu pokračujeme zvolením záložky \emph{Classify}. Obrazovk
 \caption{Obrazovka s rozbaľovacím menu, v ktorej vyberáme klasifikátor.}\label{fig:gui4}
 \end{figure}
 
-Po zvolení algoritmu na vytvorenie modelu môžeme nastaviť jeho parametre. Po kliknutí na zvolený klasifikátor, vedľa tlačítka \emph{Choose}, sa objaví nová obrazovká rovnaká tej na Obrázku \ref{fig:gui5}. Nastavenie parametrov je bližšie spomenutý v oddieli \ref{kapII:config}.
+Po zvolení algoritmu na vytvorenie modelu môžeme nastaviť jeho parametre. Po kliknutí na zvolený klasifikátor, vedľa tlačítka \emph{Choose}, sa objaví nová obrazovka rovnaká tej, ktorá je na Obrázku \ref{fig:gui5}. Nastavenie parametrov je bližšie spomenuté v oddieli \ref{kapII:config}.
 
 Pre vytvorenie modelu stlačíme tlačítko \emph{Start}.
 
@@ -69,14 +69,14 @@ Pre vykonanie experimentu môžeme voliť z dvoch možností:
 Podobne ako pri vytváraní modelov musíme
 \begin{enumerate}
 \item zvoliť algoritmy, ktoré budú použité na vytvorenie modelov (tlačítko \emph{Add new} v časti \emph{Algorithms}) a
-\item načítať dátové množiny (tlačítko \emph{Add new} v časti \emph{Datasets}), na ktorých chceme vytvorené modely otestovať 
+\item načítať dátové množiny (tlačítko \emph{Add new} v časti \emph{Datasets}), na ktorých chceme vytvorené modely otestovať.
 \end{enumerate}
 
 Ďalej môžeme nastaviť typ experimentu, koľko krát bude experiment zopakovaný a akým spôsobom bude vykonaný (najprv množiny alebo najprv algoritmy). Medzi povolené typy experimentu patrí
 \begin{enumerate}
 \item $n$-násobná krížová validácia,
 \item náhodné rozdelenie na trénovaciu a testovaciu množinu,
-\item rozdelenie na trénovaciu a testovaciu množiny s rovnakým poradím
+\item rozdelenie na trénovaciu a testovaciu množinu s rovnakým poradím
 \end{enumerate}
 
 \begin{figure}[h!]
@@ -85,7 +85,7 @@ Podobne ako pri vytváraní modelov musíme
 \caption{Obrazovka, ktorá slúži na testovanie algoritmov medzi sebou.}\label{fig:guie1}
 \end{figure}
 
-Príklad správne nastaveného experimentu je zobrazený na Obrázku \ref{fig:guie2}. Experiment vykoná 10-násobnú krížovú validáciu, pričom každá z nich je zopakovaná 10-krát. V experimente testujeme dva algoritmy (\verb|J48| a \verb|WekaEvolutionTreeClassifier|) na jednej dátovej množine (\verb|breast-cancer.arff|).
+Príklad správne nastaveného experimentu je zobrazený na Obrázku \ref{fig:guie2}. Experiment vykoná 10-násobnú krížovú validáciu, pričom každá z nich je zopakovaná 10-krát. V experimente testujeme dva algoritmy (\verb|J48| a \verb|WekaEvolutionTreeClassif|- \verb|ier|) na jednej dátovej množine (\verb|breast-cancer.arff|).
 
 \begin{figure}[h!]
 \centering
@@ -93,12 +93,12 @@ Príklad správne nastaveného experimentu je zobrazený na Obrázku \ref{fig:gu
 \caption{Príklad obrazovky s nastavenými algoritmami a dátovou množinou na otestovanie.}\label{fig:guie2}
 \end{figure}
 
-Po nastavení experimentu stlačíme záložku \emph{Run}, ktorá zobrazí obrazovku, na ktorej spustíme experiment tlačítkom \emph{Start}. Po dokončení experimentu bez nejakých chýb dostaneme obrazovka, ktorá vyzerá ako na Obrázku \ref{fig:guie3}.
+Po nastavení experimentu stlačíme záložku \emph{Run}, ktorá zobrazí obrazovku, na ktorej spustíme experiment tlačítkom \emph{Start}. Po dokončení experimentu bez nejakých chýb dostaneme obrazovku, ktorá vyzerá ako na Obrázku \ref{fig:guie3}.
 
 \begin{figure}[h!]
 \centering
 \centerline{\mbox{\includegraphics[width=300pt]{../img/kapII/wekae3.pdf}}}
-\caption{Obrazovka, ktorá slúži na spustenia alebo zastavenie experimentu.}\label{fig:guie3}
+\caption{Obrazovka, ktorá slúži na spustenie alebo zastavenie experimentu.}\label{fig:guie3}
 \end{figure}
 
 Nakoniec stlačíme záložku \emph{Analyse}, ktorá otvorí obrazovku, na ktorej môžeme zanalyzovať výsledky experimentu. Najprv je ale nutné načítať výsledky stlačením tlačítka \emph{Experiment}. Následne môžeme nastaviť, ktorú vlastnosť by sme chceli otestovať (napr. presnosť, veľkosť stromov), typ testu, jeho hladinu významnosti a iné. Výsledok zobrazíme pomocou tlačítka \emph{Perform test}. Typická obrazovka s vykonaným testom vyzerá ako na Obrázku \ref{fig:guie4}.
@@ -268,7 +268,7 @@ Dovolené parametre sú:
 Argumentom \verb|selectors| (skupina 4.) definujeme selekcie \ref{kap2:2.4:Selection} a argumentom \verb|env-selectors| (skupina 4.) definujeme selekcie prostredia \ref{kap2:2.4:2.4.4:EnvironmentalSelection}.
 Dovolené komponenty sú 
 \begin{itemize}
-\item \verb|random| \textbf{POZOR!} experimentálny výber jedincov, ktorá vyberá jedincov náhodne.
+\item \verb|random| \textbf{POZOR!} experimentálny výber jedincov, ktorý vyberá jedincov náhodne.
 \item \verb|Rw| Ruletová selekcia,
 \item \verb|Tmt|  Turnajová selekcia.
 \end{itemize}

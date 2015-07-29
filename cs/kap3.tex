@@ -1,7 +1,7 @@
 \chapter{Genetická tvorba rozhodovacích stromov}\label{kap3:DTGA}
-V časti \ref{kap1:2.7:DTTechniques} sme popísali vytváranie rozhodovacích stromov pomocou indukčných algoritmov. Vieme, že stromy vytvorený týmito algoritmami bývajú kvalitné, ale nemusia byť optimálne. To je kvôli tomu, že tieto algoritmy patria medzi tzv. hladné techniky. Ďalším spôsobom, ako vytvárať stromy je použiť techniku, ktorá prehľadáva priestor všetkých riešení (napríklad prehľadávaciu heuristiku). Pri použití niektorej z týchto techník môžeme dostať neoptimálne riešenie, ktoré môže byť dokonca horšie, než to vytvorené indukčným algoritmom. Vhodne zvolená a nastavená prehľadávacia heuristika ale môže nájsť riešenie, ktoré je významne lepšie než to vytvorené indukčným algoritmom. V kapitole \ref{kap2:GA} sme predviedli jednu z prehľadávacích heuristík nazývanú genetické algoritmy.
+V časti \ref{kap1:2.7:DTTechniques} sme popísali vytváranie rozhodovacích stromov pomocou indukčných algoritmov. Vieme, že stromy vytvorené týmito algoritmami bývajú kvalitné, ale nemusia byť optimálne. To je kvôli tomu, že tieto algoritmy patria medzi tzv. hladné techniky. Ďalším spôsobom, ako vytvárať stromy je použiť techniku, ktorá prehľadáva priestor všetkých riešení (napríklad prehľadávaciu heuristiku). Pri použití niektorej z týchto techník môžeme dostať neoptimálne riešenie, ktoré môže byť dokonca horšie, než to vytvorené indukčným algoritmom. Vhodne zvolená a nastavená prehľadávacia heuristika ale môže nájsť riešenie, ktoré je významne lepšie než to vytvorené indukčným algoritmom. V kapitole \ref{kap2:GA} sme predviedli jednu z prehľadávacích heuristík nazývanú genetické algoritmy.
 
-V tejto kapitole teda popíšeme genetický algoritmus, ktorý sa dá použiť na tvorbu rozhodovacích stromov a ktorý sme implementovali v nástroji Weka. Popíšeme, ako kódovať jedincov v populácií genetického algoritmu tak, aby títo jedinci čo najlepšie popisovali rozhodovacie stromy. Operátory zavedené v predchádzajúcej kapitole rozšírime o nové genetické operátory špeciálne navrhnuté na tvorbu rozhodovacích stromov. Ostatné súčasti genetického algoritmu iba pripomenieme a spojíme ich s pojmami z rozhodovacích stromov.
+V tejto kapitole teda popíšeme genetický algoritmus, ktorý sa dá použiť na tvorbu rozhodovacích stromov, a ktorý sme implementovali v nástroji Weka. Popíšeme, ako kódovať jedincov v populácií genetického algoritmu tak, aby títo jedinci čo najlepšie popisovali rozhodovacie stromy. Operátory zavedené v predchádzajúcej kapitole rozšírime o nové genetické operátory špeciálne navrhnuté na tvorbu rozhodovacích stromov. Ostatné súčasti genetického algoritmu iba pripomenieme, prípadne ich spojíme s pojmami z rozhodovacích stromov.
 
 Vytváranie stromov genetickými algoritmami nie je novou technikou. Existujú práce, ktoré sa venujú tejto problematike, no tie väčšinou vytvárajú stromy od úplného začiatku. Niektoré z týchto prác spomenieme v kapitole \ref{kap6:SimilarWorks}. Taktiež treba uviesť, že voľne dostupných implementácií je málo a zatiaľ sa zdá, že neexistuje žiadna do nástroja Weka.
 
@@ -14,9 +14,9 @@ V tomto oddieli popíšeme genetický algoritmus, ktorý sa dá použiť na vytv
 \end{enumerate}
 pričom obidve skupiny majú svoje výhody aj nevýhody.
 
-Vytváranie stromov pomocou genetických algoritmov od začiatku je pomalé a nájdenie vhodného riešenia môže trvať príliš dlho. Výhodou je, že stromy vytvárame od začiatku a teda nie sú ovplyvňované takými stromami, ktorými by sme rýchlo skonvergovali k lokálnemu optimu. 
+Vytváranie stromov pomocou genetických algoritmov od začiatku je pomalé a náj\-denie vhodného riešenia môže trvať príliš dlho. Výhodou je, že stromy vytvárame od začiatku, a teda nie sú ovplyvňované takými stromami, ktorými by sme rýchlo skonvergovali k lokálnemu optimu. 
 
-Pri optimalizovaní vytvoreného stromu môžeme využiť to, že počiatočná generácia je už na počiatku kvalitná. V niektorých prípadoch by stačila iba malá zmena na týchto kvalitných stromoch a generalizačné schopnosti pozmeneného stromu by sa významne zlepšili. V iných prípadoch, kedy genetický algoritmus nedokáže vylepšiť generalizačné schopnosti, môžeme vylepšovať iné vlastnosti stromu (napr. veľkosť stromu, výšku stromu) pričom nezhoršíme generalizačné schopnosti stromu. Na úkor dodatočného času teda môžeme dostať rozhodovacie stromy, ktoré svojou kvalitou prevyšujú alebo sa aspoň vyrovnávajú tým vytvoreným indukčnými algoritmami, pričom zlepšujeme ostatné kritériá. Pre predstavu uvádzame dva obrázky rozhodovacích stromov vytvorených pre tú istú úlohu. Úloha pozostávala z klasifikácie náhodných dát, vygenerovaných generátorom \verb|RDG1|, ktorý ponúka nástroj Weka. Prvý zo stromov bol vytvorený indukčným algoritmom (Obrázok \ref{fig:treeIA}) a druhý bol optimalizovaný genetickým algoritmom (Obrázok \ref{fig:treeGA}). Ani jeden z týchto modelov nemusí byť významne lepší v predikovaní, no veľkosť stromu optimalizovaného genetickým algoritmom je výrazne menšia než veľkosť stromu vytvoreného indukčným algoritmom.
+Pri optimalizovaní vytvoreného stromu môžeme využiť to, že počiatočná generácia je už na počiatku kvalitná. V niektorých prípadoch by stačila iba malá zmena na týchto kvalitných stromoch a generalizačné schopnosti pozmeneného stromu by sa významne zlepšili. V iných prípadoch, kedy genetický algoritmus nedokáže vylepšiť generalizačné schopnosti, môžeme vylepšovať iné vlastnosti stromu (napr. veľkosť stromu, výšku stromu) pričom významne nezhoršíme generalizačné schopnosti stromu. Na úkor dodatočného času teda môžeme dostať rozhodovacie stromy, ktoré svojou kvalitou prevyšujú alebo sa aspoň vyrovnávajú tým vytvorenými indukčnými algoritmami. Pre predstavu uvádzame dva obrázky rozhodovacích stromov vytvorených pre tú istú úlohu. Úloha pozostávala z klasifikácie náhodných dát, vygenerovaných generátorom \verb|RDG1|, ktorý ponúka nástroj \verb|Weka|. Prvý zo stromov bol vytvorený indukčným algoritmom (Obrázok \ref{fig:treeIA}) a druhý bol optimalizovaný genetickým algoritmom (Obrázok \ref{fig:treeGA}). Ani jeden z týchto modelov nemusí byť významne lepší v predikovaní, no veľkosť stromu optimalizovaného genetickým algoritmom je výrazne menšia než veľkosť stromu vytvoreného indukčným algoritmom.
 
 \begin{figure}[h]
 \centering
@@ -24,7 +24,7 @@ Pri optimalizovaní vytvoreného stromu môžeme využiť to, že počiatočná 
 \caption{Príklad stromu vytvoreného nejakým indukčným algoritmom.}\label{fig:treeIA}
 \end{figure}
 
-V tejto práci sa kvôli jeho výhodám zameriame na optimalizovanie vytvorených stromov genetickými algoritmami. Pritom počiatočné stromy nebudú náhodné, ale do určitej miery kvalitné. Kvalitu stromu vynútime použitím niektorého z algoritmov spomínaných v časti \ref{kap1:2.6:DTEvaluation}. 
+V tejto práci sa kvôli jeho výhodám zameriame na optimalizovanie vytvorených stromov genetickými algoritmami. Počiatočné stromy nebudú náhodné, ale do určitej miery kvalitné. Kvalitu stromu vynútime použitím niektorého z algoritmov spomínaných v časti \ref{kap1:2.6:DTEvaluation}. 
 
 Celým procesom optimalizácie stromov sa snažíme čo najviac zlepšiť (tj. zmenšiť) generalizačnú chybu, pričom môžeme vylepšovať aj ďalšie kritéria stromu, ako napríklad veľkosť stromu. Z časti \ref{kap1:2.6:2.6.1:Generalize} vieme, že generalizačnú chybu môžeme aproximovať empirickou chybou na nezávislej testovacej množine. Dátovú množinu $D$ teda rozdelíme na trénovaciu podmnožinu $T$ a validačnú podmnožinu $V$. Na ešte lepšiu aproximáciu generalizačnej chyby môžeme použiť $n$-násobnú krížovú validáciu viz. časť \ref{kap1:2.6:2.6.1:Generalize}. Obidva prístupy sú založené na ohodnotení kvality vytvorených stromov. Algoritmus by mal kvôli tomu poskytovať nejakú formu aproximácie generalizačnej chyby.
 
@@ -34,9 +34,9 @@ Celým procesom optimalizácie stromov sa snažíme čo najviac zlepšiť (tj. z
 \caption{Príklad stromu vytvoreného indukčným algoritmom a optimalizovaný genetickým algoritmom.}\label{fig:treeGA}
 \end{figure}
 
-Počiatočné rozhodovacie stromy, ktoré budeme optimalizovať, teda budú vybudované z trénovacej množiny $T$. Operátory budú slúžiť na prehľadávanie priestoru riešení a vyhľadanie nových rozhodovacích stromov. Typy operátorov sú zvolené tak, aby čo najviac diverzifikovali populáciu. Na vyberanie jedincov je vhodné použiť elitizmus (kvôli udržaniu najlepšieho riešenia) a turnajovú selekciu hlavne kvôli jej výhodám spomínaným v časti \ref{kap2:2.4:2.4.2:Tournament}. Genetickým algoritmom vytvárame nové stromy, ktorých kvalitu určíme podľa zvolených kritérií. Použijeme výpočet fitness z jedného alebo viacerých kritérií viz. časť \ref{kap2:2.3:Fitnesses}. Validačná množina $V$ bude slúžiť na otestovanie modelu a na odhad generalizačnej chyby.
+Počiatočné rozhodovacie stromy, ktoré budeme optimalizovať, teda budú vybudované z trénovacej množiny $T$. Operátory budú slúžiť na prehľadávanie priestoru riešení a vyhľadanie nových rozhodovacích stromov. Typy operátorov sú zvolené tak, aby čo najviac diverzifikovali populáciu. Na vyberanie jedincov je vhodné použiť elitizmus (kvôli udržaniu najlepšieho riešenia) a turnajovú selekciu hlavne kvôli jej výhodám spomínaným v časti \ref{kap2:2.4:2.4.2:Tournament}. Genetickým algoritmom vytvárame nové stromy, ktorých kvalitu určíme podľa zvolených kritérií. Na výpočet fitness z jedného alebo viacerých kritérií použijeme niektorú techniku z časti \ref{kap2:2.3:Fitnesses}. Validačná množina $V$ bude slúžiť na otestovanie modelu a na odhad generalizačnej chyby.
 
-Pri tomto genetickom algoritme použijeme selekciu prostredia z časti \ref{kap2:2.4:2.4.4:EnvironmentalSelection}, čo spolu s elitizmom zabráni strate tých najlepších jedincov a zaručí, že populácia zostane dostatočne diverzifikovaná.
+Pri tomto genetickom algoritme použijeme selekciu prostredia z časti \ref{kap2:2.4:2.4.4:EnvironmentalSelection}, čo spolu s elitizmom zabráni strate tých najlepších jedincov a zaručí, že populácia zostane aj naďalej dostatočne diverzifikovaná.
 
 V časti \ref{kap2:2.1:2.1.2:AboutGeneticAlgo}, konkrétne na Obrázku \ref{fig:GAdiagram}, sme zaviedli diagram genetického algoritmu. Podľa tohoto diagramu sa riadi aj chovanie genetického algoritmu na optimalizovanie stromov.
 V algoritme \ref{fig:DTGeneticAlgo} uvádzame pseudokód tohoto genetického optimalizovania stromov a popisujeme jeho jednotlivé súčasti.
@@ -156,7 +156,7 @@ Fitness funkcie v genetickom algoritme určujú, ako často budú jedinci vybera
 Na optimalizovanie prediktívnych vlastností stromu musíme voliť také fitness funkcie, ktoré s predikciou súvisia. Tieto fitness funkcie väčšinou počítajú určitú metriku z matice chybovosti. Na zlepšenie prediktívnych vlastností nie je každá metrika vhodná. Kvôli tomu je lepšie sa zamerať iba na niektoré z nich.
 V časti \ref{kap1:2.6:2.6.2:Alternatives} sme definovali alternatívne metriky založené na matici chybovosti, ktoré môžeme použiť pri ohodnocovaní rozhodovacích stromov. Spomínané kriteriá citlivosti, precíznosti, špecificity a f-metriky sú vhodnými kandidátmi fitness funkcií. Na zlepšenie generalizačnej chyby by mal byť výpočet metrík vykonaný na validačnej množine.
 
-Z časti \ref{kap2:2.2:2.2.3:Tree} vieme, že stromy v genetických algoritmoch majú tendenciu narastať a je nutné ich veľkosť obmedziť. To sa dá dosiahnuť voľbou fitness funkcií, ktoré ohodnocujú zložitosť stromu. Takéto fitness funkcie využívajú metriky zadefinované v časti \ref{kap1:2.6:2.6.3:TreeLook}. K existujúcim funkciám môžeme definovať nové fitness funkcie, ktoré budeme nazývať \emph{relatívne}. Takéto funkcie sú počítané vzhľadom k nejakej hodnote \emph{x}, v ktorej zároveň dosahujú maximum. Na Obrázku \ref{fig:normalvsrelative} uvádzame grafy dvoch fitness funkcií (normálnej a relatívnej) pre veľkosť stromov.
+Z časti \ref{kap2:2.2:2.2.3:Tree} vieme, že stromy v genetických algoritmoch majú tendenciu narastať, a je nutné ich veľkosť obmedziť. To sa dá dosiahnuť voľbou fitness funkcií, ktoré ohodnocujú zložitosť stromu. Takéto fitness funkcie využívajú metriky zadefinované v časti \ref{kap1:2.6:2.6.3:TreeLook}. K existujúcim funkciám môžeme definovať nové fitness funkcie, ktoré budeme nazývať \emph{relatívne}. Takéto funkcie sú počítané vzhľadom k nejakej hodnote \emph{x}, v ktorej zároveň dosahujú maximum. Na Obrázku \ref{fig:normalvsrelative} uvádzame grafy dvoch fitness funkcií (normálnej a relatívnej) pre veľkosť stromov.
 
 Vzorec na výpočet relatívnej fitness funkcie musí pracovať s hodnotou $y$, od ktorej túto fitness funkciu chceme dopočítať. Nech $x$ je skutočná hodnota fitness funkcie. Relatívnu fitness funkciu môžeme definovať jedným zo vzorcov
 \begin{itemize}
@@ -168,21 +168,21 @@ Vzorec na výpočet relatívnej fitness funkcie musí pracovať s hodnotou $y$, 
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics[width=400pt]{../img/kap3/normvsrel.pdf}}}
-\caption{Príklad grafov normálnej a relatívnej fitness funkcie hodnotiace veľkosť stromov. Na ľavo je normálna fitness funkcia, ktorá dosahuje maximum pre najmenšiu veľkosť stromu a vpravo je relatívna fitness funkcia s maximom v hodnote \emph{x}. Vzorec ľavej fitness funkcie je $\left(\dfrac{1}{x}\right)$ a vzorec pravej fitness funkcie je $\left(\dfrac{1}{2^{x-y}}\right)$.}\label{fig:normalvsrelative}
+\caption{Príklad grafov normálnej a relatívnej fitness funkcie hodnotiace veľkosť stromov. Naľavo je normálna fitness funkcia, ktorá dosahuje maximum pre najmenšiu veľkosť stromu a vpravo je relatívna fitness funkcia s maximom v hodnote \emph{y}. Vzorec ľavej fitness funkcie je $\left(\dfrac{1}{x}\right)$ a vzorec pravej fitness funkcie je $\left(\dfrac{1}{2^{|x-y|}}\right)$.}\label{fig:normalvsrelative}
 \end{figure}
 
 Voľba správnych fitness funkcií je obtiažnou úlohou. Optimálne by mali zvolené funkcie zmenšovať generalizačnú chybu a zbytočne nekomplikovať stromy. Tým sa úloha stáva multi-kriteriálnym problémom a výpočet kvality jedinca sa robí jednou z metód spomínaných v časti \ref{kap2:2.3:Fitnesses}.
 \section{Operátory na tvorbu rozhodovacích stromov}\label{kap3:3.4:Operators}
 V oddieli \ref{kap2:2.5:Operators} sme zadefinovali genetické operátory a uviedli ich dôležitosť v genetických algoritmoch. V prípade genetickej tvorby rozhodovacích stromov sú operátory zodpovedné za vytváranie nových rozhodovacích stromov. Tieto operátory by mali pracovať v súlade s dátovými množinami. To znamená nevykonávať náhodné zmeny, ale iba také, ktoré nejako súvisia s dátami.
 
-Z predchádzajúcich častí vieme, že v genetických algoritmoch obvykle najprv vykonávame kríženie a potom mutáciu. Taktiež vieme, že každý operátor aplikujeme iba s určitou pravdepodobnosťou a že toto nastavenie je neľahkou úlohou. Jednou z možností je inšpirovať sa oddielom \ref{kap2:2.6:Parameters}.
+Z predchádzajúcich častí vieme, že v genetických algoritmoch obvykle najprv vykonávame kríženie a potom mutáciu. Taktiež vieme, že každý operátor aplikujeme iba s určitou pravdepodobnosťou, a že toto nastavenie je neľahkou úlohou. Jednou z možností je inšpirovať sa oddielom \ref{kap2:2.6:Parameters}.
 
 V časti \ref{kap3:3.4:3.4.1:Crossover} pripomenieme kríženie podstromov. Potom v časti \ref{kap3:3.4:3.4.2:Mutation} predvedieme dva nové druhy mutácií.
 
 \subsection{Kríženie}\label{kap3:3.4:3.4.1:Crossover}
 V časti \ref{kap2:2.5:2.5.1:Crossover} sme definovali operátor kríženia podstromov. V prípade stromov je toto jediné kríženie, ktoré dáva zmysel, a preto ho budeme používať aj pri genetickej tvorbe rozhodovacích stromov.
 
-Toto kríženie ale musíme upraviť tak, aby v prípade kategoriálneho atribútu kontrolovalo prekrížené stromy. Krížený podstrom môže obsahovať vrchol, ktorého atribút sa už vyskytuje na ceste do koreňa a hodnoty atribútu sú nekonzistentné. V takomto prípade ho nahradím správnym potomkom (s konzistentnou hodnotou atribútu). Po zmene znova vykonám kontrolu a opakujem tento postup, dokým nie sú tieto atribúty konzistentné.
+Toto kríženie ale musíme upraviť tak, aby v prípade kategoriálneho atribútu kontrolovalo prekrížené stromy. Krížený podstrom môže obsahovať vrchol, ktorého atribút sa už vyskytuje na ceste do koreňa a hodnoty atribútu sú nekonzistentné. V takomto prípade ho nahradím správnym potomkom (s konzistentnou hodnotou atribútu). Po zmene znova vykonám kontrolu na tomto potomkovi a opakujem tento postup, dokým nie sú tieto atribúty konzistentné.
 
 \subsection{Mutácie}\label{kap3:3.4:3.4.2:Mutation}
 V časti \ref{kap2:2.5:2.5.2:Mutation} sme uviedli rôzne druhy mutácií jedincov kódovaných stromami. Po menších úpravách sa dajú tieto mutácie použiť v genetickom algoritme na tvorbu rozhodovacích stromov. Mutácie je väčšinou nutné upraviť tak, aby brali do úvahy kódovanie uvedené v časti \ref{kap3:3.2:Encoding}. Jednotlivé mutácie by tiež mali vykonávať zmeny, ktoré sú v súlade s danou dátovou množinou $D$ (zabránenie náhodným zmenám).
@@ -194,7 +194,7 @@ Nech $S$ je strom, na ktorom vykonávame mutáciu, $u$ je \emph{vnútorný} uzol
 \item zvoľ vnútorný uzol $u$,
 \item nahraď $u$ listom s klasifikáciou $\max_c u$.
 \end{enumerate}
-Príklad takejto mutácie nahradzujúcej podstrom listom je znázornený na Obrázku \ref{fig:mutnodetoleaf}.
+Príklad takejto mutácie, nahradzujúcej podstrom listom, je znázornený na Obrázku \ref{fig:mutnodetoleaf}.
 
 \begin{figure}[h]
 \centering
@@ -217,7 +217,7 @@ Nech $K=\{K_1,\ldots,K_r\}$ je množina podstromov (rozhodovacích koreňov). Ď
 \end{enumerate}
 Príklad mutácie nahradzujúcej podstrom rozhodovacím koreňom je na Obrázku \ref{fig:mutdecisionstump}.
 
-Podobne ako pri krížení je treba túto mutáciu upraviť, aby v prípade kategoriálneho atribútu kontrolovala, či sa atribút vrcholu rozhodovacieho koreňa (ten je iba jeden) už nevyskytuje na ceste do koreňa stromu a hodnoty atribútu by boli nekonzistentné. V takom prípade nahradíme vrchol jeho potomkom  (čo je určite list) pre správny atribút.
+Podobne ako pri krížení je treba túto mutáciu upraviť, aby v prípade kategoriálneho atribútu kontrolovala, či sa atribút vrcholu rozhodovacieho koreňa nenachádza na ceste do koreňa stromu a hodnoty atribútu by boli nekonzistentné. V takom prípade nahradíme vrchol jeho potomkom  (to je určite list) pre správny atribút.
 
 \begin{figure}[h]
 \centering

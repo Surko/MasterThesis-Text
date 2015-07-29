@@ -1,10 +1,10 @@
 \chapter{Testovanie a vyhodnotenie výsledkov}\label{kap5:Tests}
 Aby sme zistili, čo môžeme získať použitím nami navrhnutého algoritmu tvorby rozhodovacích stromov, tak sme tento algoritmus aplikovali na vybraných 8 klasifikačných úlohách. V tejto kapitole zhrnieme výsledky testov, ktoré sme vykonali aplikáciou \verb|GenDTLib| z nástroja \verb|Weka|. Zároveň porovnávame tieto výsledky s existujúcou metódou C4.5\footnote{V nástroji \texttt{Weka} je táto metóda implementovaná pod názvom \texttt{J48}.}, ktorá je obľúbená kvôli tomu, že vytvára kvalitné indukčné stromy (viď. \ref{kap1:2.7:2.7.4:C4.5}). V oddieli \ref{kap5:Methodology} uvedieme metodológiu testovania. Potom v oddieli \ref{kap5:Results} zhrnieme a vyhodnotíme výsledky vykonaných testov.
 \section{Metodika testovania}\label{kap5:Methodology}
-Pri testovaní budeme porovnávať náš genetický algoritmus na vytváranie stromov s indukčným algoritmom C4.5. Z predchádzajúcich kapitol vieme, že genetický algoritmus obsahuje množinu parametrov na nastavenie. Problémom je, že dve rôzne nastavenia parametrov môžu viesť k vytvoreniu dvoch úplne odlišných modelov.
+Pri testovaní budeme porovnávať náš genetický algoritmus na vytváranie stromov s indukčným algoritmom C4.5. Z predchádzajúcich kapitol vieme, že genetický algoritmus obsahuje množstvo parametrov na nastavenie. Problémom je, že dve rôzne nastavenia parametrov môžu viesť k vytvoreniu dvoch úplne odlišných modelov.
 Zvoliť vhodné parametre genetického algoritmu, ktorým by sme pri testovaní skonštruovali najlepší model, je teda obtiažnou úlohou. Tento problém riešime tým, že testujeme väčšie množstvo genetických algoritmov s rôznymi parametrami.
 
-Testovanie vykonávame pomocou nástroja \verb|Weka|, ktorý obsahuje veľa vstavaných testovacích nástrojov. Cieľom testovania a aj našej práce bolo, aby boli výsledky reprodukovateľné na všetkých systémoch. Tento nástroj umožňuje ukladať vykonávané testy a teda je ich možné zopakovať, prípadne zvoliť lepšie parametre, ktoré by vylepšili kvalitu algoritmov. Parametre genetického algoritmu je teda možné v budúcnosti prispôsobiť tak, aby pre určitú dátovú množinu dávali lepšie výsledky.
+Testovanie vykonávame pomocou nástroja \verb|Weka|, ktorý obsahuje veľa vstavaných testovacích nástrojov. Cieľom testovania, a aj našej práce bolo, aby boli výsledky reprodukovateľné na všetkých systémoch. Tento nástroj umožňuje ukladať vykonávané testy, a teda je ich možné zopakovať, prípadne zvoliť lepšie parametre, ktoré by vylepšili kvalitu algoritmov. Parametre genetického algoritmu je teda možné v budúcnosti prispôsobiť tak, aby pre určitú dátovú množinu dávali lepšie výsledky.
 
 \subsection{Postup}
 Pri testovaní sme sa zamerali na dve vlastnosti rozhodovacích stromov:
@@ -17,17 +17,17 @@ Testovanie vykonávame pre každý vstupný súbor. Modely vytvárame vo všetk�
 
 Po vytvorení budeme sledovať spomínané dve vlastnosti. Pri konečnom výbere modelu vyberáme ten najlepší zo skupiny algoritmov, ktoré optimalizovali stromy k rovnakej veľkosti -- \emph{relatívna} fitness funkcia má nastavenú rovnakú relatívnu hodnotu. Pri výbere najlepšieho modelu zohľadňujeme spomínané vlastnosti a budeme preferovať tie modely, ktoré nie sú významne horšie od algoritmu \verb|J48|. Významnosť modelov a či je model významne lepší resp. významne horší budeme zisťovať pomocou opraveného párového t-testu s hladinou významnosti 0.05. Pre každú dátovú množinu zvolíme viacero vhodných metód, ktoré ponúkajú rozumný kompromis medzi týmito vlastnosťami.
 
-Nástroj \verb|Weka| má v sebe zabudovaný experimentálny nástroj, ktorý použijeme pri testovaní modelov medzi sebou. Keďže sú genetické algoritmy nedeterministické, tak kvalitu algoritmov otestujeme pomocou 10-násobnej krížovej validácie, pričom každá validácia je zopakovaná ďalších desať krát (sto krát spúšťame algoritmus). V literatúre je tento postup porovnania modelov používaný najčastejšie. Vďaka tomu budú výsledky našej práce porovnateľné aj s týmito prácami.
+Nástroj \verb|Weka| má v sebe zabudovaný experimentálny nástroj, ktorý použijeme pri testovaní modelov medzi sebou. Keďže sú genetické algoritmy nedeterministické, tak kvalitu algoritmov otestujeme pomocou 10-násobnej krížovej validácie, pričom každá validácia je zopakovaná ďalších desať krát (algoritmus spúšťame sto krát). V literatúre je tento postup porovnania modelov používaný najčastejšie. Vďaka tomu budú výsledky našej práce porovnateľné aj s týmito prácami.
 
 \subsection{Zobrazenie výsledkov}
-Porovnanie výsledkov pre obidve vlastnosti budú, pre rôzne vytvorené modely, zhrnuté vo forme tabuliek.
+Porovnanie výsledkov pre obidve vlastnosti budú pre rôzne vytvorené modely zhrnuté vo forme tabuliek.
 
 Tabuľka \ref{fig:tab1} popisuje, ako budú zobrazené presnosti vytvorených modelov. Riadky tejto tabuľky predstavujú jednotlivé použité dátové množiny, pričom stĺpce popisujú presnosť daných modelov. Prvý stĺpec bude vždy predstavovať presnosť modelu vytvoreného algoritmom \verb|J48|, t.j C4.5. Ostatné stĺpce budú predstavovať presnosť modelov vytvorených genetickými algoritmami na vytváranie stromov, ktorých parametre sú v každej inštancii pozmenené. V každej bunke popri presnosti uvádzame  aj smerodajnú odchýlku tohoto výsledku.
 
 Tabuľka \ref{fig:tab2} je príkladom tabuľky, ktorá zobrazuje ako zložité sú vytvorené modely. Stavba tabuľky je rovnaká ako v prípade presnosti modelov. Jediná zmena je v stĺpcoch, ktoré predstavujú veľkosti vytvorených stromov pre daný model.
 
 \renewcommand{\figurename}{Tabuľka}
-\begin{table}[t]
+\begin{table}[h]
 % Because czech 
 \catcode`\-=12
 \centering 
@@ -49,14 +49,14 @@ Tabuľka \ref{fig:tab2} je príkladom tabuľky, ktorá zobrazuje ako zložité s
 \end{table}
 
 
-\begin{figure}[h]
+\begin{table}[h]
 % Because czech 
 \catcode`\-=12
 \centering 
 \newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
 \newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
 \begin{tabular}{|l||c|c|c|c||}
-\hline \multirow{2}{*}{Dátová množina} & \multicolumn{4}{|c||}{Zložitosť modelu} \\ 
+\hline \multirow{2}{*}{Dátová množina} & \multicolumn{4}{c||}{Zložitosť modelu} \\ 
 \cline{2-5} & J48 & GAx & GAy & GAz \\
 \hline
 \hline \multirow{2}{*}{colic} & 17.5 & 6.6 & 6.7 & 5.0 \T\\[-1.5ex]
@@ -68,11 +68,11 @@ Tabuľka \ref{fig:tab2} je príkladom tabuľky, ktorá zobrazuje ako zložité s
 \hline
 \end{tabular}
 \caption{Príklad tabuľky, ktorú budeme používať pre znázornenie zložitosti modelov (veľkosti stromov). Jednotlivé bunky predstavujú zložitosť modelu. Hodnota v zátvorke udáva smerodajnú odchýlku tejto hodnoty. Znaky x,y,z budú nahradené číslami, ktoré predstavujú hodnotu relatívnej fitness funkcie zložitosti stromov.}\label{fig:tab2}
-\end{figure}
+\end{table}
 
 Posledná tabuľka \ref{fig:tab3} uvádza významnosť získaných výsledkov pomocou opraveného párového t-testu s hladinou významnosti 0.05. V tabuľke porovnávame genetické algoritmy na vytváranie stromov s algoritmom \verb|J48|. Jednotlivé riadky predstavujú genetické algoritmy s rôznymi nastaveniami. Stĺpce určujú, ktorý výsledok je významne lepší alebo horší od algoritmu \verb|J48|. Každá bunka tabuľky obsahuje riadok znakov, ktorých poradie zodpovedá poradiu testovaných dátových množín.
 
-\begin{figure}[h]
+\begin{table}[h]
 % Because czech 
 \catcode`\-=12
 \centering 
@@ -80,9 +80,9 @@ Posledná tabuľka \ref{fig:tab3} uvádza významnosť získaných výsledkov po
 \newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
 \begin{tabular}{|c||c c c|c c c||}
 \hline
-\hline \multirow{2}{*}{Metóda} & \multicolumn{6}{|c||}{Signifikantne lepšie} 
+\hline \multirow{2}{*}{Metóda} & \multicolumn{6}{c||}{Signifikantne lepšie} 
 \\
-\cline{2-7} & \multicolumn{3}{|c|}{Presnosť} & \multicolumn{3}{|c|}{Zložitosť} \\
+\cline{2-7} & \multicolumn{3}{c|}{Presnosť} & \multicolumn{3}{c||}{Zložitosť} \\
 \hline
 \hline
 GAx & - & - & - & \textbf{v} & - & \textbf{v} \\ \hline
@@ -90,11 +90,11 @@ GAy & - & \textbf{x} & - & - & \textbf{v} & - \\ \hline
 GAz & - & - & - & \textbf{v} & \textbf{v} & \textbf{v} \\ \hline
  & $D_1$ & $D_2$ & $D_3$ & $D_1$ & $D_2$ & $D_3$ \\ \hline
 \end{tabular}
-\caption{Príklad tabuľky, ktorú budeme používať pre znázornenie štatisticky významného zlepšenia alebo zhoršenia (podľa párového t-testu) genetického algoritmu od algoritmu \texttt{J48}. Posledný riadok určuje pre akú množinu bol test vykonaný. Symbol \textbf{v} znamená, že daná metóda je výrazne lepšia (v určitej vlastnosti modelu) než \texttt{J48} na danej dátovej množine. Opačne, symbol \textbf{x} znamená, že daná metóda je výrazne horšia než \texttt{J48}. Znaky x,y,z budú nahradené číslami, ktoré predstavujú hodnotu relatívnej fitness funkcie zložitosti stromov.}\label{fig:tab3}
-\end{figure}
+\caption{Príklad tabuľky, ktorú budeme používať pre znázornenie štatisticky významného zlepšenia alebo zhoršenia (podľa párového t-testu) genetického algoritmu od algoritmu \texttt{J48}. Posledný riadok určuje, pre akú množinu bol test vykonaný. Symbol \textbf{v} znamená, že daná metóda je výrazne lepšia (v určitej vlastnosti modelu) než \texttt{J48} na danej dátovej množine. Opačne, symbol \textbf{x} znamená, že daná metóda je výrazne horšia než \texttt{J48}. Znaky x,y,z budú nahradené číslami, ktoré predstavujú hodnotu relatívnej fitness funkcie zložitosti stromov.}\label{fig:tab3}
+\end{table}
 
 \subsection{Vstupné dáta}
-Na testovanie sme zvolili niekoľko známych klasifikačných problémov, ktoré sme získali z databáze na stránke UCI pre strojové učenie \cite{online-uci}. Výber sme uskutočnili podľa toho, ako známe a obľúbené sú tieto dátové množiny (pre čo najlepšiu porovnateľnosť s inými prácami). Pri výbere dátových množín sme taktiež požadovali, aby bol počet inštancií pre rôzne dátové množiny iný, aby mali rôzne typy atribútov (numerické, kategoriálne) a aby bol výstupný atribút kategoriálny. Vybrali sme nasledujúce množiny:
+Na testovanie sme zvolili niekoľko známych klasifikačných problémov, ktoré sme získali z databázy na stránke UCI pre strojové učenie \cite{online-uci}. Výber sme uskutočnili podľa toho, ako známe a obľúbené sú tieto dátové množiny (pre čo najlepšiu porovnateľnosť s inými prácami). Pri výbere dátových množín sme taktiež požadovali, aby bol počet inštancií pre rôzne dátové množiny iný, aby mali rôzne typy atribútov (numerické, kategoriálne) a aby bol výstupný atribút kategoriálny. Vybrali sme nasledujúce množiny:
 \begin{itemize}
 \item \verb|Colic| je dátová množina, ktorá určuje či je nájdená lézia u koňa operovateľná bez negatívnych následkov,
 \item \verb|Credit-a| je dátová množina (angl. Australian Credit Approval), ktorá určuje schválenie úveru pre žiadateľov z Austrálie,
@@ -137,7 +137,8 @@ Breast cancer & 286 & áno & 0 & 9 & 2 \\
 \caption{Informácie o použitých dátových množinách.}\label{fig:testdata}
 \end{figure}
 \subsection{Nastavenie parametrov genetického algoritmu}
-V kapitole \ref{kap3:DTGA} sme definovali komponenty, ktoré používame v genetickom algoritme. Fitness funkcie algoritmu volíme tak, aby vyhodnocovali prediktívne schopnosti a zložitosť stromov.  Na vyhodnotenie prediktívnych schopností používame fitness funkciu presnosti a na vyhodnotenie zložitosti stromu zase relatívnu fitness funkciu veľkosti stromov (definovanú v časti \ref{kap3:3.3:Fitness}). Parametre k nim sme volili podľa toho, aké výsledky s nimi dosiahli v podobných prácach a v úlohách genetického programovania. Multi-kriteriálny problém prevedieme na jedno-kriteriálny pomocou agregácie fitness zadefinovanej \ref{kap2:2.3:2.3.1:Weighted}. Pri testovaní sme skúšali viacero nastavení parametrov. Z týchto nastavení sme vybrali iba niektoré. V tabuľke \ref{fig:configs} uvádzame parametre, ktoré budeme medzi sebou kombinovať a používať pri testovaní.
+V kapitole \ref{kap3:DTGA} sme definovali komponenty, ktoré používame v genetickom algoritme. Fitness funkcie algoritmu volíme tak, aby vyhodnocovali prediktívne schopnosti a zložitosť stromov.  Na vyhodnotenie prediktívnych schopností používame fitness funkciu presnosti a na vyhodnotenie zložitosti stromu zase relatívnu fitness funkciu veľkosti stromov (definovanú v časti \ref{kap3:3.3:Fitness}). Multi-kriteriálny problém prevedieme na jedno-kriteriálny pomocou agregácie fitness zadefinovanej \ref{kap2:2.3:2.3.1:Weighted}.
+Parametre operátorov sme volili podľa toho, aké výsledky s nimi dosiahli v podobných prácach a v úlohách genetického programovania. Pri testovaní sme skúšali viacero nastavení parametrov. Z týchto nastavení sme vybrali iba niektoré. V tabuľke \ref{fig:configs} uvádzame parametre, ktoré budeme medzi sebou kombinovať a používať pri testovaní.
 
 \begin{figure}[h]
 % Because czech 
@@ -182,12 +183,12 @@ funkcie & \\
 \end{figure}
 
 Z tabuľky môžeme vidieť, že operátor kríženia môže mať v niektorých prípadoch nulovú pravdepodobnosť. V tomto prípade skúšame či nedosiahneme lepších výsledkov použitím makro mutácií.
-Posledný uvádzaný parameter popisuje veľkosť stromov v okolí ktorých budeme optimalizovať. Hodnoty sú schválne menšie, pretože genetický algoritmus pri zvolení väčších hodnôt vytváral stromy, ktoré boli preučené. Tento parameter teda zároveň slúži ako prostriedok, ktorý zabraňuje preučeniu stromov. 
+Posledný uvádzaný parameter popisuje veľkosť stromov, v okolí ktorých budeme optimalizovať. Hodnoty sú schválne menšie, pretože genetický algoritmus pri zvolení väčších hodnôt vytváral stromy, ktoré boli preučené. Tento parameter teda zároveň slúži ako prostriedok, ktorý zabraňuje preučeniu stromov. 
 
 \section{Výsledky testov}\label{kap5:Results}
-Najväčším problémom pri testovaní bolo nastaviť parametre genetického algoritmu tak, aby sme dosiahli čo najlepšie prediktívne schopnosti. Taktiež sme sa snažili o vytvorenie stromov, ktoré by boli kvalitnejšie než tie vytvorené algoritmom C4.5. To sa nám ale nepodarilo. Napriek tomu sme nevytvorili rozhodovacie stromy, ktoré by boli signifikantne horšie. Zmenou nastavení je možné ďalej vylepšiť špecifickú vlastnosť stromu (napr. niektorá vlastnosť z matice chybovosti, hĺbka stromu, počet listov, počet vrcholov). Nastavenia parametrov je možné meniť pri každom spustení a teda ponechávame možnosť optimalizovať tieto parametre pre každú dátovú množinu zvlášť. Voľbou správnych nastavení sme sa v práci hlbšie nezaoberali, pretože veľkosť priestoru parametrov je príliš veľký a vyžadovala by ďalšie experimenty, ktoré by skúmali dopad rôznych nastavení na výsledné stromy.
+Najväčším problémom pri testovaní bolo nastaviť parametre genetického algoritmu tak, aby sme dosiahli čo najlepšie prediktívne schopnosti. Taktiež sme sa snažili o vytvorenie stromov, ktoré by boli kvalitnejšie než tie vytvorené algoritmom C4.5. To sa nám ale nepodarilo. Napriek tomu sme nevytvorili rozhodovacie stromy, ktoré by boli signifikantne horšie. Zmenou nastavení je možné ďalej vylepšiť špecifickú vlastnosť stromu (napr. niektorú vlastnosť z matice chybovosti, hĺbka stromu, počet listov, počet vrcholov). Nastavenia parametrov je možné meniť pri každom spustení a teda ponechávame možnosť optimalizovať tieto parametre pre každú dátovú množinu zvlášť. Voľbou správnych nastavení sme sa v práci hlbšie nezaoberali, pretože veľkosť priestoru parametrov je príliš veľký a vyžadovala by ďalšie experimenty, ktoré by skúmali dopad rôznych nastavení na výsledné stromy.
 
-Našu vytvorenú implementáciu sme porovnávali s C4.5 indukčným algoritmom na tvorbu stromov, ktorý je v nástroji \verb|Weka| implementovaný ako klasifikátor \verb|J48|. Genetický algoritmus s našimi zvolenými parametrami vytvoril pre každú dátovú množinu stromy, ktoré aj keď v niektorých prípadoch mali horšie generalizačné schopnosti, tak boli výsledky porovnateľné (neboli signifikantne horšie).
+Našu vytvorenú implementáciu sme porovnávali s C4.5 indukčným algoritmom na tvorbu stromov, ktorý je v nástroji \verb|Weka| implementovaný ako klasifikátor \verb|J48|. Genetický algoritmus s našimi zvolenými parametrami vytvoril pre každú dátovú množinu stromy, ktoré mali síce v niektorých prípadoch horšie generalizačné schopnosti, ale výsledky boli napriek tomu porovnateľné (neboli signifikantne horšie).
 
 V tabuľke \ref{fig:acc} uvádzame presnosť modelov, ktoré sme dosiahli otestovaním spomínaných metód. Z vykonaných testov vyberáme vždy ten najlepší model zo skupiny modelov s rovnakou nastavenou relatívnou fitness funkciou (veľkosť stromu 4,6,10 alebo 15). Podľa tabuľky sú dosiahnuté výsledky o niečo lepšie, ale ani v jednom prípade nie sú výrazne lepšie od výsledkov získaných algoritmom \verb|J48|. Napriek tomu sa nám v tých najlepších prípadoch podarilo zmenšiť smerodajnú odchýlku týchto výsledkov v porovnaní s algoritmom \verb|J48|.
 
@@ -198,7 +199,7 @@ V tabuľke \ref{fig:acc} uvádzame presnosť modelov, ktoré sme dosiahli otesto
 \newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
 \newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
 \begin{tabular}{|l||c|c|c|c|c||}
-\hline \multirow{2}{*}{Dátová množina} & \multicolumn{5}{|c||}{Presnosť modelu} \\ 
+\hline \multirow{2}{*}{Dátová množina} & \multicolumn{5}{c||}{Presnosť modelu} \\ 
 \cline{2-6} & J48 & GA6 & GA10 & GA15 & GA4 \\
 \hline
 \hline \multirow{2}{*}{colic} & 85.16\% & 85.86\% & 85.51\% & 84.83\% & 82.93\% \T\\[-1.5ex]
@@ -224,7 +225,7 @@ V tabuľke \ref{fig:acc} uvádzame presnosť modelov, ktoré sme dosiahli otesto
 
 V tabuľke \ref{fig:size} uvádzame veľkosti vytvorených stromov. Použité genetické algoritmy, ktorých relatívne hodnoty fitness funkcií sú menšie vytvorilo stromy, ktoré sú v určitých prípadoch lepšie než stromy vytvorené indukčným algoritmom. V prípade relatívnych fitness funkcií s hodnotou 6 dosahujeme na všetkých množinách okrem \verb|iris| výrazne menšie veľkosti stromov. U fitness funkcií s hodnotou 4 sú vytvorené stromy vo všetkých prípadoch výrazne menšie od tých vytvorených algoritmom \verb|J48|. 
 
-Výsledky prezentované v tabuľkách boli dosiahnuté pre rôzne nastavenia kríženia a mutácií (ich pravdepodobnosti). Povolené hodnoty pravdepodobností sme popísali v Tabuľke \ref{fig:configs}. Použité hodnoty pravdepodobností pre jednotlivé genetické algoritmy sme popísali v Tabuľke \ref{fig:setconfig}. Z nastavení v tabuľke by sme mohli vytvoriť dva predpoklady.
+Výsledky prezentované v tabuľkách boli dosiahnuté pre rôzne nastavenia kríženia a mutácií (ich pravdepodobností). Povolené hodnoty pravdepodobností sme popísali v Tabuľke \ref{fig:configs}. Použité hodnoty pravdepodobností pre jednotlivé genetické algoritmy sme popísali v Tabuľke \ref{fig:setconfig}. Z nastavení v tabuľke by sme mohli vytvoriť dva predpoklady.
 \begin{enumerate}
 \item Pre množiny \verb|Credit-a| a \verb|Credit-g| dostaneme najlepšie výsledky bez operátoru kríženia.
 \item Pre genetické algoritmy typu \verb|GA4| dostaneme najlepšie výsledky bez operátoru kríženia
@@ -300,6 +301,8 @@ Dosiahnuté výsledky, pre jednotlivé dátové množiny, uvedené v tabuľkách
 
 V tabuľke \ref{fig:sign} uvádzame, ktoré modely vytvorené genetickými algoritmami boli na daných dátových množinách lepšie a horšie (presnosťou a zložitosťou) než modely vytvorené indukčným algoritmom.
 
+Nakoniec v tabuľke \ref{fig:time} uvádzame rýchlosť algoritmov použitých na vytvorenie rozhodovacích stromov.
+
 \begin{table}[h]
 % Because czech 
 \catcode`\-=12
@@ -324,12 +327,11 @@ GA4 & - & - & - & - & - & - & - & - & \textbf{v} & \textbf{v} & \textbf{v} & \te
 \caption{Tabuľka, v ktorej popisujeme, ktoré výsledky boli signifikantne lepšie od tých získaných algoritmom \texttt{J48}. }\label{fig:sign}
 \end{table}
 
-Taktiež treba uviesť, že aj keď vytvorené modely neboli výrazne lepšie od modelov vytvorených algoritmom \verb|J48|, tak smerodajná odchýlka je v niektorých prípadoch menšia.
-Genetické algoritmus \verb|GA6| vytvára na všetkých dátových množinách okrem \verb|iris| výrazne menšie stromy, pričom prediktívne vlastnosti modelu zostali neporušené a zároveň dosahuje vo všetkých prípadoch menšiu smerodajnú odchýlku. V prípade genetického algoritmu \verb|GA4| dostávame stromy, ktoré sú výrazne menšie pre každú dátovú množinu a prediktívne vlastnosti nie sú výrazne horšie. Smerodajná odchýlka pre predikciu je ale o niečo horšia, než pre algoritmus \verb|GA6|.
+Keď zhrnieme výsledky tak môžeme povedať, že aj keď vytvorené modely neboli výrazne lepšie od modelov vytvorených algoritmom \verb|J48|, tak smerodajná odchýlka je v niektorých prípadoch menšia.
+Genetické algoritmus \verb|GA6| vytvára na všetkých dátových množinách okrem \verb|iris| výrazne menšie stromy, pričom prediktívne vlastnosti modelu zostali neporušené, a zároveň dosahuje vo všetkých prípadoch menšiu smerodajnú odchýlku. V prípade genetického algoritmu \verb|GA4| dostávame stromy, ktoré sú výrazne menšie pre každú dátovú množinu a prediktívne vlastnosti nie sú výrazne horšie. Smerodajná odchýlka pre predikciu je ale o niečo horšia, než pre algoritmus \verb|GA6|.
+Ostatné modely síce vytvárali stromy, ktoré nie sú signifikantne horšie, no zložitosť týchto stromov je pri určitých množinách výrazne horšia, než zložitosť stromov vytvorených algoritmom \verb|J48|.
+Jediným problémom genetických algoritmov je čas potrebný na vytvorenie modelu, ktorý je vo všetkých prípadoch výrazne horší. Vylepšenie modelu je teda na úkor času, ktorí sme ale v praxi väčšinou ochotní obetovať.
 
-Ostatné modely síce vytvárali stromy, ktoré nie sú signifikantne horšie, no zložitosť týchto stromov je pri určitých množinách výrazne horšia než zložitosť stromov vytvorených algoritmom \verb|J48|.
-
-Jediným problémom genetických algoritmov je čas potrebný na vytvorenie modelu, ktorý je vo všetkých prípadoch výrazne horší. Vylepšenie modelu je teda na úkor času, ktorí sme ale v praxi väčšinou ochotní obetovať. Rýchlosť algoritmov použitých na vytvorenie rozhodovacích stromov sú v tabuľke \ref{fig:time}.
 
 \begin{table}[t]
 % Because czech 
@@ -359,7 +361,7 @@ Jediným problémom genetických algoritmov je čas potrebný na vytvorenie mode
 & \tiny (0.00) & \tiny (0.02) & \tiny (0.04) & \tiny (0.03) & \tiny (0.01)\B\\
 \hline
 \end{tabular}
-\caption{Tabuľka s rýchlosťami pri vytváraní modelov. Modely boli vytvárane indukčným algoritmom C4.5 a genetickými algoritmami na tvorbu stromov s rôznymi nastaveniami.}\label{fig:time}
+\caption{Tabuľka s rýchlosťami vytvárania rozhodovacích stromov. Rozhodovacie stromy boli budované indukčným algoritmom C4.5 a genetickými algoritmami na tvorbu stromov s rôznymi nastaveniami.}\label{fig:time}
 \end{table}
 
 \setcounter{figure}{0}
