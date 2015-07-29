@@ -1,5 +1,5 @@
 \chapter{Rozšíriteľnosť aplikácie}\label{kapIII}
-V tejto kapitole popíšeme možnosti rozšírenia aplikácie o nové komponenty (operátory, selekcie, fitness funkcie, populácie) a využitie aplikácie aj bez nástroja Weka. Kapitola je určená pre užívateľov, ktorí majú skúsenosti v programovaní na platforme Java.
+V tejto kapitole popíšeme možnosti rozšírenia aplikácie o nové komponenty (operátory, selekcie, fitness funkcie, populácie) a využitie aplikácie aj bez nástroja \verb|Weka|. Kapitola je určená pre užívateľov, ktorí majú skúsenosti v programovaní na platforme Java.
 
 \section{Rozšíriteľnosť}\label{kap4:4.4:Plugin}
 V časti \ref{kap4:4.2:4.2.2:CodeOrganization} sme predviedli ako je organizovaný kód v aplikácií \verb|GenDTLib|.
@@ -59,7 +59,7 @@ Fitness funkcie sú ďalej spracované v tzv. \emph{komparátoroch}, ktoré vyho
 \end{table}
 
 \subsubsection*{Operátory}
-Pri vytváraní nových operátorov je treba implementovať rozhranie \verb|OperatorPlugin|. Jednotlivé operátory (mutácie a kríženia) v tejto knižnici potom musia implementovať rozhranie \verb|Operator|. Popis tohoto rozhrania je predstavené v tabuľke \ref{fig:tabop}.
+Pri vytváraní nových operátorov je treba implementovať rozhranie \verb|OperatorPlu|- \verb|gin|. Jednotlivé operátory (mutácie a kríženia) v tejto knižnici potom musia implementovať rozhranie \verb|Operator|. Popis tohoto rozhrania je predstavené v tabuľke \ref{fig:tabop}.
 Rozhranie operátoru je parametrizované typom jedinca.
 
 

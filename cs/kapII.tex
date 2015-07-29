@@ -188,17 +188,18 @@ Hodnota na vyplnenie \texttt{\{parametre\}} môže byť nastavená ako:
 \subsection{Argumenty}
 Argumenty môžeme deliť podľa skupín spomínaných vyššie. Do skupiny 1 patria tieto argumenty:
 \begin{enumerate}
-\item \texttt{number-of-generations} -- počet generácií,
-\item \texttt{pop-size} -- veľkosť populácie,
-\item \texttt{elitism} -- predstavuje hodnotu elitizmu,
-\item \texttt{fit-threads} -- počet vlákien použitých na počítanie fitness funkcií,
-\item \texttt{gen-threads} -- počet vlákien použitých na vytvorenie počiatočnej populácie,
-\item \texttt{classify} -- počet najlepších rozhodovacích stromov použitých na klasifikáciu. V tomto prípade bude genetický algoritmus fungovať podobne ako technika \emph{bagging}.
+\item \texttt{number-of-generations} -- počet generácií (konzolový argument je \verb|-N|),
+\item \texttt{pop-size} -- veľkosť populácie (konzolový argument je \verb|-P|),
+\item \texttt{elitism} -- predstavuje hodnotu elitizmu (konzolový argument je \verb|-E|),
+\item \texttt{fit-threads} -- počet vlákien použitých na počítanie fitness funkcií (konzolový argument je \verb|-FT|),
+\item \texttt{gen-threads} -- počet vlákien použitých na vytvorenie počiatočnej populácie (konzolový argument je \verb|-GT|),
+\item \texttt{classify} -- počet najlepších rozhodovacích stromov použitých na klasifikáciu. V tomto prípade bude genetický algoritmus fungovať podobne ako technika \emph{bagging} (konzolový argument je \verb|-NC|),
+\item \texttt{seed} -- semienko (angl. seed) pseudo-náhodného generátora čísiel (konzolový argument je \verb|-S|).
 \end{enumerate}
 Komplikovanejšie argumenty popíšeme v nasledujúcich úsekoch.
 
 \subsubsection*{Dátová množina}
-Argumentom \verb|data| (skupina 2.) definujeme ako bude rozdelená dátová množina na trénovaciu a validačnú podmnožinu. 
+Argumentom \verb|data| (skupina 2.) definujeme ako bude rozdelená dátová množina na trénovaciu a validačnú podmnožinu. Argument v konzolovom rozhraní je \verb|-D|.
 Dovolené parametre sú:
 \begin{itemize}
 \item \verb|TRAINRATIO| Podiel trénovacej množiny v dátach. Jeho hodnota je číslo z intervalu [0,1],
@@ -206,7 +207,7 @@ Dovolené parametre sú:
 \end{itemize}
 
 \subsubsection*{Fitness funkcie}
-Argumentom \verb|fit-functions| (skupina 4.), definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Argumentom \verb|fit-functions| (skupina 4.), definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov. Argument v konzolovom rozhraní je \verb|-F|.
 Dovolené komponenty sú 
 \begin{itemize}
 \item \verb|tAcc| -- presnosť rozhodovacieho stromu,
@@ -227,10 +228,12 @@ Dovolené parametre sú:
 \begin{itemize}
 \item \verb|INDEX| -- index fitness funkcie v jedincovi,
 \item \verb|DATA| -- dátová množina použitá na výpočet fitness funkcie. Jeho hodnota je buď -1 (celá množina), 0 (trénovacia množina), 1 (validačná množina).
+\item \verb|BASE| -- základ použitý na výpočet relatívnej fitness funkcie \ref{kap3:3.3:Fitness} (hodnota $b$).
+\item \verb|MEAN| -- hodnota, od ktorej počítame relatívnu fitness funkciu \ref{kap3:3.3:Fitness} (hodnota $y$).
 \end{itemize}
 
 \subsubsection*{Vyhodnotenie fitness funkcií}
-Argumentom \verb|fit-comparator| (skupina 4.) definujeme to, ako budeme určovať kvalitu jedincov.
+Argumentom \verb|fit-comparator| (skupina 4.) definujeme to, ako budeme určovať kvalitu jedincov. Argument v konzolovom rozhraní je \verb|-FC|.
 Dovolené komponenty sú 
 \begin{itemize}
 \item \verb|SINGLE| Kvalitu jedincov určujeme pomocou jednej vybranej fitness funkcie,
@@ -238,17 +241,17 @@ Dovolené komponenty sú
 \item \verb|WEIGHT| Kvalitu jedincov určujeme pomocou váženej hodnoty fitness funkcií \ref{kap2:2.3:2.3.1:Weighted}.
 \end{itemize}
 
-Parameter komponenty pozostáva z $n$ hodnôt, pričom $n = po\v cet funkcií$.
+Parameter komponenty pozostáva z $n$ hodnôt, pričom $n$ = počet funkcií.
 
 \subsubsection*{Kríženia a mutácie}
-Argumentom \verb|xover-operators| (skupina 4.) definujeme operátory kríženia.
+Argumentom \verb|xover-operators| (skupina 4.) definujeme operátory kríženia. Argument v konzolovom rozhraní je \verb|-X|.
 Dovolené komponenty (kríženia) sú: 
 \begin{itemize}
 \item \verb|dtX| -- žiadne kríženia (skopírovanie jedincov),
 \item \verb|subTreeX|  -- kríženie podstromov.
 \end{itemize}
 
-Argumentom \verb|mut-operators| (skupina 4.) definujeme operátory mutácie.
+Argumentom \verb|mut-operators| (skupina 4.) definujeme operátory mutácie. Argument v konzolovom rozhraní je \verb|-M|.
 Povolené komponenty (mutácie) sú:
 \begin{itemize}
 \item \verb|dtM| -- žiadna mutácia (skopírovanie jedincov),
@@ -265,7 +268,7 @@ Dovolené parametre sú:
 \end{itemize}
 
 \subsection*{Selekcie}
-Argumentom \verb|selectors| (skupina 4.) definujeme selekcie \ref{kap2:2.4:Selection} a argumentom \verb|env-selectors| (skupina 4.) definujeme selekcie prostredia \ref{kap2:2.4:2.4.4:EnvironmentalSelection}.
+Argumentom \verb|selectors| (skupina 4.) definujeme selekcie \ref{kap2:2.4:Selection} a argumentom \verb|env-s|- \verb|electors| (skupina 4.) definujeme selekcie prostredia \ref{kap2:2.4:2.4.4:EnvironmentalSelection}. Argument selekcie je v konzolovom rozhraní \verb|-SE| a argument selekcie prostredia je \verb|-ESE|.
 Dovolené komponenty sú 
 \begin{itemize}
 \item \verb|random| \textbf{POZOR!} experimentálny výber jedincov, ktorý vyberá jedincov náhodne.
@@ -276,7 +279,7 @@ Dovolené komponenty sú
 Selekcie sú bez parametrov.
 
 \subsubsection*{Inicializácia populácie}
-Argumentom \verb|pop-init| (skupina 3.), definujeme inicializátory počiatočnej populácie.
+Argumentom \verb|pop-init| (skupina 3.), definujeme inicializátory počiatočnej populácie. Argument v konzolovom rozhraní je \verb|-PI|.
 Povolené komponenty sú 
 \begin{itemize}
 \item \verb|wCompTree| Rozhodovacie stromy sú zaradené do počiatočnej populácie bez zmeny,
@@ -292,7 +295,7 @@ Dovolené parametre sú:
 \end{itemize}
 
 \subsubsection*{Generátor jedincov}
-Argument s názvom \verb|ind-generator| (skupina 3.), ktorým definujeme fitness funkcie, ktoré budú použité na vyhodnotenie jedincov.
+Argument s názvom \verb|ind-generator| (skupina 3.), ktorým definujeme generátory jedincov, ktoré budú použité pri inicializovaní počiatočnej populácie. Argument v konzolovom rozhraní je \verb|-G|.
 Dovolené komponenty sú 
 \begin{itemize}
 \item \verb|wJ48Gen| Rozhodovacie stromy sú generované pomocou algoritmu J48 z nástroja \verb|Weka|.

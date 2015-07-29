@@ -30,6 +30,13 @@
   Year                     = {2014}
 }
 
+@Online{,
+  Title                    = {Island model},
+  Author                   = {S Gustafson},
+  Url                      = {http://www.gustafsonresearch.com/thesis_html/node104.html},
+  Year                     = {2015}
+}
+
 @Online{online-psychoterapy,
   Title                    = {A Classification Tree Model for
 Decision-Making in Clinical Practice: An Application Based on the Data of the German Multicenter Study on Eating Disorders, Project TR-EAT},
@@ -57,10 +64,7 @@ Decision-Making in Clinical Practice: An Application Based on the Data of the Ge
   Title                    = {UCI Repository of Machine Learning Databases},
   Author                   = {D. J. Newman and S. Hettich and C. L. Blake and C.J. Merz},
   Url                      = {http://archive.ics.uci.edu/ml/},
-  Year                     = {2015},
-
-  Owner                    = {kirrie},
-  Timestamp                = {2015.07.12}
+  Year                     = {2015}
 }
 
 @Online{online-java,
