@@ -4,9 +4,36 @@ V tejto kapitole popíšeme dve práce, ktoré sa zaoberajú vytváraním rozhod
 \section{LEGAL-Tree: A lexicographic multi-objective genetic algorithm for decision tree induction}\label{kap6: 6.1:Legal}
 Cieľom práce a jej autorov \cite{kap6-legal} bolo vytvoriť taký genetický algoritmus na tvorbu rozhodovacích stromov, ktorý by dokázal nahradiť existujúce indukčné algoritmy -- vytvorené modely by nekonvergovali k lokálnemu optimu, ako to je pri indukčných algoritmoch. 
 
-Genetický algoritmus vytvára jedincov z rozhodovacích koreňov (viď. \ref{kap1:2.3:2.3.2:stumpDT}). Mutácie a kríženia sú v algoritme rovnaké ako v našej implementácii, pričom na porovnávanie jedincov používa tzv. lexikografické multi-kriteriálne funkcie, ktoré fungujú podobne ako prioritná fitness z časti \ref{kap2:2.3:2.3.2:Priority}.
+Genetický algoritmus, ktorý v práci navrhli, vytvára jedincov od počiatku pomocou rozhodovacích koreňov (viď. \ref{kap1:2.3:2.3.2:stumpDT}). Mutácie a kríženia sú v algoritme rovnaké ako v našej implementácii, pričom na porovnávanie jedincov používajú tzv. lexikografické multi-kriteriálne funkcie, ktoré fungujú podobne ako prioritná fitness z časti \ref{kap2:2.3:2.3.2:Priority}.
 
-Vytvorené modely testovali na známych dátových množinách a porovnávali s indukčným algoritmom C4.5. Pri testovaní dostali stromy, ktoré pri porovnaní s C4.5 neboli presnosťou signifikantne lepšie, ale tieto stromy boli v niektorých prípadoch jednoduchšie.
+Vytvorené modely testovali na známych dátových množinách a porovnávali s indukčným algoritmom C4.5. Pri testovaní dostali stromy, ktoré pri porovnaní s C4.5 neboli presnosťou signifikantne lepšie, ale tieto stromy boli v niektorých prípadoch jednoduchšie. Výsledky, ktoré v práci dostali sú v Tabuľke \ref{fig:legaltable}.
+
+\begin{table}[h!]
+% Because czech 
+\catcode`\-=12
+\centering 
+\newcommand\T{\rule{0pt}{2.6ex}}       % Top strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % Bottom strut
+\begin{tabular}{|l||c|c||}
+\hline
+Dátová & \multirow{2}{*}{Presnosť} & Veľkosť \\ 
+množina & & stromu \\
+\hline
+\multirow{2}{*}{colic} & 84.72\% & 8.62 \T\\[-1.5ex]
+& \tiny (2.69\%) & \tiny (5.01\B\\
+\hline
+\multirow{2}{*}{credit-a} & 85.45\% & 4.74 \T\\[-1.5ex]
+& \tiny (2.69\%) & \tiny (2.55)\B\\
+\hline
+\multirow{2}{*}{credit-g} & 71.86\% & 16.23 \T\\[-1.5ex]
+& \tiny (2.57\%) & \tiny (10.73)\B\\
+\hline
+\multirow{2}{*}{hepatitis} & 81.13\% & 20.39 \T\\[-1.5ex]
+& \tiny (4.29\%) & \tiny (6.58)\B\\
+\hline
+\end{tabular}
+\caption{Presnosť a zložitosť modelu vytvoreného genetickým algoritmom navrhnutým autormi z \cite{kap6-legal}.}\label{fig:legaltable}
+\end{table}
 
 \section{A new genetic programming algorithm for building decision tree}\label{kap6:6.2:Hybrid}
 Cieľom autorov \cite{kap6-group} tejto práce bolo vytvárať rozhodovacie stromy genetickými algoritmami, pričom sa snažili zabrániť tomu, aby boli pri reprodukcii použité také stromy, ktorých rozdiel veľkostí je príliš veľký. 

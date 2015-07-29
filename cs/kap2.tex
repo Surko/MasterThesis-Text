@@ -2,7 +2,7 @@
 Hlavným cieľom práce je optimalizovanie tvorby rozhodovacích stromov pomocou genetických algoritmov (GA). Preto 
 v tejto kapitole predstavíme genetické algoritmy a podrobnejšie popíšeme ich jednotlivé časti, ktoré budeme ďalej potrebovať v ďalšej kapitole.
 
-Táto kapitola je delená do viacerých oddielov. V oddieli \ref{kap2:2.1:Info} popíšeme základné informácie o genetických algoritmoch. Popis rôznych kódovaní jedincov je v oddieli \ref{kap2:2.2:Coding}. Rôzne druhy funkcií, používaných na vyhodnotenie jedincov, zadefinujeme v oddieli \ref{kap2:2.3:Fitnesses}. Ďalej v časti \ref{kap2:2.4:Selection} predvedieme najzákladnejšie metódy na výber jedincov. Genetické operátory používané v genetických algoritmoch zavedieme v oddieli \ref{kap2:2.5:Operators}. Nakoniec v časti \ref{kap2:2.6:Parameters} popíšeme problém výberu správnych parametrov sv genetických algoritmoch.
+Táto kapitola je delená do viacerých oddielov. V oddieli \ref{kap2:2.1:Info} popíšeme základné informácie o genetických algoritmoch. Popis rôznych kódovaní jedincov je v oddieli \ref{kap2:2.2:Coding}. Rôzne druhy funkcií, používaných na vyhodnotenie jedincov, zadefinujeme v oddieli \ref{kap2:2.3:Fitnesses}. Ďalej v časti \ref{kap2:2.4:Selection} predvedieme najzákladnejšie metódy na výber jedincov. Genetické operátory používané v genetických algoritmoch zavedieme v oddieli \ref{kap2:2.5:Operators}. Nakoniec v časti \ref{kap2:2.6:Parameters} popíšeme problém výberu správnych parametrov v genetických algoritmoch.
 
 \section{Základný popis genetických algoritmov}\label{kap2:2.1:Info}
 Genetické algoritmy sú optimalizačné techniky a prehľadávacie heuristiky, ktoré napodobujú princíp prirodzeného výberu vychádzajúceho z darwinovskej teórie. V tomto oddieli ponúkneme úvod ku genetickým algoritmom s popisom, ako by mal taký genetický algoritmus vyzerať. Informácie o genetických algoritmoch sme čerpali z knihy \cite{kap2-evolution} a úvod do oblasti genetiky zase z voľne dostupnej učebnice biológie \cite{online-biology}. Ďalšie doplňujúce poznatky boli získané z online zdrojov \cite{wiki-evolution,wiki-genetics,online-geneticsoverview}.
@@ -22,9 +22,9 @@ DNA je kvôli jej veľkosti ďalej komprimovaná do štruktúry nazývaná chrom
 \caption{Na tomto obrázku je príklad bunky s jadrom, v ktorom sú viditeľné chromozómy. Jeden z chromozómov je v spodnej časti roztiahnutý do DNA, ktorej jednotlivé časti sú popísané. Značky A,G,T predstavujú nukleotidové báze adenín, guanín a cytozín. Obrázok je prebraný a preložený z \cite{online-geneticsoverview}.}\label{fig:DNA}
 \end{figure}
 
-Snahou každého živého organizmu je rozšíriť svoju genetickú informáciu a tým pádom aj jeho gény. Sexuálna reprodukcia dvoch rodičovských organizmov je komplikovaný proces (zdroj \cite{online-shuffling} podáva rozumné vysvetlenie celého procesu). Konkrétne nás budú zaujímať dve štádia reprodukcie, ktoré fungujú na úrovni chromozómov.
+Snahou každého živého organizmu je rozšíriť svoju genetickú informáciu, a tým aj jeho gény. Sexuálna reprodukcia dvoch rodičovských organizmov je komplikovaný proces (zdroj \cite{online-shuffling} podáva rozumné vysvetlenie celého procesu). Konkrétne nás budú zaujímať dve štádia reprodukcie, ktoré fungujú na úrovni chromozómov.
 \begin{itemize}
-\item Kríženie, kde dvojica chromozómov si medzi sebou vymieňa gény a vytvára nové chromozómy.
+\item Kríženie, kde si medzi sebou dvojica chromozómov vymieňa gény a vytvára nové chromozómy.
 \item Mutácia vytvorených chromozómov, pri ktorej sú niektoré nukleotidy pozmenené kvôli chybám pri krížení.
 \end{itemize}
 Po reprodukcii dostávame nové chromozómy, ktoré tvoria genóm novo vytvoreného organizmu. Na Obrázku \ref{fig:Chromosomes} je príklad reprodukcie nespárovaných chromozómov pre haploidné organizmy.
@@ -40,17 +40,17 @@ Z biologického hľadiska je nutné popísať kvalitu nových organizmov. Tú je
 \subsection{Popis genetických algoritmov}\label{kap2:2.1:2.1.2:AboutGeneticAlgo}
 V tejto časti zadefinujeme, čo sú to genetické algoritmy, pričom jednotlivé pojmy budú podobné tým, ktoré sme predstavili v predchádzajúcej časti. 
 
-Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a z nich nájsť to najlepšie. Algoritmus pracuje s jedincami, na ktorých aplikujeme operátory kríženia a mutácie. Podľa kvality jedinca rozhodujeme, či sa bude s jedincom ďalej pracovať. V genetických algoritmoch získavame riešenia z jedincov po príslušnom dekódovaní. Jedinec a chromozóm sú v rámci genetických algoritmov synonymami. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši po dekódovaní zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
+Genetické algoritmy patria medzi metaheuristiky, ktorých úlohou je prechádzať priestor riešení a nájsť z nich to najlepšie. Algoritmus pracuje s jedincami, na ktorých aplikujeme operátory kríženia a mutácie. Podľa kvality jedinca rozhodujeme, či sa bude s jedincom ďalej pracovať. V genetických algoritmoch získavame riešenia z jedincov po príslušnom dekódovaní. Jedinec a chromozóm sú v rámci genetických algoritmov synonymami. Kvalita vytvorených jedincov záleží na tom, ako dobre tento jedinec rieši po dekódovaní zadanú úlohu. Väčšina implementácií pracuje s jedincami, ktoré by sa dali popísať ako haploidné (nespárované chromozómy).
 
 Tieto algoritmy fungujú v cykloch, ktoré predstavujú generácie. V každom cykle pracujeme s množinou jedincov, populáciou pre tú danú generáciu. V každej generácii sa snažíme zlepšiť aktuálne riešenie vytváraním nových jedincov.
 Z populácie, ktorá vznikne v poslednej generácii si potom vyberieme najkvalitnejšieho jedinca. Genetický algoritmus môže mať dodatočne zadefinované zastavovacie kritérium, ktoré ho donúti predčasne zastaviť (maximálny počet cyklov, nezlepšenie kvality jedincov v $x$ generáciách). Na Obrázku \ref{fig:GAdiagram} uvádzame diagram generického genetického algoritmu.
 
 Každý problém môže mať odlišnú reprezentáciu jedincov. S týmto súvisí úloha, ako rozumne a správne zakódovať jedincov. Takýchto kódovaní je mnoho, no medzi najznámejšie patrí binárne kódovanie, znakové kódovanie, kódovanie reálnymi číslami, ale aj kódovanie pomocou stromov, gramatík a mnoho ďalších. Napríklad pri použití binárneho kódovania sú jedinci reprezentovaní ako bitové reťazce. V tomto prípade sú jednotlivé prvky alebo skupiny prvkov reťazca génmi jedinca. Alela je v prípade bitovej hodnoty 0 alebo 1. Pri iných reprezentáciách sú alely komplikovanejšie.
 
-Kríženie v genetických algoritmoch je realizované výmenou hodnôt medzi rodičmi. To o aké hodnoty sa jedná záleží na zvolenej reprezentácií (hodnoty v reťazci, stromy, ...). Typ kríženia, ktorý môžeme použiť, závisí od zvoleného kódovania a od jeho reprezentácie jedincov. 
+Kríženie v genetických algoritmoch je realizované výmenou hodnôt medzi rodičmi. To, o aké hodnoty sa jedná, záleží na zvolenej reprezentácií (hodnoty v reťazci, stromy, ...). Typ kríženia, ktorý môžeme použiť, závisí od zvoleného kódovania a od jeho reprezentácie jedincov. 
 Mutácia je realizovaná zmenou hodnoty už v kríženom jedincovi, pričom podobne ako pri krížení je závislá na kódovaní jedincov a od použitej reprezentácie. 
 
-Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcami si môžeme vystačiť s jednobodovým alebo uniformným krížením. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
+Napríklad v prípade kódovania, pri ktorom sú jedinci reprezentovaní reťazcami, si môžeme vystačiť s jednobodovým alebo uniformným krížením. Rozumnou mutáciou je v tomto prípade invertovanie bitu.
 
 \begin{figure}[h]
 \centering
@@ -156,14 +156,14 @@ Tento typ kódovania je najčastejšie používaným kódovaním jedincov už od
 \item Holland a jeho študenti sa venovali tomuto kódovaniu najdlhšie, čo spôsobilo, že väčšinu teoretických poznatkov máme dokázaných pre binárne kódovanie (príkladom môže byť veta o schémach).
 \item Pre binárne kódovanie existujú určité heuristiky, ako správne zvoliť parametre genetického algoritmu.
 \end{enumerate}
-Veľa teoretických poznatkov sa dá rozšíriť aj na nebinárne kódovanie, no tieto rozšírenia nie sú tak dobre zdokumentované, ako to je v prípade originálneho genetických algoritmov.
+Veľa teoretických poznatkov sa dá rozšíriť aj na nebinárne kódovanie, no tieto rozšírenia nie sú tak dobre zdokumentované, ako to je v prípade originálneho genetického algoritmu.
 
-Praktické použitie genetického algoritmu, ktorý pracuje s binárne kódovanými jedincami je napríklad problém batohu. Majme batoh $B$ o kapacite $V$ a $n$ predmetov, ktoré je možné vložiť do batohu. Každý predmet má určitú váhu $v_i$ a cenu $c_i$. V úlohe sa snažíme maximalizovať cenu zvolených predmetov pričom váha týchto predmetov nesmie presiahnuť kapacitu batohu $V$. Túto úlohu potom môžeme zakódovať následovne. Nech $B=\{b_1,...,b_n\}$ je binárny reťazec, kde $b_i = 1, 1 \leq i \leq n$ práve vtedy, keď je $i$-tý predmet v batohu. Podmienku batohu $\sum_{i=1}^{n} b_i * v_i \leq V$ zabezpečíme pomocou operátorov. Kvalita jedinca je potom $\sum_{i=1}^{n} b_i * c_i$.
+Praktické použitie genetického algoritmu, ktorý pracuje s binárne kódovanými jedincami, je napríklad problém batohu. Majme batoh $B$ o kapacite $V$ a $n$ predmetov, ktoré je možné vložiť do batohu. Každý predmet má určitú váhu $v_i$ a cenu $c_i$. V úlohe sa snažíme maximalizovať cenu zvolených predmetov, pričom váha týchto predmetov nesmie presiahnuť kapacitu batohu $V$. Túto úlohu potom môžeme zakódovať následovne. Nech $B=\{b_1,...,b_n\}$ je binárny reťazec, kde $b_i = 1, 1 \leq i \leq n$ práve vtedy, keď je $i$-tý predmet v batohu. Podmienku batohu $\sum_{i=1}^{n} b_i * v_i \leq V$ zabezpečíme pomocou operátorov. Kvalita jedinca je potom $\sum_{i=1}^{n} b_i * c_i$.
 \subsection{Kódovanie reálnymi číslami}\label{kap2:2.2:2.2.2:RealValued}
 Historicky prvé pokusy boli postavené na zakódovaní reálnych čísiel do bitovej reprezentácie. Dnes sa tento typ zakódovania nepoužíva, dokým nato nie je naozaj dobrý dôvod. V súčasnosti sa reálne čísla kódujú prirodzenejšou floating-point reprezentáciou ako čísla s plávajúcou desatinnou čiarkou (mantisa a exponent) a odpovedajúce operátory to potom rešpektujú ``nerežeme do čísiel''. Jedinci v genetických algoritmoch sú teda reprezentovaní reťazcami, ktorých prvky sú čísla s plávajúcou čiarkou (floatové čísla).
 Príklad jedinca kódovaného reálnymi číslami je na Obrázku \ref{fig:Encoding}b). Genetické operátory musia byť zvolené tak, aby rešpektovali štruktúry reťazcov reálnych čísiel.
 
-Príkladom použitia genetického algoritmu, ktorý pracuje s jedincami kódovanými reálnymi číslami je multi-kriteriálna optimalizácia funkcií. Pri tejto úlohe sa snažíme minimalizovať (alebo maximalizovať) hodnotu viacero zadaných funkcií, čo je ale NP ťažké. Reálne kódovaný jedinec predstavuje bod v $n$-dimenzionálnom priestore. Genetický algoritmus prehľadáva priestor riešení a na konci vráti takého jedinca, ktorý čo najlepšie minimalizuje všetky funkcie.
+Príkladom použitia genetického algoritmu, ktorý pracuje s jedincami kódovanými reálnymi číslami, je multi-kriteriálna optimalizácia funkcií. Pri tejto úlohe sa snažíme minimalizovať (alebo maximalizovať) hodnotu viacero zadaných funkcií, čo je ale NP ťažké. Reálne kódovaný jedinec predstavuje bod v $n$-dimenzionálnom priestore. Genetický algoritmus prehľadáva priestor riešení a na konci vráti takého jedinca, ktorý čo najlepšie minimalizuje všetky funkcie.
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics{../img/kap2/encoding.pdf}}}
@@ -173,9 +173,9 @@ Príkladom použitia genetického algoritmu, ktorý pracuje s jedincami kódovan
 \subsection{Kódovanie stromami}\label{kap2:2.2:2.2.3:Tree}
 Reprezentácia jedinca reťazcom nie je vhodná na všetky úlohy. Pri úlohách, ktorých riešenia sa dajú jednoducho previesť na strom, je rozumné použiť na kódovanie jedincov túto stromovú štruktúru. Kvôli tejto štruktúre bolo nutné zaviesť rôzne nové mutácie a kríženia, ktoré by dávali zmysel pre takéto kódovanie. 
 
-Pri práci s jedincami kódovanými pomocou stromov sa v genetických algoritmoch vyskytujú určité problémy. Stromy v genetických algoritmoch majú tendenciu narastať. V biologickej evolúcii existuje určitý fyzikálny limit, ktorý bráni nadmernému rastu. Limitovanie stromov je v genetických algoritmoch možné dosiahnuť reštrikciou veľkosti stromu alebo obmedzením maximálnej hĺbky. To je možné docieliť buď pomocou kritérií kvality stromov alebo pomocou operátorov, ktoré nezväčšujú jedincov (prípadne ich zmenšujú).
+Pri práci s jedincami kódovanými pomocou stromov sa v genetických algoritmoch vyskytujú určité problémy. Stromy v genetických algoritmoch majú tendenciu narastať. V biologickej evolúcii existuje určitý fyzikálny limit, ktorý bráni nadmernému rastu. Limitovanie stromov je v genetických algoritmoch možné dosiahnuť reštrikciou veľkosti stromu alebo obmedzením maximálnej hĺbky. To môžeme docieliť buď pomocou kritérií kvality stromov, alebo pomocou operátorov, ktoré nezväčšujú jedincov (prípadne ich zmenšujú).
 
-Príkladom genetického algoritmu pracujúceho s jedincami kódovanými stromami je metóda genetického programovania (GP). Hlavnou úlohou genetického programovania je hľadať programy (kódované stromami), ktoré riešia zadaný problém. Stromy reprezentujúce programy majú vo vnútorných vrcholoch operátory (obyčajne aj zložité) a v listoch zase konštanty. Príklad takéhoto stromového jedinca je na Obrázku \ref{fig:TreEncoding}.
+Príkladom genetického algoritmu, ktorý pracuje s jedincami kódovanými stromami, je metóda genetického programovania (GP). Hlavnou úlohou genetického programovania je hľadať programy (kódované stromami), ktoré riešia zadaný problém. Stromy reprezentujúce programy majú vo vnútorných vrcholoch operátory (obyčajne aj zložité) a v listoch zase konštanty. Príklad takéhoto stromového jedinca je na Obrázku \ref{fig:TreEncoding}.
 \begin{figure}[h]
 \centering
 \centerline{\mbox{\includegraphics{../img/kap2/treencoding.pdf}}}
@@ -183,7 +183,7 @@ Príkladom genetického algoritmu pracujúceho s jedincami kódovanými stromami
 \end{figure}
 
 \section{Vyhodnotenie jedincov}\label{kap2:2.3:Fitnesses}
-Dôležitou častou genetických algoritmov je nejakým spôsobom ohodnotiť kvalitu jedincov. V GA určuje kvalita jedinca väčšinou kvalitu riešenia zadanej úlohy, no zároveň ovplyvňuje aj to, ako často sa jedinec zúčastní procesu reprodukcie. Kritérium na ohodnotenie kvality jedinca je v GA nazývaná fitness. Úlohy, ktoré hodnotia jedinca iba podľa jedného kritéria nazývame jedno-kriteriálne (angl. SOEA -- simple objective evolution algorithm). 
+Dôležitou súčasťou genetických algoritmov je nejako ohodnotiť kvalitu jedincov. V genetických algoritmoch určuje kvalita jedinca väčšinou kvalitu riešenia zadanej úlohy, no zároveň ovplyvňuje aj to, ako často sa jedinec zúčastní procesu reprodukcie. Kritérium na ohodnotenie kvality jedinca je v genetických algoritmoch nazývaná fitness funkcia. Úlohy, ktoré hodnotia jedinca iba podľa jedného kritéria nazývame jedno-kriteriálne (angl. SOEA -- simple objective evolution algorithm). 
 
 V prípade úloh, pri ktorých určujeme kvalitu jedinca pomocou dvoch a viacerých kritérií (multi-kriteriálne problémy angl. MOEA -- multi objective evolution algorithm) je potrebné pozmeniť genetický algoritmus tak, aby s nimi vedel nejako rozumne pracovať. To je možné dosiahnuť rôznymi metódami.
 V časti \ref{kap2:2.3:2.3.1:Weighted} predvedieme metódu, ktorá rieši problém viacerých kritérií agregáciou fitness. Ďalej v časti \ref{kap2:2.3:2.3.2:Priority} popíšeme metódu, ktorá určuje kvalitu jedincov podľa kritérií s danou prioritou. Nakoniec v časti \ref{kap2:2.3:2.3.3:Pareto} zadefinujeme, ako sa dá určiť kvalita jedincov (pomocou viacerých kritérií) podľa tzv. paretovej fronty.
@@ -203,7 +203,7 @@ Prioritná fitness rieši multi-kriteriálny problém tak, že každému kritér
 \end{enumerate}
 
 \subsection{Pareto fitness}\label{kap2:2.3:2.3.3:Pareto}
-Táto metóda rieši multi-kriteriálne problémy pomocou paretovej fronty. Na pochopenie pareto fronty je najprv nutné zadefinovať niektoré pojmy.
+Táto metóda rieši multi-kriteriálne problémy pomocou paretovej fronty. Na pochopenie paretovej fronty je najprv nutné zadefinovať niektoré pojmy.
 \begin{def-sk}
 Nech $F = \{f_{1}, \ldots, f_{k}\}$ je množina kritérií (fitness funkcií) podľa ktorých chceme ohodnotiť jedincov. Ďalej nech $x$ a $y$ sú dva jedince. Jedinec $x$ \emph{slabo dominuje} jedinca $y$, práve vtedy keď $f_{i}(x) \leq f_{i}(y)$, pre všetky $i = 1,\ldots,k$.
 \end{def-sk}
@@ -222,14 +222,14 @@ Potom jedným z postupov ako vybrať správneho jedinca z paretovej fronty je po
 \end{figure}
 
 \section{Výber jedincov}\label{kap2:2.4:Selection}
-Po zadefinovaní kódovania a kritérií na vyhodnotenie jedincov môžeme definovať metódy na výber jedincov k reprodukcii. Takýto výber sa nazýva selekcia (angl. selection). Hlavnou úlohou selekcie je vyberať tých najkvalitnejších jedincov z aktuálnej generácie (podobnosť s prirodzeným výberom z prírody) na vytvorenie novej, kvalitnejšej generácie potomkov.
+Po zadefinovaní kódovania a kritérií na vyhodnotenie jedincov môžeme popísať metódy na výber jedincov k reprodukcii. Takýto výber sa nazýva selekcia (angl. selection). Hlavnou úlohou selekcie je vyberať tých najkvalitnejších jedincov z aktuálnej generácie (podobnosť s prirodzeným výberom z prírody) na vytvorenie novej, kvalitnejšej generácie potomkov.
 
-Pri riešení úloh je nutné rozumne zvoliť metódy výberu jedincov z populácie. Pri zvolení selekcie, ktorá by vyberala iba tých najlepších jedincov z populácie by sme dostali novú generáciu (neoptimálnych) jedincov. Ale tento postup vedie k zníženiu diverzity a k rýchlej konvergencii genetického algoritmu do nejakého lokálneho optima. Naopak výber selekcie, ktorá by vyberala jedincov úplne náhodne vedie k príliš pomalej konvergencii genetického algoritmu. Univerzálny návod na to, ako zvoliť vhodnú selekciu v genetických algoritmoch nie je doteraz známy.
+Pri riešení úloh je nutné rozumne zvoliť metódy výberu jedincov z populácie. Pri zvolení selekcie, ktorá by vyberala iba tých najlepších jedincov z populácie by sme dostali novú generáciu (neoptimálnych) jedincov. Takáto zvolená selekcia vedie k zníženiu diverzity a k rýchlej konvergencii genetického algoritmu do nejakého lokálneho optima. Naopak výber selekcie, ktorá by vyberala jedincov úplne náhodne vedie k príliš pomalej konvergencii genetického algoritmu. Univerzálny návod na to, ako zvoliť vhodnú selekciu v genetických algoritmoch nie je doteraz známy.
 
-Príklady metód na výber jedincov sú: ruletová selekcia, turnajová selekcia, SUS (angl. stochastic universal sampling), a sigmoidálna selekcia. V tomto oddieli popíšeme tie najznámejšie z nich. V prvej časti \ref{kap2:2.4:2.4.1:RoulletteWheel} predvedieme ako funguje historicky prvá, ruletová selekcia, ktorá bola použitá v originálnom GA. V časti \ref{kap2:2.4:2.4.2:Tournament} predstavíme ako funguje efektívnejšia turnajová selekcia. V poslednej časti \ref{kap2:2.4:2.4.3:Elitism} zadefinujeme pojem elitizmus a ukážeme akú úlohu zohráva pri výbere jedincov.
+Príklady metód na výber jedincov sú: ruletová selekcia, turnajová selekcia, SUS (angl. stochastic universal sampling), a sigmoidálna selekcia. V tomto oddieli popíšeme tie najznámejšie z nich. V prvej časti \ref{kap2:2.4:2.4.1:RoulletteWheel} predvedieme ako funguje historicky prvá, ruletová selekcia, ktorá bola použitá v originálnom genetickom algoritme. V časti \ref{kap2:2.4:2.4.2:Tournament} predstavíme ako funguje efektívnejšia turnajová selekcia. V časti \ref{kap2:2.4:2.4.3:Elitism} zadefinujeme pojem elitizmus a ukážeme akú úlohu zohráva pri výbere jedincov. V poslednej časti \ref{kap2:2.4:2.4.4:EnvironmentalSelection} predstavíme selekciu prostredia a popíšeme ako je táto selekcia použitá v genetických algoritmoch.
 
 \subsection{Ruletová selekcia}\label{kap2:2.4:2.4.1:RoulletteWheel}
-Originálny GA od Hollanda používal selekciu, ktorá vyberala jedincov podľa ich kvality. Takýto typ selekcie sa dá implementovať pomocou ``rulety'', ktorá funguje tak, že jedincom z populácie priraďujeme jednotlivé kúsky tejto pomyselnej ``rulety''. Veľkosť prideleného kúsku závisí na fitness hodnote jedinca. Pravdepodobnosť výberu konkrétneho jedinca je potom úmerná jeho fitness. Aby sme mohli túto metódu selekcie použiť budeme predpokladať, že hodnota fitness každého jedinca je nezáporná.
+Originálny genetický algoritmus od Hollanda používal selekciu, ktorá vyberala jedincov podľa ich kvality. Takýto typ selekcie sa dá implementovať pomocou ``rulety'', ktorá funguje tak, že jedincom z populácie priraďujeme jednotlivé kúsky tejto pomyselnej ``rulety''. Veľkosť prideleného kúsku závisí na fitness hodnote jedinca. Pravdepodobnosť výberu konkrétneho jedinca je potom úmerná jeho fitness. Aby sme mohli túto metódu selekcie použiť, budeme predpokladať, že hodnota fitness každého jedinca je nezáporná.
 
 Vytvorenie rulety pre $n$ jedincov prebieha v dvoch krokoch:
 \begin{enumerate}
@@ -266,7 +266,7 @@ U = \{u_1,\ldots,u_k\}, u_i \in T, f(u_m) \geq f(u_{m+1}), \mbox{pre všetky } m
 Variácie turnajovej selekcie vychádzajú z rôzne nastavených parametrov $k$ a $p$. Keď je $p=1$ tak hovoríme o deterministickej turnajovej selekcii. V prípade $k=1$ je turnajová selekcia iba náhodný výber jedincov z populácie $P$. Najčastejším nastavením veľkosti turnaja $k$ je $k=2$ (pri genetických algoritmoch) a $k=7$ (pri genetickom programovaní).
  
 Turnajová selekcia má aj ďalšie výhody.
-Túto selekciu je možné použiť i tam, kde fitness není explicitne daná. Dokonca nie je nutné, aby hodnota fitness bola nezáporná.
+Túto selekciu je možné použiť i tam, kde fitness není explicitne daná. Dokonca ani nepožadujeme, aby hodnota fitness bola nezáporná.
 
 \subsection{Elitizmus}\label{kap2:2.4:2.4.3:Elitism}
 Elitizmus o hodnote $k\in[0,1]$, ktorý bol po prvý krát predstavený pánom De Jongom, je špeciálnym typom výberu jedincov. Na vybraných jedincoch nie sú aplikované žiadne operátory. Namiesto toho ich priamo zaraďujeme do ďalšej generácie. V prípade populácie o veľkosti $n$ donútime genetický algoritmus, aby si ponechal $n*k$ najlepších jedincov. Touto metódou neriskujeme zbytočnú stratu (krížením alebo mutáciou) doposiaľ najlepších jedincov. Bolo ukázané, že použitie elitizmu o hodnote $k$ signifikantne zlepšuje efektivitu genetických algoritmov.
@@ -285,7 +285,7 @@ Existuje veľké množstvo článkov a výskumov, ktoré sa venujú tomu, ako sp
 
 V tomto oddieli predstavíme dva najznámejšie typy operátorov. V časti \ref{kap2:2.5:2.5.1:Crossover} zadefinujeme operátor kríženia. V druhej časti \ref{kap2:2.5:2.5.2:Mutation} predvedieme operátor mutácie. Uvedieme rôzne druhy kríženia a mutácií pre odlišné kódovania jedincov. Špeciálne sa zameriame na kódovania reprezentované reťazcami a kódovanie pomocou stromov.
 \subsection{Kríženie}
-Kríženie je jeden z najznámejších operátorov. V originálnom GA je kríženie hlavným operátorom, ktorý je zodpovedný za variabilitu a inováciu jedincov. Hlavnou úlohou je skombinovať vlastnosti rodičov (za určitej pravdepodobnosti), ktorí boli vybraní niektorou z metód selekcie. Pri tomto kombinovaní dúfame v to, že povedie ku kvalitnejším jedincom.
+Kríženie je jeden z najznámejších operátorov. V originálnom genetickom algoritme je kríženie hlavným operátorom, ktorý je zodpovedný za variabilitu a inováciu jedincov. Hlavnou úlohou je skombinovať vlastnosti rodičov (za určitej pravdepodobnosti), ktorí boli vybraní niektorou z metód selekcie. Pri tomto kombinovaní dúfame v to, že povedie ku kvalitnejším jedincom.
 
 Typ použitého kríženia je závislý na kódovaní jedincov.
 V prípade kódovaní jedincov, ktoré sú reprezentované reťazcom (binárne, celočíselné, \ldots) môžeme použiť
@@ -302,7 +302,7 @@ U jedincov kódovaných pomocou stromov musíme použiť trochu iné techniky kr
 \end{figure}
 
 \subsection{Mutácia}\label{kap2:2.5:2.5.2:Mutation}
-Mutácia je popri kríženiu ďalším obľúbeným operátorom. Jeho úlohou je umožniť malé a väčšinou nové zmeny (za určitej pravdepodobnosti), ktoré sa nedajú dosiahnuť pomocou kríženia. Napriek tomu, že kríženie býva považované za primárny operátor, je mutácia dôležitou súčasťou genetických algoritmov. Niektoré evolučné metódy dokonca využívajú iba operátor mutácie a neuvažujú kríženie (evolučné stratégie,\ldots). V niektorých článkoch je zase kríženie zadefinované ako makro mutácia. V súčasnosti existuje mnoho štúdií, ktoré sa venujú mutácií. To zahŕňa skúmanie existujúcich mutácií ale aj snahy o vytvorenie úplne nových. 
+Mutácia je popri kríženiu ďalším obľúbeným operátorom. Jeho úlohou je umožniť malé a väčšinou nové zmeny (za určitej pravdepodobnosti), ktoré sa nedajú dosiahnuť pomocou kríženia. Napriek tomu, že kríženie býva považované za primárny operátor, je mutácia dôležitou súčasťou genetických algoritmov. Niektoré evolučné metódy dokonca využívajú iba operátor mutácie a neuvažujú kríženie (napríklad evolučné stratégie). V niektorých článkoch je zase kríženie zadefinované ako makro mutácia. V súčasnosti existuje mnoho štúdií, ktoré sa venujú mutácií. To zahŕňa skúmanie existujúcich mutácií, ale aj snahy o vytvorenie úplne nových. 
 
 Tak isto, ako pri krížení, je operátor mutácie závislý na kódovaní jedincov. Delenie mutácií je oproti kríženiu trochu komplikovanejšie. V niektorých prípadoch je ešte nutné rozlišovať medzi zaťaženou a nezaťaženou mutáciou. 
 \begin{itemize}
@@ -330,8 +330,8 @@ V prípade jedincov kódovaných pomocou stromov sú typickými metódami:
 \end{figure}
 
 \section{Nastavenie správnych parametrov}\label{kap2:2.6:Parameters}
-Poslednou úlohou pri práci s genetickými algoritmami je rozhodnúť, ako zvoliť vhodné hodnoty parametrov, ktorými sú veľkosť populácie, pravdepodobnosť kríženia, pravdepodobnosť mutácie prípadne hodnota elitizmu. Hľadanie riešenia pomocou GA závisí (pomimo vhodných operátorov) hlavne na týchto parametroch.
+Poslednou úlohou pri práci s genetickými algoritmami je sa rozhodnúť, ako zvoliť vhodné hodnoty parametrov, ktorými sú veľkosť populácie, pravdepodobnosť kríženia, pravdepodobnosť mutácie prípadne hodnota elitizmu. Hľadanie riešenia pomocou genetických algoritmov závisí (pomimo vhodných operátorov) hlavne na týchto parametroch.
 
-Naivným spôsobom by bolo optimalizovať parametre postupne. Toto v prípade GA nie je možné, keďže sa jednotlivé parametre navzájom ovplyvňujú. Problém správneho nastavenia parametrov či adaptácie parametrov je obľúbenou témou genetických algoritmov a existuje mnoho článkov a výskumov, ktoré sa tejto téme venujú. Napriek tomu neexistuje žiadny univerzálny návod pre nastavenie správnych parametrov a väčšinou sa používajú také hodnoty parametrov, ktoré už v minulosti dávali dobré výsledky. Pravdaže nastavenie parametrov, vo väčšine prípadov, závisí na type úlohy. To znamená, že jedno špeciálne nastavenie, ktoré dobre fungovalo na jednom type úlohy, môže dávať katastrofické výsledky na inom type úlohy.
+Naivným spôsobom by bolo optimalizovať parametre postupne. Toto v prípade genetických algoritmov nie je možné, keďže sa jednotlivé parametre navzájom ovplyvňujú. Problém správneho nastavenia parametrov či adaptácie parametrov je obľúbenou témou genetických algoritmov a existuje mnoho článkov a výskumov, ktoré sa tejto téme venujú. Napriek tomu neexistuje žiadny univerzálny návod pre nastavenie správnych parametrov a väčšinou sa používajú také hodnoty parametrov, ktoré už v minulosti dávali dobré výsledky. Pravdaže nastavenie parametrov, vo väčšine prípadov, závisí na type úlohy. To znamená, že jedno špeciálne nastavenie, ktoré dobre fungovalo na jednom type úlohy, môže dávať katastrofické výsledky na inom type úlohy.
 
-De Jong, ktorý skúmal úlohy s binárnym kódovaním, uvádza veľkosť populácie približne 50 až 100 jedincov, pravdepodobnosť jednobodového kríženia približne 0.6 a pravdepodobnosť mutácie 0.001 na jeden bit. Iná skupina ľudí uviedla, že najvhodnejšími parametrami bola veľkosť populácie 20-30, pravdepodobnosť kríženia 0.75 až 0.95 a pravdepodobnosť mutácie na jeden bit 0.005 až 0.001. Jednou z možnosti ako nastaviť vhodné parametre je využiť ďalší GA na ich optimalizáciu.
+De Jong, ktorý skúmal úlohy s binárnym kódovaním, uvádza veľkosť populácie približne 50 až 100 jedincov, pravdepodobnosť jednobodového kríženia približne 0.6 a pravdepodobnosť mutácie 0.001 na jeden bit. Iná skupina ľudí uviedla, že najvhodnejšími parametrami bola veľkosť populácie 20-30, pravdepodobnosť kríženia 0.75 až 0.95 a pravdepodobnosť mutácie na jeden bit 0.005 až 0.001. Jednou z možností ako nastaviť vhodné parametre je využiť ďalší genetický algoritmus na ich optimalizáciu.

@@ -3,12 +3,12 @@ V tejto kapitole popíšeme možnosti rozšírenia aplikácie o nové komponenty
 
 \section{Rozšíriteľnosť}\label{kap4:4.4:Plugin}
 V časti \ref{kap4:4.2:4.2.2:CodeOrganization} sme predviedli ako je organizovaný kód v aplikácií \verb|GenDTLib|.
-Na rozšírenie tejto aplikácie môžeme použiť existujúce rozhrania z balíčku \verb|genlib.plugins|. Rozhrania môžu byť určené buď na definovanie nových komponent genetického algoritmu, alebo na definovanie nových klasifikátorov a deliacich kritérií. Toto je možné kvôli zvolenej abstrakcii genetického algoritmu.
+Na rozšírenie tejto aplikácie môžeme použiť existujúce rozhrania z balíčku \verb|genlib.plu|- \verb|gins|. Rozhrania môžu byť určené buď na definovanie nových komponent genetického algoritmu, alebo na definovanie nových klasifikátorov a deliacich kritérií. Toto je možné kvôli zvolenej abstrakcii genetického algoritmu.
 \subsection{Nové komponenty}
 Existujúce komponenty môžeme rozšíriť pridaním nových knižníc do predom určených zložiek. Knižnice musia dediť od niektorého rozhrania z \verb|genlib.plugins|. Typ knižnice závisí od tohoto rozhrania. V rámci knižnice potom môžeme  dodefinovať viacero nových komponent rovnakého typu. 
 
 \subsubsection*{Fitness funkcie}
-Pri vytváraní nových funkcií je treba implementovať rozhranie \verb|FitnessPlugin|. Jednotlivé fitness funkcie v tejto knižnici potom musia implementovať rozhranie \verb|Fitnes|- \verb|sFunction|, ktoré je používané na ohodnotenie jedincov.
+Pri vytváraní nových funkcií je treba implementovať rozhranie \verb|FitnessPlugin|. Jednotlivé fitness funkcie v tejto knižnici potom musia implementovať rozhranie \verb|FitnessFunction|, ktoré je používané na ohodnotenie jedincov.
 Popis tohoto rozhrania je v uvedené v tabuľke \ref{fig:tabfit}. Celé rozhranie fitness funkcie je parametrizované typom jedinca, pre ktoré počítame fitness funkciu.
 
 Fitness funkcie sú ďalej spracované v tzv. \emph{komparátoroch}, ktoré vyhodnocujú a spracovávajú fitness funkcie.
@@ -109,7 +109,7 @@ Rozhranie operátoru je parametrizované typom jedinca.
 \end{table}
 
 \subsubsection*{Výber jedincov}
-Pri vytváraní nových selektorov je treba implementovať rozhranie \verb|SelectorPlugin|. Jednotlivé selektory v tejto knižnici potom musia implementovať rozhranie \verb|Selector|. Popis tohoto rozhrania je popísaný v tabuľke \ref{fig:tabsel}.
+Pri vytváraní nových selektorov je treba implementovať rozhranie \verb|SelectorPlu|- \verb|gin|. Jednotlivé selektory v tejto knižnici potom musia implementovať rozhranie \verb|Selector|. Popis tohoto rozhrania je popísaný v tabuľke \ref{fig:tabsel}.
 
 \begin{table}
 \centering
@@ -373,7 +373,7 @@ Pre užívateľa, ktorý z nejakého dôvodu nechce použiť nástroj Weka, exis
 \item \verb|GenLibInstances| slúži ako kontajner pre inštancie z dátovej množiny a
 \item \verb|GenLibInstance|, ktoré predstavuje jednu konkrétnu inštanciu z množiny inštancií dátovej množiny.
 \end{enumerate}
-Popis týchto rozhraní je uvedený v tabuľke \ref{fig:tabnonweka}. Podobné rozhrania obsahuje aj nástroj Weka, pričom by mali fungovať podobne.
+Popis týchto rozhraní je uvedený v tabuľke \ref{fig:tabnonweka}. Podobné rozhrania obsahuje aj nástroj Weka a bolo by vhodné keby fungovali podobne.
 
 \begin{table}
 \centering
